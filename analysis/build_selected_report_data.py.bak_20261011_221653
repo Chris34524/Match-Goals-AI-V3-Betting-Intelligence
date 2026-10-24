@@ -1,0 +1,262 @@
+import argparse
+import json
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+MATCHES = ROOT / "data" / "matches"
+
+
+def cargar(path):
+    try:
+        return json.loads(
+            path.read_text(encoding="utf-8")
+        )
+    except Exception:
+        return None
+
+
+def mid(p):
+    return (
+        p.get("match_id")
+        or p.get("id")
+        or p.get("flashscore_id")
+    )
+
+
+def buscar_modelo(result):
+    if not isinstance(result, dict):
+        return {}
+
+    for key in (
+        "J_base",
+        "BT0",
+        "base",
+        "resultado",
+    ):
+        if isinstance(result.get(key), dict):
+            return result[key]
+
+    return result
+
+
+def valor(d, *keys):
+    if not isinstance(d, dict):
+        return None
+
+    for key in keys:
+        if d.get(key) is not None:
+            return d[key]
+
+    return None
+
+
+def main():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--file",
+        required=True,
+    )
+
+    parser.add_argument(
+        "--output",
+        default="data/selected_predictions_v2.json",
+    )
+
+    args = parser.parse_args()
+
+    source = ROOT / args.file
+    output = ROOT / args.output
+
+    data = cargar(source)
+
+    if not data:
+        raise SystemExit(
+            f"No pude leer {source}"
+        )
+
+    partidos = data.get(
+        "partidos",
+        []
+    )
+
+    salida = []
+
+    for p in partidos:
+        x = dict(p)
+
+        partido_id = mid(x)
+
+        if not partido_id:
+            continue
+
+        carpeta = MATCHES / partido_id
+
+        result = cargar(
+            carpeta / "result.json"
+        )
+
+        confidence = cargar(
+            carpeta / "confidence_v2.json"
+        )
+
+        modelo = buscar_modelo(
+            result
+        )
+
+        lam = modelo.get(
+            "lambda",
+            {},
+        )
+
+        lh = valor(
+            modelo,
+            "lambda_local",
+            "local",
+            "lambda_home",
+        )
+
+        la = valor(
+            modelo,
+            "lambda_visitante",
+            "visitante",
+            "lambda_away",
+        )
+
+        if lh is None and isinstance(lam, dict):
+            lh = valor(
+                lam,
+                "local",
+                "home",
+            )
+
+        if la is None and isinstance(lam, dict):
+            la = valor(
+                lam,
+                "visitante",
+                "away",
+            )
+
+        total = valor(
+            modelo,
+            "lambda_total",
+            "total",
+            "total_lambda",
+        )
+
+        if (
+            total is None
+            and lh is not None
+            and la is not None
+        ):
+            total = float(lh) + float(la)
+
+        probabilidades = (
+            modelo.get("probabilidades")
+            or modelo.get("probabilities")
+            or modelo
+        )
+
+        def pval(*keys):
+            return valor(
+                probabilidades,
+                *keys,
+            )
+
+        x["lambda_local"] = lh
+        x["lambda_visitante"] = la
+        x["lambda_total"] = total
+
+        x["+1.5"] = pval(
+            "+1.5",
+            "over_1_5",
+            "p_over_1_5",
+        )
+
+        x["+2.5"] = pval(
+            "+2.5",
+            "over_2_5",
+            "p_over_2_5",
+        )
+
+        x["+3.5"] = pval(
+            "+3.5",
+            "over_3_5",
+            "p_over_3_5",
+        )
+
+        x["BTTS"] = pval(
+            "BTTS",
+            "btts",
+            "p_btts",
+        )
+
+        # Si result.json no expone esas claves
+        # directamente, usamos el bloque que ya
+        # quedó guardado por el pipeline.
+        if confidence:
+            x["confidence_v2"] = confidence
+
+            x["calidad_datos"] = (
+                confidence.get(
+                    "calidad_datos_global",
+                    "N/D",
+                )
+            )
+
+            x["confianza_btts"] = (
+                confidence
+                .get(
+                    "mercados",
+                    {},
+                )
+                .get(
+                    "BTTS",
+                    {},
+                )
+                .get(
+                    "confianza_predictiva",
+                    "N/D",
+                )
+            )
+
+            detalle = confidence.get(
+                "detalle_v1",
+                {},
+            )
+
+            x["score_calidad"] = detalle.get(
+                "score"
+            )
+
+            x["alertas_calidad"] = detalle.get(
+                "alertas",
+                [],
+            )
+
+        salida.append(x)
+
+    output.write_text(
+        json.dumps(
+            {
+                "source": str(source),
+                "total": len(salida),
+                "partidos": salida,
+            },
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
+    print("=" * 80)
+    print("DATASET DE REPORTE SELECCIONADO")
+    print("=" * 80)
+    print("Partidos:", len(salida))
+    print("Salida  :", output)
+    print("=" * 80)
+
+
+if __name__ == "__main__":
+    main()

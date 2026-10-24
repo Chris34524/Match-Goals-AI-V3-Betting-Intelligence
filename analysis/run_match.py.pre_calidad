@@ -1,0 +1,517 @@
+import argparse
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+from analysis.poisson import analizar
+
+
+BASE = Path("data/matches")
+
+
+def argumentos():
+    parser = argparse.ArgumentParser(
+        description=(
+            "Ejecuta el pipeline moderno "
+            "de análisis para un partido."
+        )
+    )
+
+    parser.add_argument(
+        "--match-id",
+        required=True,
+    )
+
+    parser.add_argument(
+        "--skip-xg",
+        action="store_true",
+        help=(
+            "No vuelve a ejecutar extract_xg; "
+            "usa xg_history.json existente."
+        ),
+    )
+
+    parser.add_argument(
+        "--prepare",
+        action="store_true",
+        help=(
+            "Prepara automáticamente history.json "
+            "y standings.json si no existen."
+        ),
+    )
+
+    parser.add_argument(
+        "--refresh",
+        action="store_true",
+        help=(
+            "Con --prepare, vuelve a extraer "
+            "history y standings aunque existan."
+        ),
+    )
+
+    return parser.parse_args()
+
+
+def ejecutar(modulo, match_id, extra=None):
+    comando = [
+        sys.executable,
+        "-m",
+        modulo,
+        "--match-id",
+        match_id,
+    ]
+
+    if extra:
+        comando.extend(extra)
+
+    print()
+    print("-" * 78)
+    print("EJECUTANDO:", " ".join(comando))
+    print("-" * 78)
+
+    resultado = subprocess.run(
+        comando,
+        check=False,
+    )
+
+    if resultado.returncode != 0:
+        raise RuntimeError(
+            f"{modulo} terminó con "
+            f"código {resultado.returncode}"
+        )
+
+
+def pct(valor):
+    return round(
+        valor * 100,
+        2,
+    )
+
+
+def construir_resultado_poisson(
+    nombre,
+    lambdas,
+):
+    lambda_local = lambdas["local"]
+    lambda_visitante = lambdas["visitante"]
+
+    r = analizar(
+        lambda_local,
+        lambda_visitante,
+    )
+
+    goles = r["goles"]
+
+    # Líneas .5:
+    #
+    # +1.5 = total >= 2 = 2+
+    # +2.5 = total >= 3 = 3+
+    # +3.5 = total >= 4 = 4+
+    #
+    # Para +0.5/+4.5 calculamos desde
+    # probabilidades exactas del total.
+
+    dist_total = r.get(
+        "distribucion_total",
+        {},
+    )
+
+    # Nuestro poisson.py actual ya ofrece
+    # 2+, 3+ y 4+. Para 4.5 necesitamos
+    # P(total >= 5), que equivale a la
+    # probabilidad de ganar Over 4.0.
+    over_4 = r["over_4_0"]
+
+    mas_15 = goles["2_mas"]
+    mas_25 = goles["3_mas"]
+    mas_35 = goles["4_mas"]
+    mas_45 = over_4["gana"]
+
+    menos_15 = goles["menos_2"]
+    menos_25 = goles["menos_3"]
+    menos_35 = goles["menos_4"]
+
+    # Under 4.5 = complemento de Over 4.5.
+    menos_45 = 1.0 - mas_45
+
+    salida = {
+        "escenario": nombre,
+
+        "lambda": {
+            "local": lambda_local,
+            "visitante": lambda_visitante,
+            "total": (
+                lambda_local
+                + lambda_visitante
+            ),
+        },
+
+        "resultado_1x2": {
+            "1": pct(
+                r["resultado"][
+                    "victoria_local"
+                ]
+            ),
+            "X": pct(
+                r["resultado"]["empate"]
+            ),
+            "2": pct(
+                r["resultado"][
+                    "victoria_visitante"
+                ]
+            ),
+        },
+
+        "doble_oportunidad": {
+            "1X": pct(
+                r["doble_oportunidad"]["1X"]
+            ),
+            "X2": pct(
+                r["doble_oportunidad"]["X2"]
+            ),
+            "12": pct(
+                r["doble_oportunidad"]["12"]
+            ),
+        },
+
+        "goles_medio": {
+            "+1.5": pct(mas_15),
+            "+2.5": pct(mas_25),
+            "+3.5": pct(mas_35),
+            "+4.5": pct(mas_45),
+
+            "-1.5": pct(menos_15),
+            "-2.5": pct(menos_25),
+            "-3.5": pct(menos_35),
+            "-4.5": pct(menos_45),
+        },
+
+        "btts": {
+            "si": pct(r["btts"]["si"]),
+            "no": pct(r["btts"]["no"]),
+        },
+
+        "asiaticas": {},
+    }
+
+    for linea in ("2_0", "3_0", "4_0"):
+        etiqueta = linea.replace(
+            "_",
+            ".",
+        )
+
+        over = r[f"over_{linea}"]
+        under = r[f"under_{linea}"]
+
+        salida["asiaticas"][
+            f"over_{etiqueta}"
+        ] = {
+            "gana": pct(over["gana"]),
+            "push": pct(over["push"]),
+            "pierde": pct(over["pierde"]),
+        }
+
+        salida["asiaticas"][
+            f"under_{etiqueta}"
+        ] = {
+            "gana": pct(under["gana"]),
+            "push": pct(under["push"]),
+            "pierde": pct(under["pierde"]),
+        }
+
+    salida["marcadores_probables"] = (
+        r.get(
+            "marcadores_probables",
+            [],
+        )[:10]
+    )
+
+    return salida
+
+
+def main():
+    args = argumentos()
+
+    carpeta = BASE / args.match_id
+
+    history = carpeta / "history.json"
+    standings = carpeta / "standings.json"
+    xg = carpeta / "xg_history.json"
+    lambda_json = (
+        carpeta
+        / "lambda_comparison.json"
+    )
+    salida_json = (
+        carpeta
+        / "result.json"
+    )
+
+    print("=" * 78)
+    print("PIPELINE DE ANALISIS POR PARTIDO")
+    print("=" * 78)
+    print("Match ID:", args.match_id)
+
+    # -------------------------------------------------
+    # 0. Preparación de datos base
+    # -------------------------------------------------
+
+    if args.prepare:
+        if args.refresh or not history.exists():
+            ejecutar(
+                "scraper.extract_history",
+                args.match_id,
+                [
+                    "--target",
+                    "21",
+                ],
+            )
+        else:
+            print()
+            print(
+                "Historial: reutilizando "
+                "history.json existente"
+            )
+
+        if args.refresh or not standings.exists():
+            ejecutar(
+                "scraper.standings",
+                args.match_id,
+            )
+        else:
+            print(
+                "Clasificación: reutilizando "
+                "standings.json existente"
+            )
+
+    if not history.exists():
+        raise FileNotFoundError(
+            f"No existe {history}. "
+            "Usa --prepare para extraerlo."
+        )
+
+    if not standings.exists():
+        raise FileNotFoundError(
+            f"No existe {standings}. "
+            "Usa --prepare para extraerlo."
+        )
+
+    # -------------------------------------------------
+    # 1. xG
+    # -------------------------------------------------
+
+    if args.skip_xg:
+        if not xg.exists():
+            raise FileNotFoundError(
+                "--skip-xg fue indicado, "
+                f"pero no existe {xg}"
+            )
+
+        print()
+        print(
+            "xG: reutilizando archivo existente"
+        )
+
+    else:
+        ejecutar(
+            "scraper.extract_xg",
+            args.match_id,
+            [
+                "--target",
+                "10",
+            ],
+        )
+
+    # -------------------------------------------------
+    # 2. Enriquecimiento anti-leak
+    # -------------------------------------------------
+
+    ejecutar(
+        "analysis.enrich_match",
+        args.match_id,
+    )
+
+    # -------------------------------------------------
+    # 3. H2H
+    # -------------------------------------------------
+
+    ejecutar(
+        "analysis.h2h",
+        args.match_id,
+    )
+
+    # -------------------------------------------------
+    # 4. Lambdas
+    # -------------------------------------------------
+
+    ejecutar(
+        "analysis.compare_lambda",
+        args.match_id,
+    )
+
+    if not lambda_json.exists():
+        raise RuntimeError(
+            "compare_lambda no generó "
+            f"{lambda_json}"
+        )
+
+    with lambda_json.open(
+        encoding="utf-8",
+    ) as f:
+        comparacion = json.load(f)
+
+    metodos = comparacion["metodos"]
+
+    escenarios_deseados = {
+        "J_base": (
+            "J_hibrido_experimental"
+        ),
+        "P_H2H10": (
+            "P_base_H2H_10pct"
+        ),
+        "Q_H2H15": (
+            "Q_base_H2H_15pct"
+        ),
+        "R_H2H20": (
+            "R_base_H2H_20pct"
+        ),
+    }
+
+    escenarios = {}
+
+    for etiqueta, clave in (
+        escenarios_deseados.items()
+    ):
+        if clave not in metodos:
+            continue
+
+        escenarios[etiqueta] = (
+            construir_resultado_poisson(
+                etiqueta,
+                metodos[clave],
+            )
+        )
+
+    if not escenarios:
+        raise RuntimeError(
+            "No se encontraron escenarios "
+            "Poisson utilizables."
+        )
+
+    partido = comparacion.get(
+        "partido",
+        {},
+    )
+
+    salida = {
+        "match_id": args.match_id,
+
+        "partido": partido,
+
+        "estado_modelo": (
+            "experimental"
+        ),
+
+        "modelo": {
+            "base": (
+                "J_hibrido_experimental"
+            ),
+            "h2h": (
+                "sensibilidad 10/15/20%"
+            ),
+            "seleccion_definitiva": None,
+        },
+
+        "escenarios": escenarios,
+
+        "notas": [
+            (
+                "Las probabilidades proceden "
+                "de Poisson a partir de los "
+                "lambda estimados."
+            ),
+            (
+                "Los pesos del modelo todavía "
+                "requieren backtesting."
+            ),
+            (
+                "No se selecciona todavía un "
+                "peso H2H definitivo."
+            ),
+        ],
+    }
+
+    with salida_json.open(
+        "w",
+        encoding="utf-8",
+    ) as f:
+        json.dump(
+            salida,
+            f,
+            ensure_ascii=False,
+            indent=2,
+        )
+
+    print()
+    print("=" * 78)
+    print("RESULTADO FINAL")
+    print("=" * 78)
+
+    print(
+        partido.get("local"),
+        "vs",
+        partido.get("visitante"),
+    )
+
+    for nombre, resultado in (
+        escenarios.items()
+    ):
+        print()
+        print(nombre)
+
+        l = resultado["lambda"]
+        g = resultado["goles_medio"]
+        rx = resultado["resultado_1x2"]
+        b = resultado["btts"]
+
+        print(
+            "  lambda:",
+            f"{l['local']:.3f}",
+            "+",
+            f"{l['visitante']:.3f}",
+            "=",
+            f"{l['total']:.3f}",
+        )
+
+        print(
+            "  1/X/2:",
+            f"{rx['1']:.2f}% /",
+            f"{rx['X']:.2f}% /",
+            f"{rx['2']:.2f}%",
+        )
+
+        print(
+            "  +1.5:",
+            f"{g['+1.5']:.2f}%",
+            "| +2.5:",
+            f"{g['+2.5']:.2f}%",
+            "| +3.5:",
+            f"{g['+3.5']:.2f}%",
+            "| +4.5:",
+            f"{g['+4.5']:.2f}%",
+        )
+
+        print(
+            "  BTTS:",
+            f"{b['si']:.2f}%",
+        )
+
+    print()
+    print(
+        "Guardado:",
+        salida_json,
+    )
+
+
+if __name__ == "__main__":
+    main()

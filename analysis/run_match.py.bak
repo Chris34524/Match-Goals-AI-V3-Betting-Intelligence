@@ -1,0 +1,119 @@
+import argparse
+import json
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+
+BASE = Path("data/matches")
+
+LEGACY_HISTORY = Path("data/history_raw.json")
+LEGACY_STANDINGS = Path("data/standings.json")
+LEGACY_ANALYSIS = Path("data/analysis_snapshot.json")
+
+
+def argumentos():
+    parser = argparse.ArgumentParser(
+        description="Ejecuta el análisis para un match_id."
+    )
+
+    parser.add_argument(
+        "--match-id",
+        required=True,
+    )
+
+    return parser.parse_args()
+
+
+def main():
+    args = argumentos()
+
+    directorio = BASE / args.match_id
+
+    history = directorio / "history.json"
+    standings = directorio / "standings.json"
+    analysis = directorio / "analysis.json"
+
+    if not history.exists():
+        raise FileNotFoundError(
+            f"No existe {history}"
+        )
+
+    if not standings.exists():
+        raise FileNotFoundError(
+            f"No existe {standings}"
+        )
+
+    print("=" * 70)
+    print("ANALISIS POR PARTIDO")
+    print("=" * 70)
+    print(f"Match ID: {args.match_id}")
+
+    # Compatibilidad temporal con goals.py actual:
+    shutil.copy2(
+        history,
+        LEGACY_HISTORY,
+    )
+
+    shutil.copy2(
+        standings,
+        LEGACY_STANDINGS,
+    )
+
+    if LEGACY_ANALYSIS.exists():
+        LEGACY_ANALYSIS.unlink()
+
+    resultado = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "analysis.goals",
+        ],
+        check=False,
+    )
+
+    if resultado.returncode != 0:
+        raise RuntimeError(
+            "analysis.goals terminó con error."
+        )
+
+    if not LEGACY_ANALYSIS.exists():
+        raise RuntimeError(
+            "analysis.goals no generó "
+            "data/analysis_snapshot.json"
+        )
+
+    directorio.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    shutil.copy2(
+        LEGACY_ANALYSIS,
+        analysis,
+    )
+
+    with analysis.open(
+        encoding="utf-8",
+    ) as archivo:
+        datos = json.load(archivo)
+
+    partido = datos.get(
+        "partido",
+        {},
+    )
+
+    print(
+        f"Partido: "
+        f"{partido.get('local')} vs "
+        f"{partido.get('visitante')}"
+    )
+
+    print(
+        f"Guardado en: {analysis}"
+    )
+
+
+if __name__ == "__main__":
+    main()

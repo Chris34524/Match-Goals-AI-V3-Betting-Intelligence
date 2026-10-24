@@ -1,0 +1,607 @@
+import json
+import re
+import time
+from datetime import date, timedelta
+from pathlib import Path
+from urllib.parse import parse_qs, urlparse
+
+from playwright.sync_api import sync_playwright
+
+
+URL = "https://www.flashscore.com.mx/"
+
+ARCHIVO_SALIDA = Path(
+    "data/partidos.json"
+)
+
+
+def extraer_mid(url):
+    if not url:
+        return None
+
+    valores = parse_qs(
+        urlparse(url).query
+    ).get("mid")
+
+    if valores:
+        return valores[0]
+
+    return None
+
+
+def texto_opcional(
+    elemento,
+    selector,
+):
+    locator = elemento.locator(
+        selector
+    )
+
+    if locator.count() == 0:
+        return None
+
+    try:
+        texto = (
+            locator
+            .first
+            .inner_text()
+            .strip()
+        )
+
+        return texto or None
+
+    except Exception:
+        return None
+
+
+def atributo_opcional(
+    elemento,
+    selector,
+    atributo,
+):
+    locator = elemento.locator(
+        selector
+    )
+
+    if locator.count() == 0:
+        return None
+
+    try:
+        return (
+            locator
+            .first
+            .get_attribute(atributo)
+        )
+
+    except Exception:
+        return None
+
+
+def obtener_hora(elemento):
+    """
+    Flashscore ha cambiado varias veces
+    el selector de la hora.
+
+    Intentamos varios selectores y,
+    como último recurso, usamos event__stage
+    si contiene una hora HH:MM.
+    """
+
+    selectores = [
+        ".event__time",
+        ".event__stage",
+        ".event__startTime",
+    ]
+
+    for selector in selectores:
+        texto = texto_opcional(
+            elemento,
+            selector,
+        )
+
+        if not texto:
+            continue
+
+        coincidencia = re.search(
+            r"\b([01]?\d|2[0-3]):[0-5]\d\b",
+            texto,
+        )
+
+        if coincidencia:
+            return coincidencia.group(0)
+
+    return None
+
+
+def extraer_estado(elemento):
+    texto = texto_opcional(
+        elemento,
+        ".event__stage",
+    )
+
+    if not texto:
+        return None
+
+    # Si únicamente contiene la hora,
+    # no lo consideramos un estado.
+    if re.fullmatch(
+        r"\s*([01]?\d|2[0-3]):[0-5]\d\s*",
+        texto,
+    ):
+        return None
+
+    return texto
+
+
+def extraer_partidos(
+    page,
+    fecha_iso,
+    etiqueta,
+):
+    elementos = page.locator(
+        ".event__match"
+    )
+
+    cantidad = elementos.count()
+
+    print(
+        f"Elementos DOM encontrados: "
+        f"{cantidad}"
+    )
+
+    partidos = []
+
+    for i in range(cantidad):
+        elemento = elementos.nth(i)
+
+        try:
+            local = texto_opcional(
+                elemento,
+                ".event__homeParticipant",
+            )
+
+            visitante = texto_opcional(
+                elemento,
+                ".event__awayParticipant",
+            )
+
+            if not local or not visitante:
+                continue
+
+            url = atributo_opcional(
+                elemento,
+                "a.eventRowLink",
+                "href",
+            )
+
+            match_id = extraer_mid(
+                url
+            )
+
+            if not match_id:
+                continue
+
+            partido = {
+                "id": match_id,
+                "fecha": fecha_iso,
+                "dia": etiqueta,
+                "hora": obtener_hora(
+                    elemento
+                ),
+                "local": local,
+                "visitante": visitante,
+                "estado": extraer_estado(
+                    elemento
+                ),
+                "gol_local": texto_opcional(
+                    elemento,
+                    ".event__score--home",
+                ),
+                "gol_visitante": (
+                    texto_opcional(
+                        elemento,
+                        ".event__score--away",
+                    )
+                ),
+                "url": url,
+            }
+
+            partidos.append(
+                partido
+            )
+
+        except Exception as error:
+            print(
+                f"Error en evento "
+                f"{i + 1}: {error}"
+            )
+
+    print(
+        f"Partidos extraídos: "
+        f"{len(partidos)}"
+    )
+
+    return partidos
+
+
+def obtener_ids_visibles(page):
+    enlaces = page.locator(
+        ".event__match a.eventRowLink"
+    )
+
+    ids = set()
+
+    for i in range(
+        min(
+            enlaces.count(),
+            100,
+        )
+    ):
+        url = enlaces.nth(i).get_attribute(
+            "href"
+        )
+
+        match_id = extraer_mid(
+            url
+        )
+
+        if match_id:
+            ids.add(
+                match_id
+            )
+
+    return ids
+
+
+def buscar_boton_manana(page):
+    """
+    Intentamos localizar el selector visible
+    de mañana sin depender de clases CSS
+    internas de Flashscore.
+    """
+
+    patrones = [
+        re.compile(
+            r"^\s*MAÑANA\s*$",
+            re.IGNORECASE,
+        ),
+        re.compile(
+            r"^\s*MAÑANA\b",
+            re.IGNORECASE,
+        ),
+    ]
+
+    for patron in patrones:
+        locator = page.get_by_text(
+            patron
+        )
+
+        if locator.count() > 0:
+            for i in range(
+                locator.count()
+            ):
+                candidato = locator.nth(i)
+
+                try:
+                    if candidato.is_visible():
+                        return candidato
+                except Exception:
+                    continue
+
+    return None
+
+
+def cambiar_a_manana(page):
+    print("\nBuscando control MAÑANA...")
+
+    ids_antes = obtener_ids_visibles(
+        page
+    )
+
+    print(
+        "IDs visibles antes del cambio: "
+        f"{len(ids_antes)}"
+    )
+
+    boton = buscar_boton_manana(
+        page
+    )
+
+    if boton is None:
+        raise RuntimeError(
+            "No se encontró el control visible "
+            "'MAÑANA' en Flashscore."
+        )
+
+    print(
+        "Control MAÑANA encontrado."
+    )
+
+    boton.scroll_into_view_if_needed()
+
+    boton.click()
+
+    print(
+        "Click realizado. "
+        "Esperando cambio de jornada..."
+    )
+
+    # Esperamos hasta 20 segundos a que
+    # realmente cambien los partidos.
+    inicio = time.time()
+
+    while (
+        time.time() - inicio
+        < 20
+    ):
+        page.wait_for_timeout(
+            1000
+        )
+
+        ids_despues = (
+            obtener_ids_visibles(
+                page
+            )
+        )
+
+        if (
+            ids_despues
+            and ids_despues
+            != ids_antes
+        ):
+            diferentes = len(
+                ids_despues
+                - ids_antes
+            )
+
+            print(
+                "Jornada cambiada."
+            )
+
+            print(
+                "Nuevos IDs detectados: "
+                f"{diferentes}"
+            )
+
+            return
+
+    raise RuntimeError(
+        "Se pulsó MAÑANA pero los "
+        "match_id no cambiaron."
+    )
+
+
+def quitar_duplicados(
+    partidos,
+):
+    vistos = set()
+    resultado = []
+
+    for partido in partidos:
+        match_id = partido["id"]
+
+        if match_id in vistos:
+            continue
+
+        vistos.add(
+            match_id
+        )
+
+        resultado.append(
+            partido
+        )
+
+    return resultado
+
+
+def main():
+    hoy = date.today()
+
+    manana = (
+        hoy
+        + timedelta(days=1)
+    )
+
+    print("=" * 70)
+    print(
+        "MATCH GOALS AI "
+        "- HOY + MAÑANA"
+    )
+    print("=" * 70)
+
+    print(
+        f"Fecha hoy: "
+        f"{hoy.isoformat()}"
+    )
+
+    print(
+        f"Fecha mañana: "
+        f"{manana.isoformat()}"
+    )
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch(
+            headless=True
+        )
+
+        page = browser.new_page(
+            viewport={
+                "width": 1920,
+                "height": 1080,
+            },
+            locale="es-MX",
+        )
+
+        print("\n" + "=" * 70)
+        print(
+            f"HOY - "
+            f"{hoy.isoformat()}"
+        )
+        print("=" * 70)
+
+        print(
+            f"Abriendo: {URL}"
+        )
+
+        response = page.goto(
+            URL,
+            wait_until="domcontentloaded",
+            timeout=60_000,
+        )
+
+        if response:
+            print(
+                f"HTTP: "
+                f"{response.status}"
+            )
+
+        page.wait_for_selector(
+            ".event__match",
+            timeout=30_000,
+        )
+
+        page.wait_for_timeout(
+            5000
+        )
+
+        partidos_hoy = (
+            extraer_partidos(
+                page,
+                hoy.isoformat(),
+                "hoy",
+            )
+        )
+
+        ids_hoy = {
+            p["id"]
+            for p in partidos_hoy
+        }
+
+        cambiar_a_manana(
+            page
+        )
+
+        # Damos tiempo adicional para que
+        # terminen de cargarse ligas/eventos.
+        page.wait_for_timeout(
+            4000
+        )
+
+        print("\n" + "=" * 70)
+        print(
+            f"MAÑANA - "
+            f"{manana.isoformat()}"
+        )
+        print("=" * 70)
+
+        partidos_manana = (
+            extraer_partidos(
+                page,
+                manana.isoformat(),
+                "mañana",
+            )
+        )
+
+        browser.close()
+
+    ids_manana = {
+        p["id"]
+        for p in partidos_manana
+    }
+
+    repetidos = (
+        ids_hoy
+        & ids_manana
+    )
+
+    print("\n" + "=" * 70)
+    print("VALIDACIÓN DE JORNADAS")
+    print("=" * 70)
+
+    print(
+        f"IDs hoy: "
+        f"{len(ids_hoy)}"
+    )
+
+    print(
+        f"IDs mañana: "
+        f"{len(ids_manana)}"
+    )
+
+    print(
+        "IDs repetidos entre días: "
+        f"{len(repetidos)}"
+    )
+
+    if (
+        ids_hoy
+        == ids_manana
+    ):
+        raise RuntimeError(
+            "HOY y MAÑANA contienen "
+            "exactamente los mismos partidos."
+        )
+
+    partidos = (
+        partidos_hoy
+        + partidos_manana
+    )
+
+    # Sólo eliminamos duplicados dentro del
+    # conjunto completo como protección.
+    partidos = quitar_duplicados(
+        partidos
+    )
+
+    ARCHIVO_SALIDA.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    ARCHIVO_SALIDA.write_text(
+        json.dumps(
+            partidos,
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
+    cantidad_hoy = sum(
+        1
+        for p in partidos
+        if p["dia"] == "hoy"
+    )
+
+    cantidad_manana = sum(
+        1
+        for p in partidos
+        if p["dia"] == "mañana"
+    )
+
+    print("\n" + "=" * 70)
+    print("RESUMEN FINAL")
+    print("=" * 70)
+
+    print(
+        f"Hoy: {cantidad_hoy}"
+    )
+
+    print(
+        f"Mañana: "
+        f"{cantidad_manana}"
+    )
+
+    print(
+        f"Total: "
+        f"{len(partidos)}"
+    )
+
+    print(
+        f"Guardado en: "
+        f"{ARCHIVO_SALIDA}"
+    )
+
+
+if __name__ == "__main__":
+    main()

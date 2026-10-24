@@ -1,0 +1,360 @@
+import json
+from datetime import date, timedelta
+from pathlib import Path
+from urllib.parse import parse_qs, urlparse
+
+from playwright.sync_api import sync_playwright
+
+
+BASE_URL = "https://www.flashscore.com.mx/"
+
+ARCHIVO_SALIDA = Path(
+    "data/partidos.json"
+)
+
+
+def extraer_mid(url):
+    if not url:
+        return None
+
+    query = parse_qs(
+        urlparse(url).query
+    )
+
+    valores = query.get("mid")
+
+    if not valores:
+        return None
+
+    return valores[0]
+
+
+def texto_opcional(
+    elemento,
+    selector,
+):
+    locator = elemento.locator(
+        selector
+    )
+
+    if locator.count() == 0:
+        return None
+
+    texto = (
+        locator
+        .first
+        .inner_text()
+        .strip()
+    )
+
+    return texto or None
+
+
+def atributo_opcional(
+    elemento,
+    selector,
+    atributo,
+):
+    locator = elemento.locator(
+        selector
+    )
+
+    if locator.count() == 0:
+        return None
+
+    return (
+        locator
+        .first
+        .get_attribute(atributo)
+    )
+
+
+def extraer_partidos(
+    page,
+    fecha_iso,
+    etiqueta,
+):
+    elementos = page.locator(
+        ".event__match"
+    )
+
+    print(
+        f"Elementos DOM encontrados: "
+        f"{elementos.count()}"
+    )
+
+    partidos = []
+
+    for i in range(
+        elementos.count()
+    ):
+        elemento = elementos.nth(i)
+
+        try:
+            local = texto_opcional(
+                elemento,
+                ".event__homeParticipant",
+            )
+
+            visitante = texto_opcional(
+                elemento,
+                ".event__awayParticipant",
+            )
+
+            if not local or not visitante:
+                continue
+
+            url = atributo_opcional(
+                elemento,
+                "a.eventRowLink",
+                "href",
+            )
+
+            match_id = extraer_mid(
+                url
+            )
+
+            if not match_id:
+                continue
+
+            hora = texto_opcional(
+                elemento,
+                ".event__time",
+            )
+
+            estado = texto_opcional(
+                elemento,
+                ".event__stage",
+            )
+
+            gol_local = texto_opcional(
+                elemento,
+                ".event__score--home",
+            )
+
+            gol_visitante = texto_opcional(
+                elemento,
+                ".event__score--away",
+            )
+
+            partidos.append(
+                {
+                    "id": match_id,
+                    "fecha": fecha_iso,
+                    "dia": etiqueta,
+                    "hora": hora,
+                    "local": local,
+                    "visitante": visitante,
+                    "estado": estado,
+                    "gol_local": gol_local,
+                    "gol_visitante": (
+                        gol_visitante
+                    ),
+                    "url": url,
+                }
+            )
+
+        except Exception as error:
+            print(
+                f"Error procesando "
+                f"evento {i + 1}: "
+                f"{error}"
+            )
+
+    return partidos
+
+
+def cargar_fecha(
+    page,
+    offset,
+    fecha,
+    etiqueta,
+):
+    if offset == 0:
+        url = BASE_URL
+    else:
+        url = (
+            f"{BASE_URL}?d={offset}"
+        )
+
+    print("\n" + "=" * 70)
+
+    print(
+        f"{etiqueta.upper()} "
+        f"- {fecha.isoformat()}"
+    )
+
+    print("=" * 70)
+
+    print(
+        f"Abriendo: {url}"
+    )
+
+    response = page.goto(
+        url,
+        wait_until="domcontentloaded",
+        timeout=60_000,
+    )
+
+    if response:
+        print(
+            f"HTTP: {response.status}"
+        )
+
+    page.wait_for_selector(
+        ".event__match",
+        timeout=30_000,
+    )
+
+    page.wait_for_timeout(
+        5000
+    )
+
+    partidos = extraer_partidos(
+        page,
+        fecha.isoformat(),
+        etiqueta,
+    )
+
+    print(
+        f"Partidos extraídos: "
+        f"{len(partidos)}"
+    )
+
+    return partidos
+
+
+def quitar_duplicados(
+    partidos,
+):
+    vistos = set()
+    resultado = []
+
+    for partido in partidos:
+        clave = partido["id"]
+
+        if clave in vistos:
+            continue
+
+        vistos.add(
+            clave
+        )
+
+        resultado.append(
+            partido
+        )
+
+    return resultado
+
+
+def main():
+    hoy = date.today()
+
+    manana = (
+        hoy
+        + timedelta(days=1)
+    )
+
+    print("=" * 70)
+    print(
+        "MATCH GOALS AI "
+        "- HOY + MAÑANA"
+    )
+    print("=" * 70)
+
+    print(
+        f"Fecha hoy: "
+        f"{hoy.isoformat()}"
+    )
+
+    print(
+        f"Fecha mañana: "
+        f"{manana.isoformat()}"
+    )
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch(
+            headless=True
+        )
+
+        page = browser.new_page(
+            viewport={
+                "width": 1920,
+                "height": 1080,
+            },
+            locale="es-MX",
+        )
+
+        partidos_hoy = cargar_fecha(
+            page,
+            0,
+            hoy,
+            "hoy",
+        )
+
+        partidos_manana = cargar_fecha(
+            page,
+            1,
+            manana,
+            "mañana",
+        )
+
+        browser.close()
+
+    partidos = quitar_duplicados(
+        partidos_hoy
+        + partidos_manana
+    )
+
+    ARCHIVO_SALIDA.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    ARCHIVO_SALIDA.write_text(
+        json.dumps(
+            partidos,
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
+    cantidad_hoy = sum(
+        1
+        for partido in partidos
+        if partido["dia"] == "hoy"
+    )
+
+    cantidad_manana = sum(
+        1
+        for partido in partidos
+        if partido["dia"] == "mañana"
+    )
+
+    print("\n" + "=" * 70)
+    print("RESUMEN")
+    print("=" * 70)
+
+    print(
+        f"Hoy: {cantidad_hoy}"
+    )
+
+    print(
+        f"Mañana: "
+        f"{cantidad_manana}"
+    )
+
+    print(
+        f"Total: "
+        f"{len(partidos)}"
+    )
+
+    print(
+        f"\nGuardado en: "
+        f"{ARCHIVO_SALIDA}"
+    )
+
+
+if __name__ == "__main__":
+    main()

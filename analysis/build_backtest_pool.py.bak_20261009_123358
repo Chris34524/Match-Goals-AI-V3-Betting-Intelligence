@@ -1,0 +1,332 @@
+import argparse
+import json
+import random
+from collections import Counter, defaultdict
+from datetime import datetime
+from pathlib import Path
+
+
+MATCHES_DIR = Path("data/matches")
+OUTPUT = Path("data/backtest_pool.json")
+OUTPUT_IDS = Path("data/backtest_pool.txt")
+
+
+def cargar_json(path):
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def parse_fecha(valor):
+    if not valor:
+        return None
+
+    texto = str(valor).strip()
+
+    formatos = (
+        "%Y-%m-%d",
+        "%d.%m.%Y",
+        "%d.%m.%y",
+        "%d/%m/%Y",
+        "%d/%m/%y",
+        "%Y-%m-%d %H:%M",
+        "%d.%m.%Y %H:%M",
+        "%d.%m.%y %H:%M",
+    )
+
+    for formato in formatos:
+        try:
+            return datetime.strptime(texto, formato)
+        except ValueError:
+            pass
+
+    try:
+        return datetime.fromisoformat(
+            texto.replace("Z", "+00:00")
+        ).replace(tzinfo=None)
+    except Exception:
+        return None
+
+
+def filas_history(history):
+    for seccion in history.get("secciones", []):
+        tipo = (
+            seccion.get("tipo_estimado")
+            or seccion.get("tipo")
+            or "desconocida"
+        )
+
+        for p in seccion.get("partidos", []):
+            yield tipo, p
+
+
+def normalizar(tipo, p, origen):
+    mid = (
+        p.get("match_id")
+        or p.get("id")
+        or p.get("flashscore_id")
+    )
+
+    if not mid:
+        return None
+
+    fecha_txt = (
+        p.get("fecha")
+        or p.get("date")
+    )
+
+    fecha = parse_fecha(fecha_txt)
+
+    if not fecha:
+        return None
+
+    gl = p.get("goles_local")
+    gv = p.get("goles_visitante")
+
+    if gl is None:
+        gl = p.get("home_score")
+
+    if gv is None:
+        gv = p.get("away_score")
+
+    # Queremos solamente partidos ya finalizados
+    try:
+        gl = int(gl)
+        gv = int(gv)
+    except Exception:
+        return None
+
+    return {
+        "match_id": str(mid),
+        "fecha": fecha.strftime("%Y-%m-%d"),
+        "timestamp": fecha.timestamp(),
+        "local": (
+            p.get("local")
+            or p.get("home")
+            or p.get("equipo_local")
+        ),
+        "visitante": (
+            p.get("visitante")
+            or p.get("away")
+            or p.get("equipo_visitante")
+        ),
+        "goles_local": gl,
+        "goles_visitante": gv,
+        "competicion": (
+            p.get("competicion")
+            or p.get("competition")
+            or p.get("nombre_competicion")
+            or p.get("liga")
+            or "DESCONOCIDA"
+        ),
+        "codigo_competicion": (
+            p.get("codigo_competicion")
+            or p.get("competition_code")
+        ),
+        "tipo_origen": tipo,
+        "origen": origen,
+    }
+
+
+def recolectar():
+    candidatos = {}
+
+    for history_path in MATCHES_DIR.rglob("history.json"):
+        history = cargar_json(history_path)
+
+        if not history:
+            continue
+
+        origen = history.get("match_id") or history_path.parent.name
+
+        for tipo, p in filas_history(history):
+            item = normalizar(
+                tipo,
+                p,
+                origen,
+            )
+
+            if not item:
+                continue
+
+            mid = item["match_id"]
+
+            # Deduplicación por match_id
+            if mid not in candidatos:
+                candidatos[mid] = item
+
+    return list(candidatos.values())
+
+
+def seleccionar(candidatos, target, seed, max_comp):
+    rng = random.Random(seed)
+
+    # Agrupar por competición
+    grupos = defaultdict(list)
+
+    for p in candidatos:
+        comp = p["competicion"]
+        grupos[comp].append(p)
+
+    for grupo in grupos.values():
+        rng.shuffle(grupo)
+
+    seleccion = []
+    indices = Counter()
+
+    # Round-robin para no saturar una sola liga
+    competiciones = list(grupos.keys())
+    rng.shuffle(competiciones)
+
+    progreso = True
+
+    while len(seleccion) < target and progreso:
+        progreso = False
+
+        for comp in competiciones:
+            if len(seleccion) >= target:
+                break
+
+            if max_comp > 0 and indices[comp] >= max_comp:
+                continue
+
+            grupo = grupos[comp]
+
+            if not grupo:
+                continue
+
+            seleccion.append(grupo.pop())
+            indices[comp] += 1
+            progreso = True
+
+    # Si el límite por competición impide completar target,
+    # rellenamos con el resto sin filtro.
+    if len(seleccion) < target:
+        usados = {x["match_id"] for x in seleccion}
+
+        resto = [
+            p for p in candidatos
+            if p["match_id"] not in usados
+        ]
+
+        rng.shuffle(resto)
+
+        seleccion.extend(
+            resto[:target - len(seleccion)]
+        )
+
+    # Orden cronológico para facilitar inspección
+    seleccion.sort(
+        key=lambda x: x["timestamp"]
+    )
+
+    return seleccion[:target]
+
+
+def main():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--target",
+        type=int,
+        default=100,
+    )
+
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=20261008,
+    )
+
+    parser.add_argument(
+        "--max-per-competition",
+        type=int,
+        default=15,
+        help=(
+            "Máximo inicial por competición. "
+            "0 = sin límite."
+        ),
+    )
+
+    args = parser.parse_args()
+
+    if args.target < 1:
+        parser.error("--target debe ser >= 1")
+
+    candidatos = recolectar()
+
+    print("=" * 70)
+    print("BACKTEST HISTORICAL POOL")
+    print("=" * 70)
+    print("CANDIDATOS ÚNICOS:", len(candidatos))
+
+    if not candidatos:
+        raise SystemExit(
+            "No encontré partidos históricos "
+            "en data/matches/*/history.json"
+        )
+
+    seleccion = seleccionar(
+        candidatos,
+        args.target,
+        args.seed,
+        args.max_per_competition,
+    )
+
+    salida = {
+        "generado": datetime.now().isoformat(
+            timespec="seconds"
+        ),
+        "metodo": (
+            "Históricos deduplicados de history.json; "
+            "selección diversificada por competición."
+        ),
+        "advertencia": (
+            "Este pool sirve para validar infraestructura. "
+            "Está condicionado por los equipos previamente "
+            "analizados y no debe ser la muestra definitiva."
+        ),
+        "seed": args.seed,
+        "target": args.target,
+        "candidatos_disponibles": len(candidatos),
+        "numero_seleccionados": len(seleccion),
+        "partidos": seleccion,
+    }
+
+    OUTPUT.write_text(
+        json.dumps(
+            salida,
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
+    OUTPUT_IDS.write_text(
+        "".join(
+            f"{p['match_id']}\n"
+            for p in seleccion
+        ),
+        encoding="utf-8",
+    )
+
+    por_comp = Counter(
+        p["competicion"]
+        for p in seleccion
+    )
+
+    print("SELECCIONADOS:", len(seleccion))
+    print()
+    print("TOP COMPETICIONES:")
+
+    for comp, n in por_comp.most_common(15):
+        print(f"{n:>4}  {comp}")
+
+    print()
+    print("ARCHIVO:", OUTPUT)
+    print("IDS    :", OUTPUT_IDS)
+
+
+if __name__ == "__main__":
+    main()

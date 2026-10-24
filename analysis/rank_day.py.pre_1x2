@@ -1,0 +1,278 @@
+import json
+from pathlib import Path
+
+from analysis.poisson import analizar
+
+
+IDS = Path("/tmp/matches_hoy.txt")
+BASE = Path("data/matches")
+SALIDA = Path("data/day_predictions.json")
+
+
+def pct(x):
+    return round(x * 100, 2)
+
+
+def calidad(result):
+    if not result:
+        return "DEBIL"
+
+    if (
+        result.get(
+            "integridad_temporal",
+            {},
+        ).get("estado") != "OK"
+    ):
+        return "REVISAR"
+
+    c = result.get(
+        "calidad_datos",
+        {},
+    )
+
+    forma = c.get("forma", {})
+    xg = c.get("xg", {})
+
+    fl = forma.get("local", {}).get(
+        "nivel"
+    )
+    fv = forma.get("visitante", {}).get(
+        "nivel"
+    )
+
+    xl = xg.get("local", {}).get(
+        "nivel"
+    )
+    xv = xg.get("visitante", {}).get(
+        "nivel"
+    )
+
+    buenos_xg = {
+        "completa",
+        "buena",
+    }
+
+    if (
+        fl in {"completa", "parcial"}
+        and fv in {"completa", "parcial"}
+        and xl in buenos_xg
+        and xv in buenos_xg
+    ):
+        return "FUERTE"
+
+    if (
+        fl != "debil"
+        and fv != "debil"
+        and xl != "debil"
+        and xv != "debil"
+    ):
+        return "MEDIA"
+
+    return "DEBIL"
+
+
+def main():
+    ids = [
+        x.strip()
+        for x in IDS.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if x.strip()
+    ]
+
+    filas = []
+    errores = []
+
+    for mid in ids:
+        carpeta = BASE / mid
+
+        ruta_lambda = (
+            carpeta
+            / "lambda_comparison.json"
+        )
+
+        ruta_result = (
+            carpeta
+            / "result.json"
+        )
+
+        if not ruta_lambda.exists():
+            errores.append(
+                {
+                    "match_id": mid,
+                    "motivo": "sin_lambda",
+                }
+            )
+            continue
+
+        with ruta_lambda.open(
+            encoding="utf-8"
+        ) as f:
+            comp = json.load(f)
+
+        metodo = comp.get(
+            "metodos",
+            {},
+        ).get(
+            "J_BT_sin_temporada"
+        )
+
+        if not metodo:
+            errores.append(
+                {
+                    "match_id": mid,
+                    "motivo": "sin_BT0",
+                }
+            )
+            continue
+
+        result = None
+
+        if ruta_result.exists():
+            with ruta_result.open(
+                encoding="utf-8"
+            ) as f:
+                result = json.load(f)
+
+        r = analizar(
+            metodo["local"],
+            metodo["visitante"],
+        )
+
+        partido = comp.get(
+            "partido",
+            {},
+        )
+
+        fila = {
+            "match_id": mid,
+            "fecha": partido.get("fecha"),
+            "hora": partido.get("hora"),
+            "pais": partido.get("pais"),
+            "competicion": (
+                partido.get("competicion")
+            ),
+            "local": partido.get("local"),
+            "visitante": (
+                partido.get("visitante")
+            ),
+            "lambda_local": round(
+                metodo["local"],
+                3,
+            ),
+            "lambda_visitante": round(
+                metodo["visitante"],
+                3,
+            ),
+            "lambda_total": round(
+                metodo["total"],
+                3,
+            ),
+            "+1.5": pct(
+                r["goles"]["2_mas"]
+            ),
+            "+2.5": pct(
+                r["goles"]["3_mas"]
+            ),
+            "+3.5": pct(
+                r["goles"]["4_mas"]
+            ),
+            "+4.5": pct(
+                r["over_4_0"]["gana"]
+            ),
+            "btts": pct(
+                r["btts"]["si"]
+            ),
+            "calidad": calidad(result),
+        }
+
+        filas.append(fila)
+
+    filas.sort(
+        key=lambda x: (
+            x["+2.5"],
+            x["lambda_total"],
+        ),
+        reverse=True,
+    )
+
+    salida = {
+        "modelo_principal": (
+            "J_BT_sin_temporada"
+        ),
+        "descripcion": (
+            "Forma reciente + xG + "
+            "local/visitante. H2H no modifica "
+            "el lambda principal."
+        ),
+        "partidos": filas,
+        "errores": errores,
+    }
+
+    with SALIDA.open(
+        "w",
+        encoding="utf-8",
+    ) as f:
+        json.dump(
+            salida,
+            f,
+            ensure_ascii=False,
+            indent=2,
+        )
+
+    print()
+    print("=" * 118)
+    print(
+        "RANKING DE GOLES | "
+        "MODELO BASE DE FORMA"
+    )
+    print("=" * 118)
+
+    print(
+        f"{'#':>2} "
+        f"{'PARTIDO':<43} "
+        f"{'λ':>6} "
+        f"{'+1.5':>7} "
+        f"{'+2.5':>7} "
+        f"{'+3.5':>7} "
+        f"{'+4.5':>7} "
+        f"{'BTTS':>7} "
+        f"{'DATOS':>8}"
+    )
+
+    print("-" * 118)
+
+    for i, p in enumerate(filas, 1):
+        nombre = (
+            f"{p['local']} - "
+            f"{p['visitante']}"
+        )
+
+        print(
+            f"{i:>2} "
+            f"{nombre[:43]:<43} "
+            f"{p['lambda_total']:>6.2f} "
+            f"{p['+1.5']:>6.1f}% "
+            f"{p['+2.5']:>6.1f}% "
+            f"{p['+3.5']:>6.1f}% "
+            f"{p['+4.5']:>6.1f}% "
+            f"{p['btts']:>6.1f}% "
+            f"{p['calidad']:>8}"
+        )
+
+    if errores:
+        print()
+        print("NO ANALIZADOS:")
+        for e in errores:
+            print(
+                e["match_id"],
+                "->",
+                e["motivo"],
+            )
+
+    print()
+    print("Guardado:", SALIDA)
+
+
+if __name__ == "__main__":
+    main()

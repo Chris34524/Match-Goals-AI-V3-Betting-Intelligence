@@ -1,0 +1,819 @@
+import argparse
+import json
+import re
+from pathlib import Path
+from analysis.temporal import filtrar_prepartido
+
+
+def normalizar(nombre):
+    nombre = nombre or ""
+
+    nombre = re.sub(
+        r"\s+\([^)]*\)$",
+        "",
+        nombre,
+    )
+
+    return nombre.strip().casefold()
+
+
+def partido_desde_perspectiva(
+    partido,
+    equipo,
+):
+    if not partido.get(
+        "resultado_parseado"
+    ):
+        return None
+
+    equipo_norm = normalizar(
+        equipo
+    )
+
+    local_norm = normalizar(
+        partido.get("local")
+    )
+
+    visitante_norm = normalizar(
+        partido.get("visitante")
+    )
+
+    if equipo_norm == local_norm:
+        gf = partido["goles_local"]
+        gc = partido["goles_visitante"]
+        condicion = "local"
+
+    elif equipo_norm == visitante_norm:
+        gf = partido["goles_visitante"]
+        gc = partido["goles_local"]
+        condicion = "visitante"
+
+    else:
+        return None
+
+    return {
+        "fecha": partido.get("fecha"),
+        "local": partido.get("local"),
+        "visitante": partido.get(
+            "visitante"
+        ),
+        "gf": gf,
+        "gc": gc,
+        "total_goles": gf + gc,
+        "condicion": condicion,
+        "decidido_penales": partido.get(
+            "decidido_penales",
+            False,
+        ),
+    }
+
+
+def resumir_partidos(
+    partidos,
+):
+    pj = len(partidos)
+
+    if pj == 0:
+        return {
+            "pj": 0,
+            "gf": 0,
+            "gc": 0,
+            "promedio_gf": None,
+            "promedio_gc": None,
+            "promedio_total_goles": None,
+            "victorias": 0,
+            "empates": 0,
+            "derrotas": 0,
+            "over_1_5": {
+                "casos": 0,
+                "porcentaje": None,
+            },
+            "over_2_5": {
+                "casos": 0,
+                "porcentaje": None,
+            },
+            "over_3_5": {
+                "casos": 0,
+                "porcentaje": None,
+            },
+            "btts": {
+                "casos": 0,
+                "porcentaje": None,
+            },
+            "porterias_cero": {
+                "casos": 0,
+                "porcentaje": None,
+            },
+            "sin_marcar": {
+                "casos": 0,
+                "porcentaje": None,
+            },
+        }
+
+    gf = sum(
+        p["gf"]
+        for p in partidos
+    )
+
+    gc = sum(
+        p["gc"]
+        for p in partidos
+    )
+
+    victorias = sum(
+        p["gf"] > p["gc"]
+        for p in partidos
+    )
+
+    empates = sum(
+        p["gf"] == p["gc"]
+        for p in partidos
+    )
+
+    derrotas = sum(
+        p["gf"] < p["gc"]
+        for p in partidos
+    )
+
+    over_1_5 = sum(
+        p["total_goles"] >= 2
+        for p in partidos
+    )
+
+    over_2_5 = sum(
+        p["total_goles"] >= 3
+        for p in partidos
+    )
+
+    over_3_5 = sum(
+        p["total_goles"] >= 4
+        for p in partidos
+    )
+
+    btts = sum(
+        p["gf"] > 0
+        and p["gc"] > 0
+        for p in partidos
+    )
+
+    porterias_cero = sum(
+        p["gc"] == 0
+        for p in partidos
+    )
+
+    sin_marcar = sum(
+        p["gf"] == 0
+        for p in partidos
+    )
+
+    def porcentaje(casos):
+        return casos / pj
+
+    return {
+        "pj": pj,
+        "gf": gf,
+        "gc": gc,
+        "promedio_gf": gf / pj,
+        "promedio_gc": gc / pj,
+        "promedio_total_goles": (
+            gf + gc
+        ) / pj,
+        "victorias": victorias,
+        "empates": empates,
+        "derrotas": derrotas,
+        "over_1_5": {
+            "casos": over_1_5,
+            "porcentaje": porcentaje(
+                over_1_5
+            ),
+        },
+        "over_2_5": {
+            "casos": over_2_5,
+            "porcentaje": porcentaje(
+                over_2_5
+            ),
+        },
+        "over_3_5": {
+            "casos": over_3_5,
+            "porcentaje": porcentaje(
+                over_3_5
+            ),
+        },
+        "btts": {
+            "casos": btts,
+            "porcentaje": porcentaje(
+                btts
+            ),
+        },
+        "porterias_cero": {
+            "casos": porterias_cero,
+            "porcentaje": porcentaje(
+                porterias_cero
+            ),
+        },
+        "sin_marcar": {
+            "casos": sin_marcar,
+            "porcentaje": porcentaje(
+                sin_marcar
+            ),
+        },
+    }
+
+
+def preparar_equipo(
+    seccion,
+    equipo,
+):
+    partidos = []
+
+    for partido in seccion[
+        "partidos"
+    ]:
+        preparado = (
+            partido_desde_perspectiva(
+                partido,
+                equipo,
+            )
+        )
+
+        if preparado is not None:
+            partidos.append(
+                preparado
+            )
+
+    return partidos
+
+
+def calcular_ventanas_equipo(
+    partidos,
+    condicion_relevante,
+):
+    resultado = {}
+
+    for ventana in (
+        5,
+        10,
+        20,
+    ):
+        seleccion = partidos[
+            :ventana
+        ]
+
+        resultado[
+            f"l{ventana}"
+        ] = resumir_partidos(
+            seleccion
+        )
+
+    relevantes = [
+        p
+        for p in partidos
+        if p["condicion"]
+        == condicion_relevante
+    ]
+
+    resultado[
+        f"como_{condicion_relevante}"
+    ] = resumir_partidos(
+        relevantes
+    )
+
+    resultado[
+        f"como_{condicion_relevante}"
+    ][
+        "muestra_disponible"
+    ] = len(relevantes)
+
+    return resultado
+
+
+def preparar_h2h(
+    seccion,
+    local_principal,
+):
+    partidos = []
+
+    for partido in seccion[
+        "partidos"
+    ]:
+        preparado = (
+            partido_desde_perspectiva(
+                partido,
+                local_principal,
+            )
+        )
+
+        if preparado is not None:
+            partidos.append(
+                preparado
+            )
+
+    return partidos
+
+
+def calcular_h2h(
+    partidos,
+):
+    resultado = {}
+
+    for ventana in (
+        5,
+        10,
+        20,
+    ):
+        seleccion = partidos[
+            :ventana
+        ]
+
+        resultado[
+            f"h{ventana}"
+        ] = resumir_partidos(
+            seleccion
+        )
+
+    resultado[
+        "disponibles"
+    ] = len(partidos)
+
+    return resultado
+
+
+def encontrar_seccion(
+    datos,
+    tipo,
+    equipo=None,
+):
+    secciones = datos.get(
+        "secciones",
+        [],
+    )
+
+    # 1. Etiqueta explícita normal
+    for seccion in secciones:
+        if seccion.get(
+            "tipo_estimado"
+        ) == tipo:
+            return seccion
+
+    # 2. Fallback por nombre del equipo
+    if equipo:
+        objetivo = normalizar(equipo)
+        candidatos = []
+
+        for seccion in secciones:
+            if seccion.get(
+                "tipo_estimado"
+            ) == "h2h":
+                continue
+
+            titulo = (
+                seccion.get("titulo")
+                or ""
+            )
+
+            titulo = titulo.replace(
+                "ÚLTIMOS PARTIDOS:",
+                "",
+            ).strip()
+
+            if normalizar(titulo) == objetivo:
+                candidatos.append(seccion)
+
+        if len(candidatos) == 1:
+            print(
+                ">>> Sección recuperada por nombre:",
+                equipo,
+                "->",
+                candidatos[0].get("titulo"),
+            )
+            return candidatos[0]
+
+    return None
+
+
+
+def fmt_num(valor, decimales=2):
+    """Formatea números sin fallar cuando no hay muestra."""
+    if valor is None:
+        return "N/D"
+
+    try:
+        return f"{float(valor):.{decimales}f}"
+    except (TypeError, ValueError):
+        return "N/D"
+
+
+def fmt_pct(valor):
+    """Formatea proporciones 0-1 como porcentaje."""
+    if valor is None:
+        return "N/D"
+
+    try:
+        return f"{float(valor):.0%}"
+    except (TypeError, ValueError):
+        return "N/D"
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description=(
+            "Genera métricas observadas "
+            "a partir de history.json"
+        )
+    )
+
+    parser.add_argument(
+        "--match-id",
+        required=True,
+    )
+
+    args = parser.parse_args()
+
+    carpeta = (
+        Path("data")
+        / "matches"
+        / args.match_id
+    )
+
+    entrada = (
+        carpeta
+        / "history.json"
+    )
+
+    salida = (
+        carpeta
+        / "enriched.json"
+    )
+
+    if not entrada.exists():
+        raise SystemExit(
+            f"No existe: {entrada}"
+        )
+
+    with entrada.open(
+        encoding="utf-8"
+    ) as f:
+        datos = json.load(f)
+
+    partido = datos[
+        "partido"
+    ]
+
+    local = partido[
+        "local"
+    ]
+
+    visitante = partido[
+        "visitante"
+    ]
+
+    # ID del encuentro que estamos analizando.
+    # Debe quedar fuera de todas las muestras
+    # históricas para evitar data leakage.
+    match_id_objetivo = (
+        partido.get("id")
+        or args.match_id
+    )
+
+    seccion_local = encontrar_seccion(
+        datos,
+        "equipo_local",
+        local,
+    )
+
+    seccion_visitante = (
+        encontrar_seccion(
+            datos,
+            "equipo_visitante",
+            visitante,
+        )
+    )
+
+    seccion_h2h = encontrar_seccion(
+        datos,
+        "h2h",
+    )
+
+    if seccion_local is None:
+        raise SystemExit(
+            "Falta sección equipo_local."
+        )
+
+    if seccion_visitante is None:
+        raise SystemExit(
+            "Falta sección "
+            "equipo_visitante."
+        )
+
+    # Filtro temporal estricto:
+    # sólo información anterior al objetivo.
+    partidos_local_validos, control_local = (
+        filtrar_prepartido(
+            seccion_local["partidos"],
+            match_id_objetivo,
+            partido.get("fecha"),
+        )
+    )
+
+    partidos_visitante_validos, control_visitante = (
+        filtrar_prepartido(
+            seccion_visitante["partidos"],
+            match_id_objetivo,
+            partido.get("fecha"),
+        )
+    )
+
+    seccion_local_limpia = {
+        **seccion_local,
+        "partidos": partidos_local_validos,
+    }
+
+    seccion_visitante_limpia = {
+        **seccion_visitante,
+        "partidos": partidos_visitante_validos,
+    }
+
+    partidos_local = preparar_equipo(
+        seccion_local_limpia,
+        local,
+    )
+
+    partidos_visitante = (
+        preparar_equipo(
+            seccion_visitante_limpia,
+            visitante,
+        )
+    )
+
+    resultado = {
+        "match_id": args.match_id,
+        "partido": partido,
+        "control_muestra": {
+            "match_id_objetivo": (
+                match_id_objetivo
+            ),
+            "partido_objetivo_excluido": True,
+            "fecha_objetivo": partido.get("fecha"),
+            "equipo_local": control_local,
+            "equipo_visitante": control_visitante,
+        },
+        "datos_observados": {
+            "local": {
+                "equipo": local,
+                **calcular_ventanas_equipo(
+                    partidos_local,
+                    "local",
+                ),
+            },
+            "visitante": {
+                "equipo": visitante,
+                **calcular_ventanas_equipo(
+                    partidos_visitante,
+                    "visitante",
+                ),
+            },
+        },
+    }
+
+    # ----------------------------------------
+    # Clasificación / temporada.
+    # ----------------------------------------
+
+    ruta_standings = (
+        carpeta
+        / "standings.json"
+    )
+
+    if ruta_standings.exists():
+
+        with ruta_standings.open(
+            encoding="utf-8"
+        ) as f:
+            standings = json.load(f)
+
+        resultado[
+            "datos_observados"
+        ]["temporada"] = {
+            "estado": standings.get(
+                "estado"
+            ),
+            "local": standings.get(
+                "local"
+            ),
+            "visitante": standings.get(
+                "visitante"
+            ),
+            "numero_equipos": len(
+                standings.get(
+                    "clasificacion",
+                    [],
+                )
+            ),
+        }
+
+    else:
+        resultado[
+            "datos_observados"
+        ]["temporada"] = {
+            "estado": (
+                "sin_standings"
+            ),
+            "local": None,
+            "visitante": None,
+            "numero_equipos": 0,
+        }
+
+    if seccion_h2h is not None:
+        # El H2H también debe representar sólo
+        # información disponible antes del partido.
+        partidos_h2h_validos, control_h2h = (
+            filtrar_prepartido(
+                seccion_h2h["partidos"],
+                match_id_objetivo,
+                partido.get("fecha"),
+            )
+        )
+
+        seccion_h2h_limpia = {
+            **seccion_h2h,
+            "partidos": partidos_h2h_validos,
+        }
+
+        resultado["control_muestra"]["h2h"] = (
+            control_h2h
+        )
+
+        partidos_h2h = preparar_h2h(
+            seccion_h2h_limpia,
+            local,
+        )
+
+        resultado[
+            "datos_observados"
+        ]["h2h"] = {
+            "perspectiva": local,
+            **calcular_h2h(
+                partidos_h2h
+            ),
+        }
+
+    else:
+        resultado[
+            "datos_observados"
+        ]["h2h"] = {
+            "perspectiva": local,
+            "disponibles": 0,
+            "h5": resumir_partidos(
+                []
+            ),
+            "h10": resumir_partidos(
+                []
+            ),
+            "h20": resumir_partidos(
+                []
+            ),
+        }
+
+    salida.write_text(
+        json.dumps(
+            resultado,
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
+    print("=" * 75)
+    print("MATCH GOALS AI - ENRICH")
+    print("=" * 75)
+
+    print()
+    print(
+        local,
+        "vs",
+        visitante,
+    )
+
+    print()
+    print(
+        "Guardado en:",
+        salida,
+    )
+
+    print()
+
+    for lado in (
+        "local",
+        "visitante",
+    ):
+        equipo = resultado[
+            "datos_observados"
+        ][lado]
+
+        print("=" * 75)
+        print(
+            equipo["equipo"]
+        )
+        print("=" * 75)
+
+        for ventana in (
+            "l5",
+            "l10",
+            "l20",
+        ):
+            r = equipo[
+                ventana
+            ]
+
+            print(
+                ventana.upper(),
+                "| PJ:",
+                r["pj"],
+                "| GF/PJ:",
+                fmt_num(r.get("promedio_gf")),
+                "| GC/PJ:",
+                fmt_num(r.get("promedio_gc")),
+                "| TG/PJ:",
+                fmt_num(r.get("promedio_total_goles")),
+                "| O2.5:",
+                fmt_pct((r.get("over_2_5") or {}).get("porcentaje")),
+                "| BTTS:",
+                fmt_pct((r.get("btts") or {}).get("porcentaje")),
+            )
+
+        condicion = (
+            "como_local"
+            if lado == "local"
+            else "como_visitante"
+        )
+
+        r = equipo[
+            condicion
+        ]
+
+        print(
+            condicion.upper(),
+            "| PJ:",
+            r["pj"],
+            "| GF/PJ:",
+            fmt_num(r.get("promedio_gf")),
+            "| GC/PJ:",
+            fmt_num(r.get("promedio_gc")),
+            "| TG/PJ:",
+            fmt_num(r.get("promedio_total_goles")),
+            "| O2.5:",
+            fmt_pct((r.get("over_2_5") or {}).get("porcentaje")),
+            "| BTTS:",
+            fmt_pct((r.get("btts") or {}).get("porcentaje")),
+        )
+
+        print()
+
+    h2h = resultado[
+        "datos_observados"
+    ]["h2h"]
+
+    print("=" * 75)
+    print("H2H")
+    print("=" * 75)
+
+    print(
+        "Disponibles:",
+        h2h["disponibles"],
+    )
+
+    for ventana in (
+        "h5",
+        "h10",
+        "h20",
+    ):
+        r = h2h[
+            ventana
+        ]
+
+        if r["pj"] == 0:
+            print(
+                ventana.upper(),
+                "| sin datos",
+            )
+            continue
+
+        print(
+            ventana.upper(),
+            "| PJ:",
+            r["pj"],
+            "| TG/PJ:",
+            fmt_num(r.get("promedio_total_goles")),
+            "| O1.5:",
+            f"{r['over_1_5']['porcentaje']:.0%}",
+            "| O2.5:",
+            fmt_pct((r.get("over_2_5") or {}).get("porcentaje")),
+            "| O3.5:",
+            f"{r['over_3_5']['porcentaje']:.0%}",
+            "| BTTS:",
+            fmt_pct((r.get("btts") or {}).get("porcentaje")),
+        )
+
+
+if __name__ == "__main__":
+    main()

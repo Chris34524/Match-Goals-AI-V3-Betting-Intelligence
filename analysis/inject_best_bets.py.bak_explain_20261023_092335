@@ -1,0 +1,286 @@
+import argparse
+import html
+import json
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def esc(v):
+    return html.escape(
+        str(v or "")
+    )
+
+
+def pct(v):
+    try:
+        return f"{float(v)*100:.1f}%"
+    except Exception:
+        return "N/D"
+
+
+def fmt_pick(x):
+    if not x:
+        return "—"
+
+    return (
+        f"<strong>{esc(x.get('mercado'))}</strong>"
+        f"<br>{pct(x.get('probabilidad'))}"
+        f"<br><small>{esc(x.get('nivel'))}</small>"
+    )
+
+
+def main():
+    ap = argparse.ArgumentParser()
+
+    ap.add_argument(
+        "--html",
+        default="data/report_window_pro.html",
+    )
+
+    ap.add_argument(
+        "--data",
+        default="data/selected_predictions_v2.json",
+    )
+
+    args = ap.parse_args()
+
+    hp = ROOT / args.html
+    dp = ROOT / args.data
+
+    doc = hp.read_text(
+        encoding="utf-8"
+    )
+
+    data = json.loads(
+        dp.read_text(
+            encoding="utf-8"
+        )
+    )
+
+    rows = []
+
+    for p in data.get(
+        "partidos",
+        []
+    ):
+        b = p.get(
+            "mejores_apuestas",
+            {}
+        )
+
+        pr = b.get(
+            "principal"
+        )
+
+        alts = b.get(
+            "alternativas",
+            []
+        )
+
+        r = b.get(
+            "resultado_1x2"
+        )
+
+        dc = b.get(
+            "doble_oportunidad"
+        )
+
+        rows.append(
+            f"""
+            <tr>
+              <td class="bb-match">
+                <strong>
+                  {esc(p.get('local'))}
+                  vs
+                  {esc(p.get('visitante'))}
+                </strong>
+                <br>
+                <small>
+                  {esc(p.get('competicion'))}
+                </small>
+              </td>
+
+              <td>
+                {fmt_pick(pr)}
+              </td>
+
+              <td>
+                {
+                    fmt_pick(alts[0])
+                    if len(alts) > 0
+                    else '—'
+                }
+              </td>
+
+              <td>
+                {
+                    fmt_pick(alts[1])
+                    if len(alts) > 1
+                    else '—'
+                }
+              </td>
+
+              <td>
+                {
+                    (
+                        f"<strong>{esc(r.get('resultado'))}</strong>"
+                        f"<br>{pct(r.get('probabilidad'))}"
+                    )
+                    if r
+                    else '—'
+                }
+              </td>
+
+              <td>
+                {
+                    (
+                        f"<strong>{esc(dc.get('mercado'))}</strong>"
+                        f"<br>{pct(dc.get('probabilidad'))}"
+                    )
+                    if dc
+                    else '—'
+                }
+              </td>
+
+              <td>
+                <strong>
+                  {esc(b.get('accion'))}
+                </strong>
+              </td>
+
+              <td>
+                {esc(
+                    p.get(
+                        'calidad_datos',
+                        'N/D'
+                    )
+                )}
+              </td>
+            </tr>
+            """
+        )
+
+    panel = f"""
+<style>
+.bb-panel {{
+    margin: 25px auto;
+    max-width: 98%;
+    padding: 22px;
+    border-radius: 15px;
+    background: #151d29;
+    color: #f2f5f8;
+}}
+
+.bb-wrap {{
+    overflow-x: auto;
+}}
+
+.bb-table {{
+    width: 100%;
+    border-collapse: collapse;
+}}
+
+.bb-table th,
+.bb-table td {{
+    padding: 11px 9px;
+    border-bottom: 1px solid #334052;
+    text-align: center;
+    vertical-align: middle;
+}}
+
+.bb-table th {{
+    background: #243044;
+}}
+
+.bb-match {{
+    text-align: left !important;
+}}
+
+.bb-note {{
+    opacity: .72;
+    margin-bottom: 15px;
+    font-size: 12px;
+}}
+</style>
+
+<section class="bb-panel">
+
+<h2>Mejores opciones estadísticas por partido</h2>
+
+<div class="bb-note">
+La selección principal combina probabilidad BT0,
+calidad de datos y desempeño reciente del mercado.
+Sin cuotas disponibles esto NO mide valor esperado (EV).
+1X2 y doble oportunidad se muestran como contexto
+y todavía no tienen confianza predictiva validada.
+</div>
+
+<div class="bb-wrap">
+<table class="bb-table">
+
+<thead>
+<tr>
+<th>Partido</th>
+<th>Principal</th>
+<th>Alternativa 1</th>
+<th>Alternativa 2</th>
+<th>Resultado probable</th>
+<th>Doble oportunidad</th>
+<th>Decisión</th>
+<th>Calidad</th>
+</tr>
+</thead>
+
+<tbody>
+{''.join(rows)}
+</tbody>
+
+</table>
+</div>
+
+</section>
+"""
+
+    body = doc.lower().find(
+        "<body"
+    )
+
+    if body == -1:
+        raise SystemExit(
+            "No encontré BODY"
+        )
+
+    pos = doc.find(
+        ">",
+        body,
+    )
+
+    if pos == -1:
+        raise SystemExit(
+            "BODY inválido"
+        )
+
+    pos += 1
+
+    doc = (
+        doc[:pos]
+        + panel
+        + doc[pos:]
+    )
+
+    hp.write_text(
+        doc,
+        encoding="utf-8",
+    )
+
+    print(
+        "Panel de mejores opciones:",
+        len(rows),
+        "partidos"
+    )
+
+
+if __name__ == "__main__":
+    main()

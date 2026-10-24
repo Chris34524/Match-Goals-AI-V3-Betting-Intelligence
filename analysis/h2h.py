@@ -1,0 +1,696 @@
+import argparse
+import json
+import math
+from datetime import datetime
+from pathlib import Path
+from analysis.temporal import filtrar_prepartido
+
+
+def parsear_fecha(valor):
+    if not valor:
+        return None
+
+    try:
+        return datetime.strptime(
+            valor,
+            "%d.%m.%y",
+        )
+    except ValueError:
+        return None
+
+
+def normalizar_partido(
+    partido,
+    equipo_local_actual,
+    equipo_visitante_actual,
+):
+    local = partido.get("local")
+    visitante = partido.get("visitante")
+
+    gl = partido.get("goles_local")
+    gv = partido.get("goles_visitante")
+
+    if gl is None or gv is None:
+        return None
+
+    if (
+        local == equipo_local_actual
+        and visitante
+        == equipo_visitante_actual
+    ):
+        goles_equipo_local = gl
+        goles_equipo_visitante = gv
+        orientacion = "igual"
+
+    elif (
+        local == equipo_visitante_actual
+        and visitante
+        == equipo_local_actual
+    ):
+        goles_equipo_local = gv
+        goles_equipo_visitante = gl
+        orientacion = "invertida"
+
+    else:
+        return None
+
+    total = (
+        goles_equipo_local
+        + goles_equipo_visitante
+    )
+
+    return {
+        "match_id": partido.get(
+            "match_id"
+        ),
+        "fecha": partido.get("fecha"),
+        "fecha_dt": parsear_fecha(
+            partido.get("fecha")
+        ),
+        "competicion_codigo": (
+            partido.get(
+                "competicion_codigo"
+            )
+        ),
+        "competicion": partido.get(
+            "competicion"
+        ),
+        "orientacion": orientacion,
+        "goles_equipo_local": (
+            goles_equipo_local
+        ),
+        "goles_equipo_visitante": (
+            goles_equipo_visitante
+        ),
+        "total_goles": total,
+        "btts": (
+            goles_equipo_local > 0
+            and goles_equipo_visitante > 0
+        ),
+    }
+
+
+def resumen(partidos, n):
+    muestra = partidos[:n]
+
+    if not muestra:
+        return {
+            "n": 0,
+        }
+
+    cantidad = len(muestra)
+
+    gf_local = sum(
+        p["goles_equipo_local"]
+        for p in muestra
+    )
+
+    gf_visitante = sum(
+        p["goles_equipo_visitante"]
+        for p in muestra
+    )
+
+    totales = [
+        p["total_goles"]
+        for p in muestra
+    ]
+
+    victorias_local = sum(
+        p["goles_equipo_local"]
+        > p["goles_equipo_visitante"]
+        for p in muestra
+    )
+
+    empates = sum(
+        p["goles_equipo_local"]
+        == p["goles_equipo_visitante"]
+        for p in muestra
+    )
+
+    victorias_visitante = (
+        cantidad
+        - victorias_local
+        - empates
+    )
+
+    return {
+        "n": cantidad,
+
+        "gf_local_promedio": (
+            gf_local / cantidad
+        ),
+
+        "gf_visitante_promedio": (
+            gf_visitante / cantidad
+        ),
+
+        "total_promedio": (
+            sum(totales)
+            / cantidad
+        ),
+
+        "p_2_mas": (
+            sum(
+                x >= 2
+                for x in totales
+            )
+            / cantidad
+        ),
+
+        "p_3_mas": (
+            sum(
+                x >= 3
+                for x in totales
+            )
+            / cantidad
+        ),
+
+        "p_4_mas": (
+            sum(
+                x >= 4
+                for x in totales
+            )
+            / cantidad
+        ),
+
+        "p_menos_2": (
+            sum(
+                x < 2
+                for x in totales
+            )
+            / cantidad
+        ),
+
+        "p_menos_3": (
+            sum(
+                x < 3
+                for x in totales
+            )
+            / cantidad
+        ),
+
+        "p_menos_4": (
+            sum(
+                x < 4
+                for x in totales
+            )
+            / cantidad
+        ),
+
+        "btts": (
+            sum(
+                p["btts"]
+                for p in muestra
+            )
+            / cantidad
+        ),
+
+        "victoria_local": (
+            victorias_local
+            / cantidad
+        ),
+
+        "empate": (
+            empates
+            / cantidad
+        ),
+
+        "victoria_visitante": (
+            victorias_visitante
+            / cantidad
+        ),
+    }
+
+
+def peso_recencia(
+    fecha_partido,
+    fecha_referencia,
+):
+    """
+    Decaimiento exponencial.
+
+    Vida media inicial = 730 días
+    (~2 años).
+
+    NO consideramos este parámetro
+    definitivo todavía.
+    """
+
+    if (
+        fecha_partido is None
+        or fecha_referencia is None
+    ):
+        return 0.25
+
+    dias = (
+        fecha_referencia
+        - fecha_partido
+    ).days
+
+    dias = max(
+        dias,
+        0,
+    )
+
+    vida_media = 730.0
+
+    return math.exp(
+        -math.log(2)
+        * dias
+        / vida_media
+    )
+
+
+def resumen_ponderado(
+    partidos,
+    fecha_referencia,
+):
+    registros = []
+
+    for p in partidos:
+        peso = peso_recencia(
+            p["fecha_dt"],
+            fecha_referencia,
+        )
+
+        registros.append(
+            (
+                p,
+                peso,
+            )
+        )
+
+    suma_pesos = sum(
+        peso
+        for _, peso in registros
+    )
+
+    if suma_pesos == 0:
+        return {
+            "n": len(partidos),
+            "peso_total": 0,
+        }
+
+    def media_ponderada(
+        funcion
+    ):
+        return sum(
+            funcion(p) * peso
+            for p, peso in registros
+        ) / suma_pesos
+
+    return {
+        "n": len(partidos),
+
+        "peso_total": suma_pesos,
+
+        "gf_local_promedio": (
+            media_ponderada(
+                lambda p:
+                p[
+                    "goles_equipo_local"
+                ]
+            )
+        ),
+
+        "gf_visitante_promedio": (
+            media_ponderada(
+                lambda p:
+                p[
+                    "goles_equipo_visitante"
+                ]
+            )
+        ),
+
+        "total_promedio": (
+            media_ponderada(
+                lambda p:
+                p["total_goles"]
+            )
+        ),
+
+        "p_2_mas": (
+            media_ponderada(
+                lambda p:
+                p["total_goles"] >= 2
+            )
+        ),
+
+        "p_3_mas": (
+            media_ponderada(
+                lambda p:
+                p["total_goles"] >= 3
+            )
+        ),
+
+        "p_4_mas": (
+            media_ponderada(
+                lambda p:
+                p["total_goles"] >= 4
+            )
+        ),
+
+        "p_menos_2": (
+            media_ponderada(
+                lambda p:
+                p["total_goles"] < 2
+            )
+        ),
+
+        "p_menos_3": (
+            media_ponderada(
+                lambda p:
+                p["total_goles"] < 3
+            )
+        ),
+
+        "p_menos_4": (
+            media_ponderada(
+                lambda p:
+                p["total_goles"] < 4
+            )
+        ),
+
+        "btts": (
+            media_ponderada(
+                lambda p:
+                p["btts"]
+            )
+        ),
+
+        "victoria_local": (
+            media_ponderada(
+                lambda p:
+                p[
+                    "goles_equipo_local"
+                ]
+                >
+                p[
+                    "goles_equipo_visitante"
+                ]
+            )
+        ),
+
+        "empate": (
+            media_ponderada(
+                lambda p:
+                p[
+                    "goles_equipo_local"
+                ]
+                ==
+                p[
+                    "goles_equipo_visitante"
+                ]
+            )
+        ),
+
+        "victoria_visitante": (
+            media_ponderada(
+                lambda p:
+                p[
+                    "goles_equipo_local"
+                ]
+                <
+                p[
+                    "goles_equipo_visitante"
+                ]
+            )
+        ),
+    }
+
+
+def main():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--match-id",
+        required=True,
+    )
+
+    args = parser.parse_args()
+
+    carpeta = (
+        Path("data")
+        / "matches"
+        / args.match_id
+    )
+
+    ruta = (
+        carpeta
+        / "history.json"
+    )
+
+    if not ruta.exists():
+        raise SystemExit(
+            f"No existe: {ruta}"
+        )
+
+    with ruta.open(
+        encoding="utf-8"
+    ) as f:
+        history = json.load(f)
+
+    principal = history["partido"]
+
+    equipo_local = principal["local"]
+    equipo_visitante = (
+        principal["visitante"]
+    )
+
+    match_id_objetivo = (
+        principal.get("id")
+        or args.match_id
+    )
+
+    fecha_referencia = (
+        datetime.strptime(
+            principal["fecha"],
+            "%Y-%m-%d",
+        )
+        if principal.get("fecha")
+        else None
+    )
+
+    seccion_h2h = next(
+        (
+            s
+            for s in history[
+                "secciones"
+            ]
+            if s.get(
+                "tipo_estimado"
+            ) == "h2h"
+        ),
+        None,
+    )
+
+    if seccion_h2h is None:
+        raise SystemExit(
+            "No existe seccion H2H"
+        )
+
+    partidos_h2h_validos, control_temporal = (
+        filtrar_prepartido(
+            seccion_h2h["partidos"],
+            match_id_objetivo,
+            principal.get("fecha"),
+        )
+    )
+
+    partidos = []
+
+    for p in partidos_h2h_validos:
+        normalizado = (
+            normalizar_partido(
+                p,
+                equipo_local,
+                equipo_visitante,
+            )
+        )
+
+        if normalizado:
+            partidos.append(
+                normalizado
+            )
+
+    h5 = resumen(
+        partidos,
+        5,
+    )
+
+    h10 = resumen(
+        partidos,
+        10,
+    )
+
+    h20 = resumen(
+        partidos,
+        20,
+    )
+
+    ponderado = resumen_ponderado(
+        partidos[:20],
+        fecha_referencia,
+    )
+
+    salida = {
+        "match_id": args.match_id,
+
+        "partido": {
+            "local": equipo_local,
+            "visitante": (
+                equipo_visitante
+            ),
+        },
+
+        "partido_objetivo_excluido": (
+            match_id_objetivo
+        ),
+
+        "numero_h2h_validos": len(
+            partidos
+        ),
+
+        "h5": h5,
+        "h10": h10,
+        "h20": h20,
+
+        "ponderado_recencia": (
+            ponderado
+        ),
+
+        "partidos": [
+            {
+                k: v
+                for k, v in p.items()
+                if k != "fecha_dt"
+            }
+            for p in partidos[:20]
+        ],
+    }
+
+    ruta_salida = (
+        carpeta
+        / "h2h_analysis.json"
+    )
+
+    ruta_salida.write_text(
+        json.dumps(
+            salida,
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
+    print("=" * 76)
+    print("ANALISIS H2H")
+    print("=" * 76)
+
+    print(
+        equipo_local,
+        "vs",
+        equipo_visitante,
+    )
+
+    print(
+        "Partido objetivo excluido:",
+        match_id_objetivo,
+    )
+
+    print(
+        "H2H validos:",
+        len(partidos),
+    )
+
+    for nombre, r in (
+        ("H5", h5),
+        ("H10", h10),
+        ("H20", h20),
+        (
+            "PONDERADO",
+            ponderado,
+        ),
+    ):
+        print()
+        print(nombre)
+
+        print(
+            "n:",
+            r.get("n"),
+        )
+
+        print(
+            "GF local:",
+            round(
+                r.get(
+                    "gf_local_promedio",
+                    0,
+                ),
+                3,
+            ),
+        )
+
+        print(
+            "GF visitante:",
+            round(
+                r.get(
+                    "gf_visitante_promedio",
+                    0,
+                ),
+                3,
+            ),
+        )
+
+        print(
+            "Total:",
+            round(
+                r.get(
+                    "total_promedio",
+                    0,
+                ),
+                3,
+            ),
+        )
+
+        print(
+            "2+:",
+            f"{r.get('p_2_mas', 0):.1%}",
+            "| 3+:",
+            f"{r.get('p_3_mas', 0):.1%}",
+            "| 4+:",
+            f"{r.get('p_4_mas', 0):.1%}",
+        )
+
+        print(
+            "-2:",
+            f"{r.get('p_menos_2', 0):.1%}",
+            "| -3:",
+            f"{r.get('p_menos_3', 0):.1%}",
+            "| -4:",
+            f"{r.get('p_menos_4', 0):.1%}",
+        )
+
+        print(
+            "BTTS:",
+            f"{r.get('btts', 0):.1%}",
+        )
+
+        print(
+            "1/X/2:",
+            f"{r.get('victoria_local', 0):.1%}",
+            "/",
+            f"{r.get('empate', 0):.1%}",
+            "/",
+            f"{r.get('victoria_visitante', 0):.1%}",
+        )
+
+    print()
+    print(
+        "Guardado en:",
+        ruta_salida,
+    )
+
+
+if __name__ == "__main__":
+    main()

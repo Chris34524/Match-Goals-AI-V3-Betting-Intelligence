@@ -1,0 +1,991 @@
+import argparse
+import json
+from pathlib import Path
+
+
+def media(a, b):
+    return (a + b) / 2
+
+
+def promedio_ponderado(valores):
+    """
+    valores:
+    [
+        (valor, peso),
+        ...
+    ]
+    """
+
+    validos = [
+        (valor, peso)
+        for valor, peso in valores
+        if valor is not None
+    ]
+
+    if not validos:
+        return None
+
+    suma_pesos = sum(
+        peso
+        for _, peso in validos
+    )
+
+    if suma_pesos == 0:
+        return None
+
+    return sum(
+        valor * peso
+        for valor, peso in validos
+    ) / suma_pesos
+
+
+def resumen_xg(partidos, n):
+    muestra = [
+        p
+        for p in partidos[:n]
+        if (
+            p.get("xg_disponible")
+            and p.get("xgf") is not None
+            and p.get("xga") is not None
+        )
+    ]
+
+    if not muestra:
+        return {
+            "n": 0,
+            "xgf": None,
+            "xga": None,
+        }
+
+    return {
+        "n": len(muestra),
+        "xgf": sum(
+            p["xgf"]
+            for p in muestra
+        ) / len(muestra),
+        "xga": sum(
+            p["xga"]
+            for p in muestra
+        ) / len(muestra),
+    }
+
+
+def cruzar(
+    ataque_local,
+    defensa_visitante,
+    ataque_visitante,
+    defensa_local,
+):
+    return {
+        "local": media(
+            ataque_local,
+            defensa_visitante,
+        ),
+        "visitante": media(
+            ataque_visitante,
+            defensa_local,
+        ),
+    }
+
+
+def agregar_total(metodo):
+    metodo["total"] = (
+        metodo["local"]
+        + metodo["visitante"]
+    )
+
+    return metodo
+
+
+def main():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--match-id",
+        required=True,
+    )
+
+    args = parser.parse_args()
+
+    carpeta = (
+        Path("data")
+        / "matches"
+        / args.match_id
+    )
+
+    ruta_enriched = (
+        carpeta
+        / "enriched.json"
+    )
+
+    ruta_xg = (
+        carpeta
+        / "xg_history.json"
+    )
+
+    ruta_h2h = (
+        carpeta
+        / "h2h_analysis.json"
+    )
+
+    if not ruta_enriched.exists():
+        raise SystemExit(
+            f"No existe: {ruta_enriched}"
+        )
+
+    if not ruta_xg.exists():
+        raise SystemExit(
+            f"No existe: {ruta_xg}"
+        )
+
+    if not ruta_h2h.exists():
+        raise SystemExit(
+            f"No existe: {ruta_h2h}. "
+            "Ejecuta primero: "
+            "python -m analysis.h2h "
+            f"--match-id {args.match_id}"
+        )
+
+    with ruta_enriched.open(
+        encoding="utf-8"
+    ) as f:
+        enriched = json.load(f)
+
+    with ruta_xg.open(
+        encoding="utf-8"
+    ) as f:
+        xg = json.load(f)
+
+    with ruta_h2h.open(
+        encoding="utf-8"
+    ) as f:
+        h2h = json.load(f)
+
+    obs = enriched[
+        "datos_observados"
+    ]
+
+    local = obs["local"]
+    visitante = obs["visitante"]
+    temporada = obs["temporada"]
+
+    nombre_local = local["equipo"]
+    nombre_visitante = visitante[
+        "equipo"
+    ]
+
+    xg_local_l5 = resumen_xg(
+        xg["local"]["partidos"],
+        5,
+    )
+
+    xg_local_l10 = resumen_xg(
+        xg["local"]["partidos"],
+        10,
+    )
+
+    xg_visitante_l5 = resumen_xg(
+        xg["visitante"]["partidos"],
+        5,
+    )
+
+    xg_visitante_l10 = resumen_xg(
+        xg["visitante"]["partidos"],
+        10,
+    )
+
+    metodos = {}
+
+    # ========================================
+    # A. Goles reales L5
+    # ========================================
+
+    metodos["A_goles_L5"] = agregar_total(
+        cruzar(
+            local["l5"]["promedio_gf"],
+            visitante["l5"]["promedio_gc"],
+            visitante["l5"]["promedio_gf"],
+            local["l5"]["promedio_gc"],
+        )
+    )
+
+    # ========================================
+    # B. Goles reales L10
+    # ========================================
+
+    metodos["B_goles_L10"] = agregar_total(
+        cruzar(
+            local["l10"]["promedio_gf"],
+            visitante["l10"]["promedio_gc"],
+            visitante["l10"]["promedio_gf"],
+            local["l10"]["promedio_gc"],
+        )
+    )
+
+    # ========================================
+    # C. Goles reales L20
+    # ========================================
+
+    metodos["C_goles_L20"] = agregar_total(
+        cruzar(
+            local["l20"]["promedio_gf"],
+            visitante["l20"]["promedio_gc"],
+            visitante["l20"]["promedio_gf"],
+            local["l20"]["promedio_gc"],
+        )
+    )
+
+    # ========================================
+    # D. xG L5
+    # ========================================
+
+    if (
+        xg_local_l5["xgf"] is not None
+        and xg_visitante_l5["xga"] is not None
+        and xg_visitante_l5["xgf"] is not None
+        and xg_local_l5["xga"] is not None
+    ):
+        metodos["D_xG_L5"] = agregar_total(
+            cruzar(
+                xg_local_l5["xgf"],
+                xg_visitante_l5["xga"],
+                xg_visitante_l5["xgf"],
+                xg_local_l5["xga"],
+            )
+        )
+
+    # ========================================
+    # E. xG L10
+    # ========================================
+
+    if (
+        xg_local_l10["xgf"] is not None
+        and xg_visitante_l10["xga"] is not None
+        and xg_visitante_l10["xgf"] is not None
+        and xg_local_l10["xga"] is not None
+    ):
+        metodos["E_xG_L10"] = agregar_total(
+            cruzar(
+                xg_local_l10["xgf"],
+                xg_visitante_l10["xga"],
+                xg_visitante_l10["xgf"],
+                xg_local_l10["xga"],
+            )
+        )
+
+    # ========================================
+    # F. Condición casa / visitante
+    # ========================================
+
+    metodos[
+        "F_casa_visitante"
+    ] = agregar_total(
+        cruzar(
+            local["como_local"][
+                "promedio_gf"
+            ],
+            visitante[
+                "como_visitante"
+            ]["promedio_gc"],
+            visitante[
+                "como_visitante"
+            ]["promedio_gf"],
+            local["como_local"][
+                "promedio_gc"
+            ],
+        )
+    )
+
+    # ========================================
+    # G. Temporada
+    # ========================================
+
+    if (
+        temporada.get("local")
+        and temporada.get("visitante")
+    ):
+        metodos[
+            "G_temporada"
+        ] = agregar_total(
+            cruzar(
+                temporada["local"][
+                    "promedio_gf"
+                ],
+                temporada["visitante"][
+                    "promedio_gc"
+                ],
+                temporada["visitante"][
+                    "promedio_gf"
+                ],
+                temporada["local"][
+                    "promedio_gc"
+                ],
+            )
+        )
+
+    # ========================================
+    # H. Forma goles:
+    #
+    # L5  25%
+    # L10 45%
+    # L20 30%
+    #
+    # L10 es el centro.
+    # L5 aporta recencia sin dominar.
+    # L20 aporta estabilidad.
+    # ========================================
+
+    forma_goles_local_ataque = (
+        promedio_ponderado(
+            [
+                (
+                    local["l5"][
+                        "promedio_gf"
+                    ],
+                    0.25,
+                ),
+                (
+                    local["l10"][
+                        "promedio_gf"
+                    ],
+                    0.45,
+                ),
+                (
+                    local["l20"][
+                        "promedio_gf"
+                    ],
+                    0.30,
+                ),
+            ]
+        )
+    )
+
+    forma_goles_local_defensa = (
+        promedio_ponderado(
+            [
+                (
+                    local["l5"][
+                        "promedio_gc"
+                    ],
+                    0.25,
+                ),
+                (
+                    local["l10"][
+                        "promedio_gc"
+                    ],
+                    0.45,
+                ),
+                (
+                    local["l20"][
+                        "promedio_gc"
+                    ],
+                    0.30,
+                ),
+            ]
+        )
+    )
+
+    forma_goles_visitante_ataque = (
+        promedio_ponderado(
+            [
+                (
+                    visitante["l5"][
+                        "promedio_gf"
+                    ],
+                    0.25,
+                ),
+                (
+                    visitante["l10"][
+                        "promedio_gf"
+                    ],
+                    0.45,
+                ),
+                (
+                    visitante["l20"][
+                        "promedio_gf"
+                    ],
+                    0.30,
+                ),
+            ]
+        )
+    )
+
+    forma_goles_visitante_defensa = (
+        promedio_ponderado(
+            [
+                (
+                    visitante["l5"][
+                        "promedio_gc"
+                    ],
+                    0.25,
+                ),
+                (
+                    visitante["l10"][
+                        "promedio_gc"
+                    ],
+                    0.45,
+                ),
+                (
+                    visitante["l20"][
+                        "promedio_gc"
+                    ],
+                    0.30,
+                ),
+            ]
+        )
+    )
+
+    metodos[
+        "H_forma_goles_5_10_20"
+    ] = agregar_total(
+        cruzar(
+            forma_goles_local_ataque,
+            forma_goles_visitante_defensa,
+            forma_goles_visitante_ataque,
+            forma_goles_local_defensa,
+        )
+    )
+
+    # ========================================
+    # I. Forma xG:
+    #
+    # L5  35%
+    # L10 65%
+    #
+    # Sólo tenemos xG hasta L10.
+    # ========================================
+
+    forma_xg_local_ataque = (
+        promedio_ponderado(
+            [
+                (
+                    xg_local_l5["xgf"],
+                    0.35,
+                ),
+                (
+                    xg_local_l10["xgf"],
+                    0.65,
+                ),
+            ]
+        )
+    )
+
+    forma_xg_local_defensa = (
+        promedio_ponderado(
+            [
+                (
+                    xg_local_l5["xga"],
+                    0.35,
+                ),
+                (
+                    xg_local_l10["xga"],
+                    0.65,
+                ),
+            ]
+        )
+    )
+
+    forma_xg_visitante_ataque = (
+        promedio_ponderado(
+            [
+                (
+                    xg_visitante_l5["xgf"],
+                    0.35,
+                ),
+                (
+                    xg_visitante_l10["xgf"],
+                    0.65,
+                ),
+            ]
+        )
+    )
+
+    forma_xg_visitante_defensa = (
+        promedio_ponderado(
+            [
+                (
+                    xg_visitante_l5["xga"],
+                    0.35,
+                ),
+                (
+                    xg_visitante_l10["xga"],
+                    0.65,
+                ),
+            ]
+        )
+    )
+
+    if all(
+        valor is not None
+        for valor in (
+            forma_xg_local_ataque,
+            forma_xg_local_defensa,
+            forma_xg_visitante_ataque,
+            forma_xg_visitante_defensa,
+        )
+    ):
+        metodos[
+            "I_forma_xG_5_10"
+        ] = agregar_total(
+            cruzar(
+                forma_xg_local_ataque,
+                forma_xg_visitante_defensa,
+                forma_xg_visitante_ataque,
+                forma_xg_local_defensa,
+            )
+        )
+
+    # ========================================
+    # J. Híbrido experimental.
+    #
+    # NO es el modelo definitivo.
+    #
+    # 45% forma xG
+    # 25% forma goles
+    # 20% casa/visitante
+    # 10% temporada
+    # ========================================
+
+    componentes_hibrido = [
+        (
+            "I_forma_xG_5_10",
+            0.45,
+        ),
+        (
+            "H_forma_goles_5_10_20",
+            0.25,
+        ),
+        (
+            "F_casa_visitante",
+            0.20,
+        ),
+        (
+            "G_temporada",
+            0.10,
+        ),
+    ]
+
+    hibrido_local = (
+        promedio_ponderado(
+            [
+                (
+                    metodos[nombre][
+                        "local"
+                    ],
+                    peso,
+                )
+                for nombre, peso
+                in componentes_hibrido
+                if nombre in metodos
+            ]
+        )
+    )
+
+    hibrido_visitante = (
+        promedio_ponderado(
+            [
+                (
+                    metodos[nombre][
+                        "visitante"
+                    ],
+                    peso,
+                )
+                for nombre, peso
+                in componentes_hibrido
+                if nombre in metodos
+            ]
+        )
+    )
+
+    metodos[
+        "J_hibrido_experimental"
+    ] = agregar_total(
+        {
+            "local": hibrido_local,
+            "visitante": (
+                hibrido_visitante
+            ),
+        }
+    )
+
+    # ========================================
+    # K-N. H2H
+    #
+    # H5/H10/H20 son diagnósticos.
+    # NO se suman entre sí para construir
+    # el modelo porque contienen partidos
+    # repetidos entre ventanas.
+    # ========================================
+
+    for clave, nombre_metodo in (
+        ("h5", "K_H2H_H5"),
+        ("h10", "L_H2H_H10"),
+        ("h20", "M_H2H_H20"),
+    ):
+        r = h2h.get(clave, {})
+
+        if (
+            r.get("gf_local_promedio")
+            is not None
+            and r.get(
+                "gf_visitante_promedio"
+            ) is not None
+        ):
+            metodos[
+                nombre_metodo
+            ] = agregar_total(
+                {
+                    "local": r[
+                        "gf_local_promedio"
+                    ],
+                    "visitante": r[
+                        "gf_visitante_promedio"
+                    ],
+                }
+            )
+
+    h2h_ponderado = h2h.get(
+        "ponderado_recencia",
+        {},
+    )
+
+    if (
+        h2h_ponderado.get(
+            "gf_local_promedio"
+        ) is not None
+        and h2h_ponderado.get(
+            "gf_visitante_promedio"
+        ) is not None
+    ):
+        metodos[
+            "N_H2H_ponderado"
+        ] = agregar_total(
+            {
+                "local": h2h_ponderado[
+                    "gf_local_promedio"
+                ],
+                "visitante": h2h_ponderado[
+                    "gf_visitante_promedio"
+                ],
+            }
+        )
+
+    # ========================================
+    # O. H2H ponderado con orientación.
+    #
+    # Partimos de los pesos de recencia ya
+    # calculados conceptualmente por h2h.py,
+    # pero aquí reconstruimos la ponderación
+    # usando fecha y orientación para poder
+    # estudiar el efecto de la sede.
+    #
+    # Misma orientación: factor 1.00
+    # Invertida:          factor 0.70
+    #
+    # 0.70 es EXPERIMENTAL, no definitivo.
+    # ========================================
+
+    from datetime import datetime
+    import math
+
+    fecha_principal = enriched.get(
+        "partido",
+        {},
+    ).get("fecha")
+
+    fecha_referencia = (
+        datetime.strptime(
+            fecha_principal,
+            "%Y-%m-%d",
+        )
+        if fecha_principal
+        else None
+    )
+
+    registros_h2h_orientacion = []
+
+    for p in h2h.get(
+        "partidos",
+        [],
+    ):
+        try:
+            fecha_h = datetime.strptime(
+                p["fecha"],
+                "%d.%m.%y",
+            )
+        except (
+            KeyError,
+            TypeError,
+            ValueError,
+        ):
+            fecha_h = None
+
+        if (
+            fecha_h is not None
+            and fecha_referencia is not None
+        ):
+            dias = max(
+                (
+                    fecha_referencia
+                    - fecha_h
+                ).days,
+                0,
+            )
+
+            peso_recencia = math.exp(
+                -math.log(2)
+                * dias
+                / 730.0
+            )
+        else:
+            peso_recencia = 0.25
+
+        factor_orientacion = (
+            1.00
+            if p.get("orientacion")
+            == "igual"
+            else 0.70
+        )
+
+        peso = (
+            peso_recencia
+            * factor_orientacion
+        )
+
+        registros_h2h_orientacion.append(
+            (
+                p,
+                peso,
+            )
+        )
+
+    suma_pesos_h2h = sum(
+        peso
+        for _, peso
+        in registros_h2h_orientacion
+    )
+
+    if suma_pesos_h2h > 0:
+        h2h_orientado_local = sum(
+            p["goles_equipo_local"]
+            * peso
+            for p, peso
+            in registros_h2h_orientacion
+        ) / suma_pesos_h2h
+
+        h2h_orientado_visitante = sum(
+            p["goles_equipo_visitante"]
+            * peso
+            for p, peso
+            in registros_h2h_orientacion
+        ) / suma_pesos_h2h
+
+        metodos[
+            "O_H2H_recencia_orientacion"
+        ] = agregar_total(
+            {
+                "local": (
+                    h2h_orientado_local
+                ),
+                "visitante": (
+                    h2h_orientado_visitante
+                ),
+            }
+        )
+
+    # ========================================
+    # P-R. Sensibilidad del H2H.
+    #
+    # J queda intacto como BASE.
+    #
+    # Se prueba añadir la señal H2H
+    # recencia + orientación con:
+    #
+    # 10%, 15%, 20%
+    #
+    # NO son pesos definitivos.
+    # ========================================
+
+    base = metodos[
+        "J_hibrido_experimental"
+    ]
+
+    senal_h2h = metodos.get(
+        "O_H2H_recencia_orientacion",
+        metodos.get(
+            "N_H2H_ponderado"
+        ),
+    )
+
+    if senal_h2h is not None:
+        for etiqueta, peso_h2h in (
+            ("P_base_H2H_10pct", 0.10),
+            ("Q_base_H2H_15pct", 0.15),
+            ("R_base_H2H_20pct", 0.20),
+        ):
+            metodos[
+                etiqueta
+            ] = agregar_total(
+                {
+                    "local": (
+                        base["local"]
+                        * (1 - peso_h2h)
+                        + senal_h2h["local"]
+                        * peso_h2h
+                    ),
+                    "visitante": (
+                        base["visitante"]
+                        * (1 - peso_h2h)
+                        + senal_h2h[
+                            "visitante"
+                        ]
+                        * peso_h2h
+                    ),
+                }
+            )
+
+    # ========================================
+    # SALIDA ESTRUCTURADA
+    #
+    # Guardamos todos los escenarios para que
+    # run_match.py y, más adelante, run_day.py
+    # puedan consumirlos sin parsear texto.
+    # ========================================
+
+    archivo_salida = (
+        carpeta
+        / "lambda_comparison.json"
+    )
+
+    salida = {
+        "match_id": args.match_id,
+        "partido": enriched.get(
+            "partido",
+            {},
+        ),
+        "metodos": metodos,
+        "modelo_base_actual": (
+            "J_hibrido_experimental"
+        ),
+        "escenarios_h2h": {
+            "10pct": "P_base_H2H_10pct",
+            "15pct": "Q_base_H2H_15pct",
+            "20pct": "R_base_H2H_20pct",
+        },
+        "advertencias": [
+            (
+                "Los pesos actuales son "
+                "experimentales y requieren "
+                "backtesting."
+            ),
+            (
+                "Los escenarios H2H 10/15/20 "
+                "son pruebas de sensibilidad, "
+                "no pesos definitivos."
+            ),
+        ],
+    }
+
+    with archivo_salida.open(
+        "w",
+        encoding="utf-8",
+    ) as f:
+        json.dump(
+            salida,
+            f,
+            ensure_ascii=False,
+            indent=2,
+        )
+
+    print("=" * 86)
+    print("COMPARADOR DE LAMBDA")
+    print("=" * 86)
+
+    print()
+    print(
+        nombre_local,
+        "vs",
+        nombre_visitante,
+    )
+
+    print()
+    print(
+        f"{'METODO':<30}"
+        f"{nombre_local[:15]:>17}"
+        f"{nombre_visitante[:15]:>17}"
+        f"{'TOTAL':>12}"
+    )
+
+    print("-" * 76)
+
+    for nombre, valores in (
+        metodos.items()
+    ):
+        print(
+            f"{nombre:<30}"
+            f"{valores['local']:>17.3f}"
+            f"{valores['visitante']:>17.3f}"
+            f"{valores['total']:>12.3f}"
+        )
+
+    print()
+    print("=" * 86)
+    print("DATOS xG UTILIZADOS")
+    print("=" * 86)
+
+    print()
+    print(nombre_local)
+
+    print(
+        "L5 :",
+        xg_local_l5,
+    )
+
+    print(
+        "L10:",
+        xg_local_l10,
+    )
+
+    print()
+    print(nombre_visitante)
+
+    print(
+        "L5 :",
+        xg_visitante_l5,
+    )
+
+    print(
+        "L10:",
+        xg_visitante_l10,
+    )
+
+    print()
+    print("=" * 86)
+    print("IMPORTANTE")
+    print("=" * 86)
+
+    print(
+        "J_hibrido_experimental NO es "
+        "todavía el modelo final."
+    )
+
+    print(
+        "Los pesos existen sólo para "
+        "comparar una primera combinación."
+    )
+
+    print(
+        "P/Q/R prueban sensibilidad H2H "
+        "10% / 15% / 20%; tampoco son "
+        "modelos definitivos."
+    )
+
+    print(
+        "O usa factor experimental 0.70 "
+        "cuando el H2H tuvo orientación "
+        "local/visitante invertida."
+    )
+
+
+if __name__ == "__main__":
+    main()

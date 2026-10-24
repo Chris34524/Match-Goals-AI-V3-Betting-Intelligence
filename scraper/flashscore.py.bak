@@ -1,0 +1,217 @@
+import json
+from pathlib import Path
+from urllib.parse import parse_qs, urlparse
+
+from playwright.sync_api import sync_playwright
+
+
+URL = "https://www.flashscore.com.mx/"
+
+
+def extraer_mid(url):
+    if not url:
+        return None
+
+    query = parse_qs(urlparse(url).query)
+
+    valores = query.get("mid")
+
+    if valores:
+        return valores[0]
+
+    return None
+
+
+def texto_opcional(elemento, selector):
+    locator = elemento.locator(selector)
+
+    if locator.count() == 0:
+        return None
+
+    texto = locator.first.inner_text().strip()
+
+    return texto if texto else None
+
+
+def atributo_opcional(elemento, selector, atributo):
+    locator = elemento.locator(selector)
+
+    if locator.count() == 0:
+        return None
+
+    return locator.first.get_attribute(atributo)
+
+
+def extraer_partidos(page):
+    elementos = page.locator(".event__match")
+
+    cantidad = elementos.count()
+
+    print(f"Elementos encontrados: {cantidad}")
+
+    partidos = []
+
+    for i in range(cantidad):
+        elemento = elementos.nth(i)
+
+        try:
+            local = texto_opcional(
+                elemento,
+                ".event__homeParticipant",
+            )
+
+            visitante = texto_opcional(
+                elemento,
+                ".event__awayParticipant",
+            )
+
+            estado = texto_opcional(
+                elemento,
+                ".event__stage",
+            )
+
+            gol_local = texto_opcional(
+                elemento,
+                ".event__score--home",
+            )
+
+            gol_visitante = texto_opcional(
+                elemento,
+                ".event__score--away",
+            )
+
+            url = atributo_opcional(
+                elemento,
+                "a.eventRowLink",
+                "href",
+            )
+
+            if not local or not visitante:
+                continue
+
+            partido = {
+                "id": extraer_mid(url),
+                "local": local,
+                "visitante": visitante,
+                "estado": estado,
+                "gol_local": gol_local,
+                "gol_visitante": gol_visitante,
+                "url": url,
+            }
+
+            partidos.append(partido)
+
+        except Exception as error:
+            print(
+                f"Error procesando elemento {i + 1}: "
+                f"{error}"
+            )
+
+    return partidos
+
+
+def guardar_json(partidos):
+    ruta = Path("data/partidos_hoy.json")
+
+    ruta.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    ruta.write_text(
+        json.dumps(
+            partidos,
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
+    print(f"\nJSON guardado en: {ruta}")
+
+
+def mostrar_partidos(partidos):
+    print()
+    print("=" * 80)
+    print(f"PARTIDOS EXTRAÍDOS: {len(partidos)}")
+    print("=" * 80)
+
+    for numero, partido in enumerate(
+        partidos,
+        start=1,
+    ):
+        estado = partido["estado"] or "?"
+
+        marcador = ""
+
+        if (
+            partido["gol_local"] is not None
+            and partido["gol_visitante"] is not None
+        ):
+            marcador = (
+                f" "
+                f"[{partido['gol_local']}-"
+                f"{partido['gol_visitante']}]"
+            )
+
+        print(
+            f"{numero:03d} | "
+            f"{partido['local']} "
+            f"vs "
+            f"{partido['visitante']} "
+            f"| {estado}"
+            f"{marcador}"
+        )
+
+
+def main():
+    print("=" * 80)
+    print("MATCH GOALS AI - FLASHSCORE")
+    print("=" * 80)
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch(
+            headless=True,
+        )
+
+        page = browser.new_page(
+            viewport={
+                "width": 1920,
+                "height": 1080,
+            },
+            locale="es-MX",
+        )
+
+        print(f"\nAbriendo {URL}")
+
+        response = page.goto(
+            URL,
+            wait_until="domcontentloaded",
+            timeout=60_000,
+        )
+
+        if response:
+            print(f"HTTP: {response.status}")
+
+        print("Esperando partidos...")
+
+        page.wait_for_selector(
+            ".event__match",
+            timeout=30_000,
+        )
+
+        # Damos unos segundos para que Flashscore
+        # termine de incorporar eventos al DOM.
+        page.wait_for_timeout(5000)
+
+        partidos = extraer_partidos(page)
+
+        mostrar_partidos(partidos)
+
+        guardar_json(partidos)
+
+        browser.close()
+
+
+if __name__ == "__main__":
+    main()

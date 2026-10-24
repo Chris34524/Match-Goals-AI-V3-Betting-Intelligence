@@ -1,0 +1,64 @@
+# ============================================================
+# Match Goals AI V3 — Betting Intelligence
+# ============================================================
+
+# Python virtual environments
+.venv/
+venv/
+env/
+
+# Python cache / bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs / runtime files
+*.log
+logs/
+tmp/
+temp/
+
+# Current generated logs
+flashscore_log.txt
+
+# ============================================================
+# DATA POLICY
+# Historical/runtime datasets stay LOCAL.
+# V3 schemas/manifests will be versioned separately.
+# ============================================================
+data/
+
+# Existing backup snapshots
+analysis_backup_*/
+
+# Generated diagnostics / audits
+diagnostico_proyecto.txt
+match_goals_v3_bootstrap_audit.txt
+*_audit.txt
+
+# Packaging / build
+build/
+dist/
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints/

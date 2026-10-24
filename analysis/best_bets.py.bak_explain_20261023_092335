@@ -1,0 +1,505 @@
+import argparse
+import json
+import math
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+EVAL = ROOT / "data" / "evaluation"
+
+
+BASELINE = {
+    "+1.5": 0.1752,
+    "+2.5": 0.2425,
+    "+3.5": 0.2193,
+    "BTTS": 0.2575,
+}
+
+
+def num(v):
+    try:
+        x = float(v)
+        return x if math.isfinite(x) else None
+    except Exception:
+        return None
+
+
+def latest_effectiveness():
+    cumulative = (
+        EVAL / "effectiveness_cumulative.json"
+    )
+
+    if cumulative.exists():
+        try:
+            d = json.loads(
+                cumulative.read_text(
+                    encoding="utf-8"
+                )
+            )
+
+            if d.get("partidos_unicos", 0) >= 50:
+                return (
+                    d,
+                    cumulative.name,
+                )
+
+        except Exception:
+            pass
+
+    files = sorted(
+        EVAL.glob("effectiveness_*.json"),
+        key=lambda p: p.stat().st_mtime,
+        reverse=True,
+    )
+
+    for p in files:
+        try:
+            d = json.loads(
+                p.read_text(encoding="utf-8")
+            )
+
+            if d.get("partidos_liquidados", 0) >= 50:
+                return d, p.name
+
+        except Exception:
+            continue
+
+    return {}, None
+
+
+def stat_for_market(metrics, market):
+    base_market = {
+        "-1.5": "+1.5",
+        "-2.5": "+2.5",
+        "-3.5": "+3.5",
+        "BTTS_NO": "BTTS",
+        "BTTS_SI": "BTTS",
+    }.get(
+        market,
+        market,
+    )
+
+    m = metrics.get(
+        base_market,
+        {},
+    )
+
+    return (
+        base_market,
+        m,
+    )
+
+
+def reliability(metrics, market):
+    base_market, m = stat_for_market(
+        metrics,
+        market,
+    )
+
+    n = int(
+        m.get("n", 0)
+        or 0
+    )
+
+    if n < 50:
+        return 0.95, "SIN VALIDACIÓN RECIENTE"
+
+    brier = num(
+        m.get("brier")
+    )
+
+    pm = num(
+        m.get("prob_media")
+    )
+
+    real = num(
+        m.get("frecuencia_real")
+    )
+
+    baseline = BASELINE.get(
+        base_market
+    )
+
+    gap = (
+        abs(pm - real)
+        if pm is not None
+        and real is not None
+        else None
+    )
+
+    if (
+        brier is not None
+        and baseline is not None
+        and brier <= baseline
+        and gap is not None
+        and gap <= 0.02
+    ):
+        return 1.03, "A"
+
+    if (
+        brier is not None
+        and baseline is not None
+        and brier <= baseline
+        and gap is not None
+        and gap <= 0.05
+    ):
+        return 1.00, "B"
+
+    if (
+        gap is not None
+        and gap <= 0.05
+    ):
+        return 0.97, "C"
+
+    return 0.92, "D"
+
+
+def quality_factor(q):
+    q = str(
+        q or ""
+    ).upper()
+
+    if q == "ALTA":
+        return 1.00
+
+    if q == "MEDIA":
+        return 0.95
+
+    if q == "BAJA":
+        return 0.85
+
+    return 0.90
+
+
+def nivel(prob, rel, quality):
+    if prob is None:
+        return "N/D"
+
+    if (
+        prob >= 0.70
+        and rel >= 0.97
+        and quality >= 0.95
+    ):
+        return "FUERTE"
+
+    if (
+        prob >= 0.62
+        and quality >= 0.90
+    ):
+        return "MEDIA"
+
+    if prob >= 0.55:
+        return "DÉBIL"
+
+    return "SIN SEÑAL"
+
+
+def candidate(
+    name,
+    prob,
+    metrics,
+    quality,
+):
+    if prob is None:
+        return None
+
+    rel, grade = reliability(
+        metrics,
+        name,
+    )
+
+    qf = quality_factor(
+        quality
+    )
+
+    score = (
+        prob
+        * rel
+        * qf
+    )
+
+    return {
+        "mercado": name,
+        "probabilidad": prob,
+        "nivel": nivel(
+            prob,
+            rel,
+            qf,
+        ),
+        "score_decision": score,
+        "calibracion_mercado": grade,
+    }
+
+
+def main():
+    ap = argparse.ArgumentParser()
+
+    ap.add_argument(
+        "--input",
+        default=(
+            "data/"
+            "selected_predictions_v2.json"
+        ),
+    )
+
+    args = ap.parse_args()
+
+    src = ROOT / args.input
+
+    data = json.loads(
+        src.read_text(
+            encoding="utf-8"
+        )
+    )
+
+    effectiveness, ef_file = (
+        latest_effectiveness()
+    )
+
+    metrics = effectiveness.get(
+        "metricas",
+        {}
+    )
+
+    partidos = data.get(
+        "partidos",
+        []
+    )
+
+    for p in partidos:
+        o15 = num(
+            p.get("+1.5")
+        )
+
+        o25 = num(
+            p.get("+2.5")
+        )
+
+        o35 = num(
+            p.get("+3.5")
+        )
+
+        btts = num(
+            p.get("BTTS")
+        )
+
+        mercados = [
+            (
+                "+1.5",
+                o15,
+            ),
+            (
+                "+2.5",
+                o25,
+            ),
+            (
+                "+3.5",
+                o35,
+            ),
+            (
+                "-1.5",
+                None
+                if o15 is None
+                else 1 - o15,
+            ),
+            (
+                "-2.5",
+                None
+                if o25 is None
+                else 1 - o25,
+            ),
+            (
+                "-3.5",
+                None
+                if o35 is None
+                else 1 - o35,
+            ),
+            (
+                "BTTS_SI",
+                btts,
+            ),
+            (
+                "BTTS_NO",
+                None
+                if btts is None
+                else 1 - btts,
+            ),
+        ]
+
+        calidad = p.get(
+            "calidad_datos",
+            "N/D",
+        )
+
+        candidatos = []
+
+        for name, prob in mercados:
+            c = candidate(
+                name,
+                prob,
+                metrics,
+                calidad,
+            )
+
+            if (
+                c is not None
+                and prob >= 0.55
+            ):
+                candidatos.append(c)
+
+        candidatos.sort(
+            key=lambda x: (
+                x["score_decision"],
+                x["probabilidad"],
+            ),
+            reverse=True,
+        )
+
+        principal = (
+            candidatos[0]
+            if candidatos
+            else None
+        )
+
+        if principal is None:
+            accion = "NO APUESTA"
+
+        elif principal["nivel"] == "FUERTE":
+            accion = "SEÑAL FUERTE"
+
+        elif principal["nivel"] == "MEDIA":
+            accion = "SEÑAL MEDIA"
+
+        else:
+            accion = "OBSERVAR"
+
+        # ----------------------------------------------
+        # Resultado 1X2: contexto, no selección principal
+        # ----------------------------------------------
+
+        p1 = num(
+            p.get("prob_1")
+        )
+
+        px = num(
+            p.get("prob_X")
+        )
+
+        p2 = num(
+            p.get("prob_2")
+        )
+
+        resultado = None
+        doble = None
+
+        if (
+            p1 is not None
+            and px is not None
+            and p2 is not None
+        ):
+            opciones = {
+                "1": p1,
+                "X": px,
+                "2": p2,
+            }
+
+            k = max(
+                opciones,
+                key=opciones.get,
+            )
+
+            resultado = {
+                "resultado": k,
+                "probabilidad": opciones[k],
+                "confianza": "NO_VALIDADA",
+            }
+
+            dobles = {
+                "1X": p1 + px,
+                "X2": px + p2,
+                "12": p1 + p2,
+            }
+
+            dk = max(
+                dobles,
+                key=dobles.get,
+            )
+
+            doble = {
+                "mercado": dk,
+                "probabilidad": dobles[dk],
+                "confianza": "EXPLORATORIA",
+            }
+
+        p["mejores_apuestas"] = {
+            "accion": accion,
+            "principal": principal,
+            "alternativas": candidatos[1:3],
+            "resultado_1x2": resultado,
+            "doble_oportunidad": doble,
+            "calidad_datos": calidad,
+            "fuente_calibracion": ef_file,
+            "nota": (
+                "Ranking estadístico sin cuotas. "
+                "No representa EV ni rentabilidad garantizada."
+            ),
+        }
+
+    data[
+        "best_bets_calibration_source"
+    ] = ef_file
+
+    src.write_text(
+        json.dumps(
+            data,
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
+    print("=" * 90)
+    print("MEJORES OPCIONES POR PARTIDO")
+    print("=" * 90)
+
+    print(
+        "Calibración:",
+        ef_file
+        or "baseline",
+    )
+
+    print()
+
+    for p in partidos:
+        b = p.get(
+            "mejores_apuestas",
+            {}
+        )
+
+        principal = b.get(
+            "principal"
+        )
+
+        print(
+            p.get("local"),
+            "vs",
+            p.get("visitante"),
+        )
+
+        if principal:
+            print(
+                "  Principal:",
+                principal["mercado"],
+                f"{principal['probabilidad']:.1%}",
+                principal["nivel"],
+                "|",
+                b.get("accion"),
+            )
+        else:
+            print(
+                "  NO APUESTA"
+            )
+
+
+if __name__ == "__main__":
+    main()

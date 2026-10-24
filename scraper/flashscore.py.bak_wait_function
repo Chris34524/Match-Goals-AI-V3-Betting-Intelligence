@@ -1,0 +1,748 @@
+import argparse
+import json
+import re
+from datetime import date, timedelta
+from pathlib import Path
+from urllib.parse import parse_qs, urlparse
+
+from playwright.sync_api import sync_playwright
+
+
+URL = "https://www.flashscore.com.mx/"
+
+ARCHIVO_SALIDA = Path(
+    "data/partidos.json"
+)
+
+SELECTOR_PARTIDO = ".event__match"
+
+SELECTOR_FECHA = (
+    '[data-testid="wcl-dayPickerButton"]'
+)
+
+SELECTOR_SIGUIENTE = (
+    '[data-day-picker-arrow="next"]'
+)
+
+
+def leer_argumentos():
+    parser = argparse.ArgumentParser(
+        description=(
+            "Obtiene partidos de Flashscore "
+            "para varios días consecutivos."
+        )
+    )
+
+    parser.add_argument(
+        "--days",
+        type=int,
+        default=2,
+        help=(
+            "Cantidad de días a obtener. "
+            "2 = hoy + mañana."
+        ),
+    )
+
+    args = parser.parse_args()
+
+    if args.days < 1:
+        parser.error(
+            "--days debe ser >= 1"
+        )
+
+    if args.days > 14:
+        parser.error(
+            "--days no puede ser mayor "
+            "a 14 por seguridad."
+        )
+
+    return args
+
+
+def extraer_mid(url):
+    if not url:
+        return None
+
+    query = parse_qs(
+        urlparse(url).query
+    )
+
+    valores = query.get("mid")
+
+    if not valores:
+        return None
+
+    return valores[0]
+
+
+def texto_opcional(
+    elemento,
+    selector,
+):
+    locator = elemento.locator(
+        selector
+    )
+
+    if locator.count() == 0:
+        return None
+
+    try:
+        texto = (
+            locator
+            .first
+            .inner_text()
+            .strip()
+        )
+
+        return texto or None
+
+    except Exception:
+        return None
+
+
+def atributo_opcional(
+    elemento,
+    selector,
+    atributo,
+):
+    locator = elemento.locator(
+        selector
+    )
+
+    if locator.count() == 0:
+        return None
+
+    try:
+        return (
+            locator
+            .first
+            .get_attribute(
+                atributo
+            )
+        )
+
+    except Exception:
+        return None
+
+
+def obtener_fecha_flashscore(page):
+    boton = page.locator(
+        SELECTOR_FECHA
+    )
+
+    if boton.count() == 0:
+        raise RuntimeError(
+            "No se encontró el selector "
+            "de fecha de Flashscore."
+        )
+
+    aria_label = (
+        boton
+        .first
+        .get_attribute("aria-label")
+    )
+
+    texto = (
+        boton
+        .first
+        .inner_text()
+        .strip()
+    )
+
+    return {
+        "texto": texto,
+        "aria_label": aria_label,
+    }
+
+
+def obtener_hora(elemento):
+    """
+    Intentamos obtener una hora HH:MM
+    de varios elementos posibles.
+    """
+
+    selectores = [
+        ".event__time",
+        ".event__stage",
+        ".event__startTime",
+    ]
+
+    for selector in selectores:
+        texto = texto_opcional(
+            elemento,
+            selector,
+        )
+
+        if not texto:
+            continue
+
+        coincidencia = re.search(
+            r"\b(?:[01]?\d|2[0-3]):[0-5]\d\b",
+            texto,
+        )
+
+        if coincidencia:
+            return coincidencia.group(0)
+
+    return None
+
+
+def obtener_estado(elemento):
+    texto = texto_opcional(
+        elemento,
+        ".event__stage",
+    )
+
+    if not texto:
+        return None
+
+    if re.fullmatch(
+        r"\s*(?:[01]?\d|2[0-3]):[0-5]\d\s*",
+        texto,
+    ):
+        return None
+
+    return texto
+
+
+def extraer_competicion(elemento):
+    """
+    Busca el encabezado de liga anterior
+    al partido dentro del DOM.
+
+    Todavía lo dejamos opcional porque
+    validaremos el resultado después.
+    """
+
+    try:
+        datos = elemento.evaluate(
+            """
+            (el) => {
+                let actual = el.previousElementSibling;
+
+                while (actual) {
+                    if (
+                        actual.classList &&
+                        actual.classList.contains(
+                            "headerLeague__wrapper"
+                        )
+                    ) {
+                        const liga =
+                            actual.querySelector(
+                                ".headerLeague__title-text"
+                            );
+
+                        const pais =
+                            actual.querySelector(
+                                ".headerLeague__category-text"
+                            );
+
+                        return {
+                            liga:
+                                liga
+                                    ? liga.textContent.trim()
+                                    : null,
+                            pais:
+                                pais
+                                    ? pais.textContent.trim()
+                                    : null
+                        };
+                    }
+
+                    actual =
+                        actual.previousElementSibling;
+                }
+
+                return {
+                    liga: null,
+                    pais: null
+                };
+            }
+            """
+        )
+
+        return datos
+
+    except Exception:
+        return {
+            "liga": None,
+            "pais": None,
+        }
+
+
+def extraer_partidos(
+    page,
+    fecha_iso,
+    offset,
+    fecha_flashscore,
+):
+    elementos = page.locator(
+        SELECTOR_PARTIDO
+    )
+
+    cantidad = elementos.count()
+
+    print(
+        f"Elementos DOM encontrados: "
+        f"{cantidad}"
+    )
+
+    partidos = []
+
+    for i in range(cantidad):
+        elemento = elementos.nth(i)
+
+        try:
+            local = texto_opcional(
+                elemento,
+                ".event__homeParticipant",
+            )
+
+            visitante = texto_opcional(
+                elemento,
+                ".event__awayParticipant",
+            )
+
+            if not local or not visitante:
+                continue
+
+            url = atributo_opcional(
+                elemento,
+                "a.eventRowLink",
+                "href",
+            )
+
+            match_id = extraer_mid(
+                url
+            )
+
+            if not match_id:
+                continue
+
+            competicion = (
+                extraer_competicion(
+                    elemento
+                )
+            )
+
+            partido = {
+                "id": match_id,
+                "fecha": fecha_iso,
+                "offset_dia": offset,
+                "fecha_flashscore": (
+                    fecha_flashscore[
+                        "texto"
+                    ]
+                ),
+                "fecha_flashscore_label": (
+                    fecha_flashscore[
+                        "aria_label"
+                    ]
+                ),
+                "hora": obtener_hora(
+                    elemento
+                ),
+                "pais": competicion[
+                    "pais"
+                ],
+                "competicion": (
+                    competicion[
+                        "liga"
+                    ]
+                ),
+                "local": local,
+                "visitante": visitante,
+                "estado": obtener_estado(
+                    elemento
+                ),
+                "gol_local": (
+                    texto_opcional(
+                        elemento,
+                        ".event__score--home",
+                    )
+                ),
+                "gol_visitante": (
+                    texto_opcional(
+                        elemento,
+                        ".event__score--away",
+                    )
+                ),
+                "url": url,
+            }
+
+            partidos.append(
+                partido
+            )
+
+        except Exception as error:
+            print(
+                f"Error evento "
+                f"{i + 1}: {error}"
+            )
+
+    print(
+        f"Partidos extraídos: "
+        f"{len(partidos)}"
+    )
+
+    return partidos
+
+
+def esperar_cambio_fecha(
+    page,
+    fecha_anterior,
+):
+    print(
+        "Esperando cambio de fecha..."
+    )
+
+    page.wait_for_function(
+        """
+        ([selector, anterior]) => {
+            const elemento =
+                document.querySelector(
+                    selector
+                );
+
+            if (!elemento) {
+                return false;
+            }
+
+            return (
+                elemento.getAttribute(
+                    "aria-label"
+                ) !== anterior
+            );
+        }
+        """,
+        [
+            SELECTOR_FECHA,
+            fecha_anterior,
+        ],
+        timeout=20_000,
+    )
+
+    page.wait_for_timeout(
+        2500
+    )
+
+
+def avanzar_un_dia(page):
+    fecha_antes = (
+        obtener_fecha_flashscore(
+            page
+        )
+    )
+
+    print(
+        "Fecha antes del click: "
+        f"{fecha_antes['texto']} "
+        f"| {fecha_antes['aria_label']}"
+    )
+
+    boton = page.locator(
+        SELECTOR_SIGUIENTE
+    )
+
+    if boton.count() == 0:
+        raise RuntimeError(
+            "No se encontró la flecha "
+            "'Día siguiente'."
+        )
+
+    boton.first.click()
+
+    esperar_cambio_fecha(
+        page,
+        fecha_antes[
+            "aria_label"
+        ],
+    )
+
+    fecha_despues = (
+        obtener_fecha_flashscore(
+            page
+        )
+    )
+
+    print(
+        "Fecha después del click: "
+        f"{fecha_despues['texto']} "
+        f"| {fecha_despues['aria_label']}"
+    )
+
+    if (
+        fecha_despues["aria_label"]
+        == fecha_antes["aria_label"]
+    ):
+        raise RuntimeError(
+            "La fecha no cambió."
+        )
+
+    return fecha_despues
+
+
+def quitar_duplicados(
+    partidos,
+):
+    vistos = set()
+    resultado = []
+
+    for partido in partidos:
+        clave = (
+            partido["fecha"],
+            partido["id"],
+        )
+
+        if clave in vistos:
+            continue
+
+        vistos.add(
+            clave
+        )
+
+        resultado.append(
+            partido
+        )
+
+    return resultado
+
+
+def etiqueta_offset(offset):
+    if offset == 0:
+        return "hoy"
+
+    if offset == 1:
+        return "mañana"
+
+    return f"+{offset} días"
+
+
+def main():
+    args = leer_argumentos()
+
+    hoy = date.today()
+
+    print("=" * 70)
+    print(
+        "MATCH GOALS AI "
+        "- NAVEGACIÓN POR FECHA"
+    )
+    print("=" * 70)
+
+    print(
+        f"Días solicitados: "
+        f"{args.days}"
+    )
+
+    print(
+        f"Fecha sistema: "
+        f"{hoy.isoformat()}"
+    )
+
+    todos = []
+
+    resumen = []
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch(
+            headless=True
+        )
+
+        page = browser.new_page(
+            viewport={
+                "width": 1920,
+                "height": 1080,
+            },
+            locale="es-MX",
+        )
+
+        print(
+            f"\nAbriendo: {URL}"
+        )
+
+        response = page.goto(
+            URL,
+            wait_until="domcontentloaded",
+            timeout=60_000,
+        )
+
+        if response:
+            print(
+                f"HTTP: "
+                f"{response.status}"
+            )
+
+        page.wait_for_selector(
+            SELECTOR_PARTIDO,
+            timeout=30_000,
+        )
+
+        page.wait_for_selector(
+            SELECTOR_FECHA,
+            timeout=30_000,
+        )
+
+        page.wait_for_timeout(
+            4000
+        )
+
+        fecha_flashscore = (
+            obtener_fecha_flashscore(
+                page
+            )
+        )
+
+        print(
+            "Fecha inicial Flashscore: "
+            f"{fecha_flashscore['texto']} "
+            f"| "
+            f"{fecha_flashscore['aria_label']}"
+        )
+
+        for offset in range(
+            args.days
+        ):
+            fecha_esperada = (
+                hoy
+                + timedelta(
+                    days=offset
+                )
+            )
+
+            if offset > 0:
+                fecha_flashscore = (
+                    avanzar_un_dia(
+                        page
+                    )
+                )
+
+            print(
+                "\n"
+                + "=" * 70
+            )
+
+            print(
+                f"DÍA {offset} "
+                f"({etiqueta_offset(offset)})"
+            )
+
+            print(
+                f"Fecha esperada Python: "
+                f"{fecha_esperada.isoformat()}"
+            )
+
+            print(
+                "Fecha visible Flashscore: "
+                f"{fecha_flashscore['texto']}"
+            )
+
+            print(
+                "=" * 70
+            )
+
+            partidos = (
+                extraer_partidos(
+                    page,
+                    fecha_esperada.isoformat(),
+                    offset,
+                    fecha_flashscore,
+                )
+            )
+
+            todos.extend(
+                partidos
+            )
+
+            resumen.append(
+                {
+                    "offset": offset,
+                    "etiqueta": (
+                        etiqueta_offset(
+                            offset
+                        )
+                    ),
+                    "fecha": (
+                        fecha_esperada
+                        .isoformat()
+                    ),
+                    "fecha_flashscore": (
+                        fecha_flashscore[
+                            "texto"
+                        ]
+                    ),
+                    "fecha_flashscore_label": (
+                        fecha_flashscore[
+                            "aria_label"
+                        ]
+                    ),
+                    "partidos": len(
+                        partidos
+                    ),
+                }
+            )
+
+        browser.close()
+
+    todos = quitar_duplicados(
+        todos
+    )
+
+    ARCHIVO_SALIDA.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    salida = {
+        "generado_desde": (
+            hoy.isoformat()
+        ),
+        "dias_solicitados": (
+            args.days
+        ),
+        "resumen": resumen,
+        "partidos": todos,
+    }
+
+    ARCHIVO_SALIDA.write_text(
+        json.dumps(
+            salida,
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
+    print(
+        "\n"
+        + "=" * 70
+    )
+
+    print("RESUMEN FINAL")
+
+    print("=" * 70)
+
+    for dia in resumen:
+        print(
+            f"{dia['fecha']} "
+            f"| "
+            f"{dia['etiqueta']:<10} "
+            f"| FS: "
+            f"{dia['fecha_flashscore']:<10} "
+            f"| partidos: "
+            f"{dia['partidos']}"
+        )
+
+    print(
+        f"\nTotal partidos: "
+        f"{len(todos)}"
+    )
+
+    print(
+        f"Guardado en: "
+        f"{ARCHIVO_SALIDA}"
+    )
+
+
+if __name__ == "__main__":
+    main()

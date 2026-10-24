@@ -1,0 +1,1032 @@
+import argparse
+import json
+import re
+from datetime import datetime
+from pathlib import Path
+
+
+DIRECTORIO_PARTIDOS = Path(
+    "data/matches"
+)
+
+ARCHIVO_CLASIFICACION = Path(
+    "data/standings.json"
+)
+
+
+def leer_argumentos():
+    parser = argparse.ArgumentParser(
+        description=(
+            "Analiza estadísticamente "
+            "un partido."
+        )
+    )
+
+    parser.add_argument(
+        "--match-id",
+        required=True,
+        help="ID del partido",
+    )
+
+    return parser.parse_args()
+
+
+def limpiar_nombre_equipo(nombre):
+    return re.sub(
+        r"\s+\([^)]*\)$",
+        "",
+        nombre,
+    ).strip()
+
+
+def es_numero(valor):
+    return re.fullmatch(
+        r"\d+",
+        valor,
+    ) is not None
+
+
+def parsear_fecha(texto):
+    try:
+        return datetime.strptime(
+            texto,
+            "%d.%m.%y",
+        )
+    except ValueError:
+        return None
+
+
+def parsear_fila(texto):
+    partes = [
+        parte.strip()
+        for parte in texto.splitlines()
+        if parte.strip()
+    ]
+
+    if len(partes) < 5:
+        return None
+
+    indices_goles = [
+        i
+        for i, valor in enumerate(partes)
+        if es_numero(valor)
+    ]
+
+    if len(indices_goles) < 2:
+        return None
+
+    indice_gol_local = indices_goles[-2]
+    indice_gol_visitante = indices_goles[-1]
+
+    if indice_gol_local < 2:
+        return None
+
+    local = partes[
+        indice_gol_local - 2
+    ]
+
+    visitante = partes[
+        indice_gol_local - 1
+    ]
+
+    goles_local = int(
+        partes[indice_gol_local]
+    )
+
+    goles_visitante = int(
+        partes[indice_gol_visitante]
+    )
+
+    fecha_texto = partes[0]
+
+    return {
+        "fecha": fecha_texto,
+        "fecha_obj": parsear_fecha(
+            fecha_texto
+        ),
+        "local": local,
+        "visitante": visitante,
+        "goles_local": goles_local,
+        "goles_visitante": (
+            goles_visitante
+        ),
+    }
+
+
+def preparar_partidos_equipo(
+    nombre_equipo,
+    filas,
+):
+    partidos = []
+
+    for fila in filas:
+        partido = parsear_fila(
+            fila
+        )
+
+        if partido is None:
+            continue
+
+        if partido["local"] == nombre_equipo:
+            gf = partido["goles_local"]
+            gc = partido["goles_visitante"]
+            condicion = "local"
+
+        elif (
+            partido["visitante"]
+            == nombre_equipo
+        ):
+            gf = partido["goles_visitante"]
+            gc = partido["goles_local"]
+            condicion = "visitante"
+
+        else:
+            continue
+
+        partidos.append(
+            {
+                **partido,
+                "gf_equipo": gf,
+                "gc_equipo": gc,
+                "condicion": condicion,
+            }
+        )
+
+    return partidos
+
+
+def calcular_estadisticas(
+    nombre_equipo,
+    partidos,
+    etiqueta,
+):
+    pj = len(partidos)
+
+    if pj == 0:
+        return None
+
+    gf = sum(
+        p["gf_equipo"]
+        for p in partidos
+    )
+
+    gc = sum(
+        p["gc_equipo"]
+        for p in partidos
+    )
+
+    victorias = sum(
+        1
+        for p in partidos
+        if p["gf_equipo"] > p["gc_equipo"]
+    )
+
+    empates = sum(
+        1
+        for p in partidos
+        if p["gf_equipo"] == p["gc_equipo"]
+    )
+
+    derrotas = sum(
+        1
+        for p in partidos
+        if p["gf_equipo"] < p["gc_equipo"]
+    )
+
+    over_25 = sum(
+        1
+        for p in partidos
+        if (
+            p["gf_equipo"]
+            + p["gc_equipo"]
+        ) >= 3
+    )
+
+    return {
+        "equipo": nombre_equipo,
+        "muestra": etiqueta,
+        "pj": pj,
+        "gf": gf,
+        "gc": gc,
+        "promedio_gf": gf / pj,
+        "promedio_gc": gc / pj,
+        "promedio_total": (
+            gf + gc
+        ) / pj,
+        "victorias": victorias,
+        "empates": empates,
+        "derrotas": derrotas,
+        "over_25": over_25,
+        "over_25_pct": (
+            over_25 / pj
+        ),
+    }
+
+
+def obtener_ventana(
+    partidos,
+    limite,
+):
+    return partidos[:limite]
+
+
+def obtener_por_condicion(
+    partidos,
+    condicion,
+    limite=10,
+):
+    seleccion = [
+        partido
+        for partido in partidos
+        if partido["condicion"]
+        == condicion
+    ]
+
+    return seleccion[:limite]
+
+
+def calcular_expectativa(
+    local,
+    visitante,
+):
+    eg_local = (
+        local["promedio_gf"]
+        + visitante["promedio_gc"]
+    ) / 2
+
+    eg_visitante = (
+        visitante["promedio_gf"]
+        + local["promedio_gc"]
+    ) / 2
+
+    return {
+        "eg_local": eg_local,
+        "eg_visitante": (
+            eg_visitante
+        ),
+        "total": (
+            eg_local
+            + eg_visitante
+        ),
+    }
+
+
+def preparar_h2h(
+    filas,
+    nombre_local,
+    nombre_visitante,
+):
+    partidos = []
+
+    for fila in filas:
+        partido = parsear_fila(
+            fila
+        )
+
+        if partido is None:
+            continue
+
+        equipos = {
+            partido["local"],
+            partido["visitante"],
+        }
+
+        objetivo = {
+            nombre_local,
+            nombre_visitante,
+        }
+
+        if equipos != objetivo:
+            continue
+
+        if partido["local"] == nombre_local:
+            gf_local = partido[
+                "goles_local"
+            ]
+
+            gf_visitante = partido[
+                "goles_visitante"
+            ]
+
+        else:
+            gf_local = partido[
+                "goles_visitante"
+            ]
+
+            gf_visitante = partido[
+                "goles_local"
+            ]
+
+        partidos.append(
+            {
+                **partido,
+                "gf_local_actual": (
+                    gf_local
+                ),
+                "gf_visitante_actual": (
+                    gf_visitante
+                ),
+                "total_goles": (
+                    partido[
+                        "goles_local"
+                    ]
+                    + partido[
+                        "goles_visitante"
+                    ]
+                ),
+            }
+        )
+
+    return partidos
+
+
+def filtrar_h2h_reciente(
+    partidos,
+    anos=5,
+):
+    hoy = datetime.now()
+
+    resultado = []
+
+    for partido in partidos:
+        fecha = partido["fecha_obj"]
+
+        if fecha is None:
+            continue
+
+        antiguedad_dias = (
+            hoy - fecha
+        ).days
+
+        if antiguedad_dias <= (
+            anos * 365.25
+        ):
+            resultado.append(
+                partido
+            )
+
+    return resultado
+
+
+def resumir_h2h(
+    partidos,
+):
+    pj = len(partidos)
+
+    if pj == 0:
+        return None
+
+    goles_local_actual = sum(
+        p["gf_local_actual"]
+        for p in partidos
+    )
+
+    goles_visitante_actual = sum(
+        p["gf_visitante_actual"]
+        for p in partidos
+    )
+
+    total_goles = sum(
+        p["total_goles"]
+        for p in partidos
+    )
+
+    over_25 = sum(
+        1
+        for p in partidos
+        if p["total_goles"] >= 3
+    )
+
+    return {
+        "pj": pj,
+        "gf_local_actual": (
+            goles_local_actual
+        ),
+        "gf_visitante_actual": (
+            goles_visitante_actual
+        ),
+        "promedio_total": (
+            total_goles / pj
+        ),
+        "over_25": over_25,
+        "over_25_pct": (
+            over_25 / pj
+        ),
+    }
+
+
+def mostrar_estadisticas(
+    titulo,
+    datos,
+):
+    print("\n" + titulo)
+
+    if datos is None:
+        print("Sin muestra disponible.")
+        return
+
+    print(
+        f"PJ: {datos['pj']}"
+    )
+
+    print(
+        f"GF: {datos['gf']} | "
+        f"GC: {datos['gc']}"
+    )
+
+    print(
+        f"GF/PJ: "
+        f"{datos['promedio_gf']:.2f}"
+    )
+
+    print(
+        f"GC/PJ: "
+        f"{datos['promedio_gc']:.2f}"
+    )
+
+    print(
+        f"Total/PJ: "
+        f"{datos['promedio_total']:.2f}"
+    )
+
+    print(
+        "Forma: "
+        f"{datos['victorias']}G "
+        f"{datos['empates']}E "
+        f"{datos['derrotas']}P"
+    )
+
+    print(
+        f"Over 2.5 observado: "
+        f"{datos['over_25']}/"
+        f"{datos['pj']} "
+        f"({datos['over_25_pct']:.1%})"
+    )
+
+
+def mostrar_expectativa(
+    titulo,
+    local_nombre,
+    visitante_nombre,
+    datos,
+):
+    print("\n" + titulo)
+
+    print(
+        f"EG {local_nombre}: "
+        f"{datos['eg_local']:.2f}"
+    )
+
+    print(
+        f"EG {visitante_nombre}: "
+        f"{datos['eg_visitante']:.2f}"
+    )
+
+    print(
+        f"TOTAL ESPERADO: "
+        f"{datos['total']:.2f}"
+    )
+
+
+def mostrar_h2h(
+    titulo,
+    datos,
+):
+    print("\n" + titulo)
+
+    if datos is None:
+        print("Sin H2H disponible.")
+        return
+
+    print(
+        f"PJ: {datos['pj']}"
+    )
+
+    print(
+        "Goles acumulados "
+        f"local actual: "
+        f"{datos['gf_local_actual']}"
+    )
+
+    print(
+        "Goles acumulados "
+        f"visitante actual: "
+        f"{datos['gf_visitante_actual']}"
+    )
+
+    print(
+        f"Total goles/PJ: "
+        f"{datos['promedio_total']:.2f}"
+    )
+
+    print(
+        f"Over 2.5 observado: "
+        f"{datos['over_25']}/"
+        f"{datos['pj']} "
+        f"({datos['over_25_pct']:.1%})"
+    )
+
+
+def limpiar_para_json(objeto):
+    if isinstance(objeto, dict):
+        return {
+            clave: limpiar_para_json(valor)
+            for clave, valor
+            in objeto.items()
+        }
+
+    if isinstance(objeto, list):
+        return [
+            limpiar_para_json(valor)
+            for valor in objeto
+        ]
+
+    if isinstance(objeto, datetime):
+        return objeto.strftime(
+            "%Y-%m-%d"
+        )
+
+    return objeto
+
+
+def cargar_clasificacion(
+    archivo_clasificacion,
+):
+    if not archivo_clasificacion.exists():
+        return None
+
+    try:
+        with archivo_clasificacion.open(
+            encoding="utf-8"
+        ) as archivo:
+            return json.load(
+                archivo
+            )
+
+    except Exception:
+        return None
+
+
+def clasificacion_corresponde(
+    datos,
+    local,
+    visitante,
+):
+    if not datos:
+        return False
+
+    partido = datos.get(
+        "partido",
+        {}
+    )
+
+    local_archivo = limpiar_nombre_equipo(
+        partido.get(
+            "local",
+            "",
+        )
+    )
+
+    visitante_archivo = (
+        limpiar_nombre_equipo(
+            partido.get(
+                "visitante",
+                "",
+            )
+        )
+    )
+
+    return (
+        local_archivo == local
+        and visitante_archivo
+        == visitante
+    )
+
+
+def mostrar_clasificacion(
+    datos,
+):
+    print("\n" + "=" * 70)
+    print("CLASIFICACIÓN / TEMPORADA")
+    print("=" * 70)
+
+    if not datos:
+        print(
+            "Sin datos de clasificación."
+        )
+        return
+
+    if datos.get("estado") != "ok":
+        print(
+            "Sin clasificación común "
+            "para este partido."
+        )
+        return
+
+    for clave in [
+        "local",
+        "visitante",
+    ]:
+        equipo = datos.get(
+            clave
+        )
+
+        if equipo is None:
+            continue
+
+        print(
+            f"\n{equipo['equipo']}"
+        )
+
+        print(
+            f"Posición: "
+            f"{equipo['posicion']}"
+        )
+
+        print(
+            f"PJ: {equipo['pj']} | "
+            f"PTS: {equipo['puntos']}"
+        )
+
+        print(
+            f"GF:GC: "
+            f"{equipo['goles']}"
+        )
+
+        print(
+            f"GF/PJ: "
+            f"{equipo['promedio_gf']:.2f}"
+        )
+
+        print(
+            f"GC/PJ: "
+            f"{equipo['promedio_gc']:.2f}"
+        )
+
+def main():
+    args = leer_argumentos()
+
+    directorio = (
+        DIRECTORIO_PARTIDOS
+        / args.match_id
+    )
+
+    archivo_historial = (
+        directorio
+        / "history.json"
+    )
+
+    archivo_clasificacion = (
+        directorio
+        / "standings.json"
+    )
+
+    archivo_salida = (
+        directorio
+        / "analysis.json"
+    )
+
+    if not archivo_historial.exists():
+        raise FileNotFoundError(
+            "No existe historial para "
+            f"{args.match_id}: "
+            f"{archivo_historial}"
+        )
+
+    with archivo_historial.open(
+        encoding="utf-8"
+    ) as archivo:
+        datos = json.load(archivo)
+
+    nombre_local = limpiar_nombre_equipo(
+        datos["partido"]["local"]
+    )
+
+    nombre_visitante = (
+        limpiar_nombre_equipo(
+            datos["partido"][
+                "visitante"
+            ]
+        )
+    )
+
+    clasificacion = (
+    cargar_clasificacion()
+    )
+
+    if not clasificacion_corresponde(
+        clasificacion,
+        nombre_local,
+        nombre_visitante,
+    ):
+        clasificacion = None
+
+    filas_local = (
+        datos["secciones"][0]["filas"]
+    )
+
+    filas_visitante = (
+        datos["secciones"][1]["filas"]
+    )
+
+    filas_h2h = []
+
+    if len(datos["secciones"]) >= 3:
+        filas_h2h = (
+            datos["secciones"][2][
+                "filas"
+            ]
+        )
+
+    partidos_local = (
+        preparar_partidos_equipo(
+            nombre_local,
+            filas_local,
+        )
+    )
+
+    partidos_visitante = (
+        preparar_partidos_equipo(
+            nombre_visitante,
+            filas_visitante,
+        )
+    )
+
+    local_l10 = calcular_estadisticas(
+        nombre_local,
+        obtener_ventana(
+            partidos_local,
+            10,
+        ),
+        "L10",
+    )
+
+    visitante_l10 = (
+        calcular_estadisticas(
+            nombre_visitante,
+            obtener_ventana(
+                partidos_visitante,
+                10,
+            ),
+            "L10",
+        )
+    )
+
+    local_l20 = calcular_estadisticas(
+        nombre_local,
+        obtener_ventana(
+            partidos_local,
+            20,
+        ),
+        "L20",
+    )
+
+    visitante_l20 = (
+        calcular_estadisticas(
+            nombre_visitante,
+            obtener_ventana(
+                partidos_visitante,
+                20,
+            ),
+            "L20",
+        )
+    )
+
+    local_casa = calcular_estadisticas(
+        nombre_local,
+        obtener_por_condicion(
+            partidos_local,
+            "local",
+            10,
+        ),
+        "LOCAL",
+    )
+
+    visitante_fuera = (
+        calcular_estadisticas(
+            nombre_visitante,
+            obtener_por_condicion(
+                partidos_visitante,
+                "visitante",
+                10,
+            ),
+            "VISITANTE",
+        )
+    )
+
+    exp_l10 = calcular_expectativa(
+        local_l10,
+        visitante_l10,
+    )
+
+    exp_l20 = calcular_expectativa(
+        local_l20,
+        visitante_l20,
+    )
+
+    h2h_todos = preparar_h2h(
+        filas_h2h,
+        nombre_local,
+        nombre_visitante,
+    )
+
+    h2h_recientes = (
+        filtrar_h2h_reciente(
+            h2h_todos,
+            anos=5,
+        )
+    )
+
+    resumen_h2h_todos = (
+        resumir_h2h(
+            h2h_todos
+        )
+    )
+
+    resumen_h2h_recientes = (
+        resumir_h2h(
+            h2h_recientes
+        )
+    )
+
+    print("=" * 70)
+    print(
+        "MATCH GOALS AI - "
+        "ANÁLISIS DESCRIPTIVO"
+    )
+    print("=" * 70)
+
+    print(
+        f"\n{nombre_local} "
+        f"vs {nombre_visitante}"
+    )
+
+    print("\n" + "=" * 70)
+    print("FORMA GENERAL")
+    print("=" * 70)
+
+    mostrar_estadisticas(
+        f"{nombre_local} - L10",
+        local_l10,
+    )
+
+    mostrar_estadisticas(
+        f"{nombre_local} - L20",
+        local_l20,
+    )
+
+    mostrar_estadisticas(
+        f"{nombre_visitante} - L10",
+        visitante_l10,
+    )
+
+    mostrar_estadisticas(
+        f"{nombre_visitante} - L20",
+        visitante_l20,
+    )
+
+    print("\n" + "=" * 70)
+    print(
+        "CONDICIÓN LOCAL / VISITANTE"
+    )
+    print("=" * 70)
+
+    mostrar_estadisticas(
+        f"{nombre_local} "
+        "(como local)",
+        local_casa,
+    )
+
+    mostrar_estadisticas(
+        f"{nombre_visitante} "
+        "(como visitante)",
+        visitante_fuera,
+    )
+
+    print("\n" + "=" * 70)
+    print("EXPECTATIVA SIMPLE")
+    print("=" * 70)
+
+    mostrar_expectativa(
+        "Usando L10",
+        nombre_local,
+        nombre_visitante,
+        exp_l10,
+    )
+
+    mostrar_expectativa(
+        "Usando L20",
+        nombre_local,
+        nombre_visitante,
+        exp_l20,
+    )
+
+    print("\n" + "=" * 70)
+    print("H2H")
+    print("=" * 70)
+
+    mostrar_h2h(
+        "Todos los H2H disponibles",
+        resumen_h2h_todos,
+    )
+
+    mostrar_h2h(
+        "H2H últimos 5 años",
+        resumen_h2h_recientes,
+    )
+
+    if (
+        resumen_h2h_recientes is None
+        or resumen_h2h_recientes[
+            "pj"
+        ] < 5
+    ):
+        print(
+            "\nADVERTENCIA H2H: "
+            "muestra pequeña. "
+            "No debe tener peso alto."
+        )
+
+    diferencia = (
+        exp_l10["total"]
+        - exp_l20["total"]
+    )
+
+    mostrar_clasificacion(
+        clasificacion
+    )
+
+    print("\n" + "=" * 70)
+    print("COMPARACIÓN L10 / L20")
+    print("=" * 70)
+
+    print(
+        f"L10 total esperado: "
+        f"{exp_l10['total']:.2f}"
+    )
+
+    print(
+        f"L20 total esperado: "
+        f"{exp_l20['total']:.2f}"
+    )
+
+    print(
+        f"Diferencia: "
+        f"{diferencia:+.2f}"
+    )
+
+    salida = {
+        "partido": {
+            "local": nombre_local,
+            "visitante": (
+                nombre_visitante
+            ),
+        },
+        "local": {
+            "l10": local_l10,
+            "l20": local_l20,
+            "como_local": (
+                local_casa
+            ),
+        },
+        "visitante": {
+            "l10": visitante_l10,
+            "l20": visitante_l20,
+            "como_visitante": (
+                visitante_fuera
+            ),
+        },
+        "expectativa": {
+            "l10": exp_l10,
+            "l20": exp_l20,
+        },
+        "h2h": {
+            "todos": (
+                resumen_h2h_todos
+            ),
+            "ultimos_5_anos": (
+                resumen_h2h_recientes
+            ),
+        },
+        "clasificacion": clasificacion,
+    }
+
+    archivo_salida.write_text(
+        json.dumps(
+            limpiar_para_json(
+                salida
+            ),
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
+    print(
+        f"\nAnálisis guardado en: "
+        f"{archivo_salida}"
+    )
+
+
+if __name__ == "__main__":
+    main()

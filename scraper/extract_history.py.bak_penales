@@ -1,0 +1,603 @@
+import argparse
+import json
+import re
+from pathlib import Path
+
+from playwright.sync_api import sync_playwright
+
+from scraper.match_selector import buscar_por_id
+
+
+OBJETIVO_PARTIDOS = 20
+MAX_CLICKS_POR_SECCION = 8
+
+BASE_SALIDA = Path("data/matches")
+
+
+def leer_argumentos():
+    parser = argparse.ArgumentParser(
+        description="Extrae historial estructurado de Flashscore."
+    )
+
+    parser.add_argument(
+        "--match-id",
+        required=True,
+        help="ID del partido de Flashscore",
+    )
+
+    parser.add_argument(
+        "--target",
+        type=int,
+        default=OBJETIVO_PARTIDOS,
+        help="Cantidad objetivo por sección de equipo.",
+    )
+
+    args = parser.parse_args()
+
+    if args.target < 1:
+        parser.error("--target debe ser >= 1")
+
+    if args.target > 40:
+        parser.error("--target no puede superar 40")
+
+    return args
+
+
+def limpiar(texto):
+    if texto is None:
+        return None
+
+    texto = str(texto).strip()
+
+    return texto or None
+
+
+def obtener_titulo_seccion(seccion):
+    texto = limpiar(
+        seccion.inner_text()
+    )
+
+    if not texto:
+        return "Sin título"
+
+    return texto.splitlines()[0].strip()
+
+
+def ampliar_seccion(
+    page,
+    seccion,
+    objetivo,
+):
+    titulo = obtener_titulo_seccion(
+        seccion
+    )
+
+    print("\n" + "-" * 70)
+    print(titulo)
+    print("-" * 70)
+
+    clicks = 0
+
+    while clicks < MAX_CLICKS_POR_SECCION:
+        cantidad = (
+            seccion
+            .locator(".h2h__row")
+            .count()
+        )
+
+        print(
+            f"Filas actuales: {cantidad}"
+        )
+
+        if cantidad >= objetivo:
+            print("Objetivo alcanzado.")
+            break
+
+        boton = seccion.get_by_text(
+            "Mostrar más partidos",
+            exact=True,
+        )
+
+        if boton.count() == 0:
+            print(
+                "No hay botón "
+                "'Mostrar más partidos'."
+            )
+            break
+
+        try:
+            boton.first.scroll_into_view_if_needed()
+            boton.first.click()
+
+            clicks += 1
+
+            print(
+                f"Click {clicks}"
+            )
+
+            page.wait_for_timeout(
+                1800
+            )
+
+        except Exception as error:
+            print(
+                "No fue posible ampliar:",
+                error,
+            )
+            break
+
+    print(
+        "Filas finales:",
+        seccion.locator(
+            ".h2h__row"
+        ).count(),
+    )
+
+
+def extraer_textos_fila(fila):
+    """
+    Conservamos el texto completo y también
+    las líneas individuales.
+    """
+
+    texto = limpiar(
+        fila.inner_text()
+    )
+
+    if not texto:
+        return None
+
+    lineas = [
+        linea.strip()
+        for linea in texto.splitlines()
+        if linea.strip()
+    ]
+
+    return {
+        "texto_raw": texto,
+        "lineas": lineas,
+    }
+
+
+def buscar_fecha(lineas):
+    patrones = [
+        r"^\d{1,2}\.\d{1,2}\.\d{2}$",
+        r"^\d{1,2}\.\d{1,2}\.\d{4}$",
+    ]
+
+    for linea in lineas:
+        for patron in patrones:
+            if re.fullmatch(
+                patron,
+                linea,
+            ):
+                return linea
+
+    return None
+
+
+def buscar_resultado(lineas):
+    """
+    Intento conservador.
+
+    Buscamos dos valores numéricos consecutivos.
+    Si la estructura no es inequívoca,
+    devolvemos None y conservamos texto_raw.
+    """
+
+    for i in range(
+        len(lineas) - 1
+    ):
+        primero = lineas[i]
+        segundo = lineas[i + 1]
+
+        if (
+            re.fullmatch(r"\d+", primero)
+            and re.fullmatch(r"\d+", segundo)
+        ):
+            return {
+                "indice": i,
+                "goles_local": int(
+                    primero
+                ),
+                "goles_visitante": int(
+                    segundo
+                ),
+            }
+
+    return None
+
+
+def parsear_fila(fila):
+    datos = extraer_textos_fila(
+        fila
+    )
+
+    if datos is None:
+        return None
+
+    lineas = datos["lineas"]
+
+    fecha = buscar_fecha(
+        lineas
+    )
+
+    resultado = buscar_resultado(
+        lineas
+    )
+
+    registro = {
+        "fecha": fecha,
+        "local": None,
+        "visitante": None,
+        "goles_local": None,
+        "goles_visitante": None,
+        "resultado_parseado": False,
+        "texto_raw": datos[
+            "texto_raw"
+        ],
+        "lineas_raw": lineas,
+    }
+
+    if resultado is None:
+        return registro
+
+    indice = resultado[
+        "indice"
+    ]
+
+    # En la estructura que ya observamos,
+    # los dos nombres aparecen inmediatamente
+    # antes de los dos goles.
+    if indice < 2:
+        return registro
+
+    local = lineas[
+        indice - 2
+    ]
+
+    visitante = lineas[
+        indice - 1
+    ]
+
+    # Evitamos interpretar la fecha como equipo.
+    if (
+        local == fecha
+        or visitante == fecha
+    ):
+        return registro
+
+    registro.update(
+        {
+            "local": local,
+            "visitante": visitante,
+            "goles_local": resultado[
+                "goles_local"
+            ],
+            "goles_visitante": resultado[
+                "goles_visitante"
+            ],
+            "resultado_parseado": True,
+        }
+    )
+
+    return registro
+
+
+def extraer_seccion(
+    seccion,
+    indice,
+):
+    filas = seccion.locator(
+        ".h2h__row"
+    )
+
+    partidos = []
+
+    for i in range(
+        filas.count()
+    ):
+        registro = parsear_fila(
+            filas.nth(i)
+        )
+
+        if registro is not None:
+            partidos.append(
+                registro
+            )
+
+    parseados = sum(
+        1
+        for p in partidos
+        if p[
+            "resultado_parseado"
+        ]
+    )
+
+    return {
+        "indice": indice,
+        "titulo": obtener_titulo_seccion(
+            seccion
+        ),
+        "numero_filas": len(
+            partidos
+        ),
+        "numero_parseados": parseados,
+        "partidos": partidos,
+    }
+
+
+def identificar_secciones(
+    secciones,
+    nombre_local,
+    nombre_visitante,
+):
+    """
+    No asumimos todavía que la sección 0
+    siempre corresponda al local.
+
+    Guardamos una clasificación tentativa
+    usando el título.
+    """
+
+    resultado = []
+
+    local_norm = (
+        nombre_local
+        .casefold()
+    )
+
+    visitante_norm = (
+        nombre_visitante
+        .casefold()
+    )
+
+    for seccion in secciones:
+        titulo = (
+            seccion["titulo"]
+            .casefold()
+        )
+
+        tipo = "desconocida"
+
+        if (
+            "enfrentamientos" in titulo
+            or "h2h" in titulo
+        ):
+            tipo = "h2h"
+
+        elif (
+            local_norm in titulo
+            and visitante_norm
+            not in titulo
+        ):
+            tipo = "equipo_local"
+
+        elif (
+            visitante_norm in titulo
+            and local_norm
+            not in titulo
+        ):
+            tipo = "equipo_visitante"
+
+        elif (
+            local_norm in titulo
+            and visitante_norm in titulo
+        ):
+            tipo = "h2h"
+
+        seccion[
+            "tipo_estimado"
+        ] = tipo
+
+        resultado.append(
+            seccion
+        )
+
+    return resultado
+
+
+def main():
+    args = leer_argumentos()
+
+    partido = buscar_por_id(
+        args.match_id
+    )
+
+    print("=" * 70)
+    print("EXTRACTOR DE HISTORIAL")
+    print("=" * 70)
+
+    print(
+        f"Match ID: {args.match_id}"
+    )
+
+    print(
+        f"{partido['local']} "
+        f"vs "
+        f"{partido['visitante']}"
+    )
+
+    print(
+        f"Objetivo por equipo: "
+        f"{args.target}"
+    )
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch(
+            headless=True
+        )
+
+        page = browser.new_page(
+            viewport={
+                "width": 1920,
+                "height": 1080,
+            },
+            locale="es-MX",
+        )
+
+        print("\nAbriendo:")
+        print(
+            partido["url"]
+        )
+
+        response = page.goto(
+            partido["url"],
+            wait_until="domcontentloaded",
+            timeout=60_000,
+        )
+
+        if response:
+            print(
+                f"HTTP: {response.status}"
+            )
+
+        page.wait_for_timeout(
+            4000
+        )
+
+        h2h = page.get_by_text(
+            "H2H",
+            exact=True,
+        )
+
+        if h2h.count() == 0:
+            browser.close()
+
+            raise RuntimeError(
+                "No encontramos "
+                "la pestaña H2H."
+            )
+
+        h2h.first.click()
+
+        page.wait_for_timeout(
+            3500
+        )
+
+        secciones_locator = (
+            page.locator(
+                ".h2h__section"
+            )
+        )
+
+        cantidad_secciones = (
+            secciones_locator.count()
+        )
+
+        print(
+            "\nSecciones H2H:",
+            cantidad_secciones,
+        )
+
+        if cantidad_secciones < 2:
+            browser.close()
+
+            raise RuntimeError(
+                "Esperábamos al menos "
+                "dos secciones H2H."
+            )
+
+        # Intentamos ampliar todas las secciones:
+        #
+        # 0 -> historial equipo local
+        # 1 -> historial equipo visitante
+        # 2 -> H2H / enfrentamientos
+        #
+        # Si una sección no tiene botón
+        # "Mostrar más partidos", la función
+        # se detiene sin error.
+        for indice in range(
+            cantidad_secciones
+        ):
+            ampliar_seccion(
+                page,
+                secciones_locator.nth(
+                    indice
+                ),
+                args.target,
+            )
+
+        secciones = []
+
+        for indice in range(
+            cantidad_secciones
+        ):
+            secciones.append(
+                extraer_seccion(
+                    secciones_locator.nth(
+                        indice
+                    ),
+                    indice,
+                )
+            )
+
+        browser.close()
+
+    secciones = identificar_secciones(
+        secciones,
+        partido["local"],
+        partido["visitante"],
+    )
+
+    resultado = {
+        "match_id": args.match_id,
+        "partido": partido,
+        "objetivo_partidos": (
+            args.target
+        ),
+        "numero_secciones": len(
+            secciones
+        ),
+        "secciones": secciones,
+    }
+
+    directorio = (
+        BASE_SALIDA
+        / args.match_id
+    )
+
+    directorio.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    salida = (
+        directorio
+        / "history.json"
+    )
+
+    salida.write_text(
+        json.dumps(
+            resultado,
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
+    print("\n" + "=" * 70)
+    print("RESUMEN")
+    print("=" * 70)
+
+    for seccion in secciones:
+        print(
+            f"[{seccion['indice']}] "
+            f"{seccion['titulo']} | "
+            f"tipo="
+            f"{seccion['tipo_estimado']} | "
+            f"filas="
+            f"{seccion['numero_filas']} | "
+            f"parseadas="
+            f"{seccion['numero_parseados']}"
+        )
+
+    print()
+
+    print(
+        f"Guardado en: {salida}"
+    )
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,435 @@
+import json
+import math
+from pathlib import Path
+
+from analysis.backtest_target import cargar_target
+from analysis.poisson import analizar
+
+
+BASE = Path("data/matches")
+
+METODOS = {
+    "BT0": "J_BT_sin_temporada",
+    "BT10": "BT_H2H_10pct",
+    "BT15": "BT_H2H_15pct",
+    "BT20": "BT_H2H_20pct",
+}
+
+MERCADOS = (
+    "+1.5",
+    "+2.5",
+    "+3.5",
+    "+4.5",
+    "BTTS",
+)
+
+
+def probabilidades(lambdas):
+    r = analizar(
+        lambdas["local"],
+        lambdas["visitante"],
+    )
+
+    return {
+        "+1.5": r["goles"]["2_mas"],
+        "+2.5": r["goles"]["3_mas"],
+        "+3.5": r["goles"]["4_mas"],
+        "+4.5": r["over_4_0"]["gana"],
+        "BTTS": r["btts"]["si"],
+        "1": r["resultado"]["victoria_local"],
+        "X": r["resultado"]["empate"],
+        "2": r["resultado"]["victoria_visitante"],
+    }
+
+
+def brier_binario(p, y):
+    return (p - float(y)) ** 2
+
+
+def log_loss_binario(p, y):
+    eps = 1e-15
+
+    p = max(
+        eps,
+        min(1.0 - eps, p),
+    )
+
+    return -(
+        float(y) * math.log(p)
+        + (1.0 - float(y))
+        * math.log(1.0 - p)
+    )
+
+
+def brier_1x2(probs, real):
+    return sum(
+        (
+            probs[r]
+            - (1.0 if r == real else 0.0)
+        ) ** 2
+        for r in ("1", "X", "2")
+    )
+
+
+def log_loss_1x2(probs, real):
+    eps = 1e-15
+
+    p = max(
+        eps,
+        min(
+            1.0 - eps,
+            probs[real],
+        ),
+    )
+
+    return -math.log(p)
+
+
+def target_mercado(target, mercado):
+    if mercado == "BTTS":
+        return target["btts"]
+
+    return target[
+        "targets_goles"
+    ][mercado]
+
+
+def main():
+    registros = []
+    descartados = []
+
+    for carpeta in sorted(BASE.iterdir()):
+        if not carpeta.is_dir():
+            continue
+
+        # -------------------------------------
+        # Barrera obligatoria anti-leak.
+        # Sólo aceptamos partidos cuya integridad
+        # temporal haya sido validada por run_match.
+        # -------------------------------------
+        ruta_result = carpeta / "result.json"
+
+        if not ruta_result.exists():
+            descartados.append(
+                {
+                    "match_id": carpeta.name,
+                    "motivo": "sin_result_integridad",
+                }
+            )
+            continue
+
+        try:
+            with ruta_result.open(
+                encoding="utf-8"
+            ) as f:
+                result_data = json.load(f)
+
+            integridad = result_data.get(
+                "integridad_temporal",
+                {},
+            )
+
+            if integridad.get("estado") != "OK":
+                descartados.append(
+                    {
+                        "match_id": carpeta.name,
+                        "motivo": "integridad_temporal_no_ok",
+                        "estado": integridad.get("estado"),
+                    }
+                )
+                continue
+
+        except Exception as exc:
+            descartados.append(
+                {
+                    "match_id": carpeta.name,
+                    "motivo": f"error_integridad: {exc}",
+                }
+            )
+            continue
+
+        ruta_lambda = (
+            carpeta
+            / "lambda_comparison.json"
+        )
+
+        if not ruta_lambda.exists():
+            descartados.append(
+                {
+                    "match_id": carpeta.name,
+                    "motivo": "sin_lambda",
+                }
+            )
+            continue
+
+        try:
+            target = cargar_target(
+                carpeta
+            )
+        except Exception as exc:
+            descartados.append(
+                {
+                    "match_id": carpeta.name,
+                    "motivo": (
+                        f"target_error: {exc}"
+                    ),
+                }
+            )
+            continue
+
+        if target is None:
+            descartados.append(
+                {
+                    "match_id": carpeta.name,
+                    "motivo": "sin_target",
+                }
+            )
+            continue
+
+        with ruta_lambda.open(
+            encoding="utf-8"
+        ) as f:
+            comparacion = json.load(f)
+
+        metodos = comparacion.get(
+            "metodos",
+            {},
+        )
+
+        faltantes = [
+            clave
+            for clave in METODOS.values()
+            if clave not in metodos
+        ]
+
+        if faltantes:
+            descartados.append(
+                {
+                    "match_id": carpeta.name,
+                    "motivo": "metodos_faltantes",
+                    "faltantes": faltantes,
+                }
+            )
+            continue
+
+        for nombre, clave in (
+            METODOS.items()
+        ):
+            probs = probabilidades(
+                metodos[clave]
+            )
+
+            registro = {
+                "match_id": carpeta.name,
+                "fecha": target["fecha"],
+                "local": target["local"],
+                "visitante": (
+                    target["visitante"]
+                ),
+                "goles_local": (
+                    target["goles_local"]
+                ),
+                "goles_visitante": (
+                    target["goles_visitante"]
+                ),
+                "modelo": nombre,
+                "mercados": {},
+                "brier_1x2": brier_1x2(
+                    probs,
+                    target["resultado_1x2"],
+                ),
+                "log_loss_1x2": (
+                    log_loss_1x2(
+                        probs,
+                        target["resultado_1x2"],
+                    )
+                ),
+            }
+
+            for mercado in MERCADOS:
+                y = target_mercado(
+                    target,
+                    mercado,
+                )
+
+                p = probs[mercado]
+
+                registro[
+                    "mercados"
+                ][mercado] = {
+                    "p": p,
+                    "y": bool(y),
+                    "brier": (
+                        brier_binario(
+                            p,
+                            y,
+                        )
+                    ),
+                    "log_loss": (
+                        log_loss_binario(
+                            p,
+                            y,
+                        )
+                    ),
+                }
+
+            registros.append(
+                registro
+            )
+
+    resumen = {}
+
+    for modelo in METODOS:
+        filas = [
+            r
+            for r in registros
+            if r["modelo"] == modelo
+        ]
+
+        if not filas:
+            continue
+
+        bloque = {
+            "n": len(filas),
+            "mercados": {},
+            "brier_1x2": sum(
+                r["brier_1x2"]
+                for r in filas
+            ) / len(filas),
+            "log_loss_1x2": sum(
+                r["log_loss_1x2"]
+                for r in filas
+            ) / len(filas),
+        }
+
+        for mercado in MERCADOS:
+            bloque[
+                "mercados"
+            ][mercado] = {
+                "brier": sum(
+                    r["mercados"][
+                        mercado
+                    ]["brier"]
+                    for r in filas
+                ) / len(filas),
+
+                "log_loss": sum(
+                    r["mercados"][
+                        mercado
+                    ]["log_loss"]
+                    for r in filas
+                ) / len(filas),
+
+                "prob_media": sum(
+                    r["mercados"][
+                        mercado
+                    ]["p"]
+                    for r in filas
+                ) / len(filas),
+
+                "frecuencia_real": sum(
+                    1.0
+                    if r["mercados"][
+                        mercado
+                    ]["y"]
+                    else 0.0
+                    for r in filas
+                ) / len(filas),
+            }
+
+        resumen[modelo] = bloque
+
+    salida = {
+        "numero_partidos": (
+            len(registros)
+            // max(len(METODOS), 1)
+        ),
+        "modelos": resumen,
+        "registros": registros,
+        "descartados": descartados,
+        "advertencia": (
+            "Muestra experimental. No seleccionar "
+            "pesos por resultados de pocos partidos."
+        ),
+    }
+
+    ruta = Path(
+        "data/backtest_summary.json"
+    )
+
+    with ruta.open(
+        "w",
+        encoding="utf-8",
+    ) as f:
+        json.dump(
+            salida,
+            f,
+            ensure_ascii=False,
+            indent=2,
+        )
+
+    print()
+    print("=" * 92)
+    print(
+        "BACKTEST POR LOTES | "
+        f"N={salida['numero_partidos']}"
+    )
+    print("=" * 92)
+
+    cabecera = (
+        f"{'MODELO':<8}"
+        f"{'N':>5}"
+        f"{'+1.5':>11}"
+        f"{'+2.5':>11}"
+        f"{'+3.5':>11}"
+        f"{'+4.5':>11}"
+        f"{'BTTS':>11}"
+        f"{'1X2':>11}"
+    )
+
+    print(cabecera)
+    print("-" * len(cabecera))
+
+    for modelo in METODOS:
+        if modelo not in resumen:
+            continue
+
+        r = resumen[modelo]
+
+        print(
+            f"{modelo:<8}"
+            f"{r['n']:>5}"
+            f"{r['mercados']['+1.5']['brier']:>11.4f}"
+            f"{r['mercados']['+2.5']['brier']:>11.4f}"
+            f"{r['mercados']['+3.5']['brier']:>11.4f}"
+            f"{r['mercados']['+4.5']['brier']:>11.4f}"
+            f"{r['mercados']['BTTS']['brier']:>11.4f}"
+            f"{r['brier_1x2']:>11.4f}"
+        )
+
+    print()
+    print(
+        "Valores mostrados = Brier promedio."
+    )
+    print(
+        "Menor es mejor, pero N pequeño "
+        "no permite calibrar el modelo."
+    )
+
+    print()
+    print("Descartados:", len(descartados))
+
+    for d in descartados:
+        print(
+            " ",
+            d["match_id"],
+            "->",
+            d["motivo"],
+        )
+
+    print()
+    print("Guardado:", ruta)
+
+
+if __name__ == "__main__":
+    main()

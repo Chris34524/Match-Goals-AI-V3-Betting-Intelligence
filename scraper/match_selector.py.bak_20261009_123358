@@ -1,0 +1,108 @@
+import json
+from pathlib import Path
+
+
+ARCHIVO_PARTIDOS = Path(
+    "data/partidos.json"
+)
+
+
+def cargar_partidos():
+    if not ARCHIVO_PARTIDOS.exists():
+        raise FileNotFoundError(
+            f"No existe "
+            f"{ARCHIVO_PARTIDOS}"
+        )
+
+    with ARCHIVO_PARTIDOS.open(
+        encoding="utf-8"
+    ) as archivo:
+        datos = json.load(
+            archivo
+        )
+
+    if isinstance(
+        datos,
+        list,
+    ):
+        # Compatibilidad con formato viejo.
+        return datos
+
+    if isinstance(
+        datos,
+        dict,
+    ):
+        return datos.get(
+            "partidos",
+            [],
+        )
+
+    raise RuntimeError(
+        "Formato desconocido "
+        "en partidos.json"
+    )
+
+
+def buscar_por_id(match_id):
+    partidos = cargar_partidos()
+
+    for partido in partidos:
+        if (
+            partido.get("id")
+            == match_id
+        ):
+            return partido
+
+    raise RuntimeError(
+        "No encontramos partido "
+        f"con ID {match_id}"
+    )
+
+
+def buscar_por_equipos(
+    local,
+    visitante,
+):
+    local = (
+        local
+        .lower()
+        .strip()
+    )
+
+    visitante = (
+        visitante
+        .lower()
+        .strip()
+    )
+
+    partidos = cargar_partidos()
+
+    for partido in partidos:
+        nombre_local = (
+            partido[
+                "local"
+            ]
+            .lower()
+            .strip()
+        )
+
+        nombre_visitante = (
+            partido[
+                "visitante"
+            ]
+            .lower()
+            .strip()
+        )
+
+        if (
+            local in nombre_local
+            and visitante
+            in nombre_visitante
+        ):
+            return partido
+
+    raise RuntimeError(
+        "No encontramos "
+        f"{local} vs "
+        f"{visitante}"
+    )

@@ -1,0 +1,278 @@
+import argparse
+import json
+from collections import Counter
+from datetime import date
+from pathlib import Path
+
+
+ENTRADA = Path("data/partidos.json")
+
+SALIDA = Path(
+    "data/partidos_candidatos.json"
+)
+
+
+ESTADOS_FINALIZADOS = {
+    "finalizado",
+    "finalizado pen.",
+    "finalizado prórroga",
+    "aplazado",
+    "cancelado",
+    "walkover",
+}
+
+
+def argumentos():
+    parser = argparse.ArgumentParser(
+        description=(
+            "Selecciona partidos futuros "
+            "para Match Goals AI."
+        )
+    )
+
+    parser.add_argument(
+        "--include-today",
+        action="store_true",
+        help=(
+            "Incluye partidos de hoy "
+            "que todavía tengan hora."
+        ),
+    )
+
+    return parser.parse_args()
+
+
+def normalizar(texto):
+    if texto is None:
+        return ""
+
+    return (
+        str(texto)
+        .strip()
+        .lower()
+    )
+
+
+def cargar():
+    if not ENTRADA.exists():
+        raise FileNotFoundError(
+            f"No existe {ENTRADA}"
+        )
+
+    with ENTRADA.open(
+        encoding="utf-8"
+    ) as archivo:
+        datos = json.load(archivo)
+
+    if isinstance(datos, dict):
+        return (
+            datos,
+            datos.get(
+                "partidos",
+                [],
+            ),
+        )
+
+    if isinstance(datos, list):
+        return (
+            {},
+            datos,
+        )
+
+    raise RuntimeError(
+        "Formato desconocido "
+        "en partidos.json"
+    )
+
+
+def clasificar(partido):
+    estado = normalizar(
+        partido.get("estado")
+    )
+
+    hora = partido.get(
+        "hora"
+    )
+
+    goles_local = partido.get(
+        "gol_local"
+    )
+
+    goles_visitante = partido.get(
+        "gol_visitante"
+    )
+
+    # Estado explícitamente finalizado.
+    if estado in ESTADOS_FINALIZADOS:
+        return "finalizado"
+
+    if "finalizado" in estado:
+        return "finalizado"
+
+    if "cancelado" in estado:
+        return "descartado"
+
+    if "aplazado" in estado:
+        return "descartado"
+
+    # Hay marcador y no hay hora:
+    # probablemente está en vivo o terminó.
+    # No lo declaramos finalizado sin evidencia.
+    if (
+        goles_local is not None
+        and goles_visitante is not None
+        and not hora
+    ):
+        return "marcador_sin_hora"
+
+    # Una hora HH:MM es nuestra señal
+    # más clara de partido programado.
+    if hora:
+        return "programado"
+
+    return "desconocido"
+
+
+def main():
+    args = argumentos()
+
+    metadata, partidos = cargar()
+
+    hoy = date.today().isoformat()
+
+    candidatos = []
+    clasificados = []
+
+    contador = Counter()
+
+    for partido in partidos:
+        categoria = clasificar(
+            partido
+        )
+
+        contador[categoria] += 1
+
+        registro = dict(
+            partido
+        )
+
+        registro[
+            "categoria_filtro"
+        ] = categoria
+
+        clasificados.append(
+            registro
+        )
+
+        if categoria != "programado":
+            continue
+
+        fecha = partido.get(
+            "fecha"
+        )
+
+        if fecha > hoy:
+            candidatos.append(
+                registro
+            )
+
+            continue
+
+        if (
+            fecha == hoy
+            and args.include_today
+        ):
+            candidatos.append(
+                registro
+            )
+
+    salida = {
+        "fecha_referencia": hoy,
+        "origen": str(
+            ENTRADA
+        ),
+        "include_today": (
+            args.include_today
+        ),
+        "total_origen": len(
+            partidos
+        ),
+        "total_candidatos": len(
+            candidatos
+        ),
+        "conteo_categorias": dict(
+            contador
+        ),
+        "candidatos": candidatos,
+    }
+
+    SALIDA.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    SALIDA.write_text(
+        json.dumps(
+            salida,
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
+    print("=" * 70)
+    print("FILTRO DE PARTIDOS")
+    print("=" * 70)
+
+    print(
+        f"Origen: {ENTRADA}"
+    )
+
+    print(
+        f"Partidos originales: "
+        f"{len(partidos)}"
+    )
+
+    print()
+
+    for categoria, cantidad in sorted(
+        contador.items()
+    ):
+        print(
+            f"{categoria:<22} "
+            f"{cantidad}"
+        )
+
+    print()
+
+    print(
+        f"Candidatos: "
+        f"{len(candidatos)}"
+    )
+
+    print(
+        f"Guardado en: "
+        f"{SALIDA}"
+    )
+
+    print()
+    print(
+        "CANDIDATOS POR FECHA"
+    )
+
+    por_fecha = Counter(
+        p.get("fecha")
+        for p in candidatos
+    )
+
+    for fecha, cantidad in sorted(
+        por_fecha.items()
+    ):
+        print(
+            f"{fecha}: "
+            f"{cantidad}"
+        )
+
+
+if __name__ == "__main__":
+    main()

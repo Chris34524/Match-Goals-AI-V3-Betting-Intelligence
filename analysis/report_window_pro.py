@@ -1,0 +1,3300 @@
+import html
+import json
+import math
+import re
+import unicodedata
+from pathlib import Path
+
+
+BASE = Path("data")
+MATCHES = BASE / "matches"
+SRC = BASE / "day_predictions_v2.json"
+OUT = BASE / "report_window_pro.html"
+
+
+# ============================================================
+# UTILIDADES
+# ============================================================
+
+def cargar(path):
+    try:
+        return json.loads(
+            path.read_text(encoding="utf-8")
+        )
+    except Exception:
+        return None
+
+
+def esc(x):
+    return html.escape(str(x if x is not None else ""))
+
+
+def num(x):
+    try:
+        v = float(x)
+        if math.isfinite(v):
+            return v
+    except Exception:
+        pass
+    return None
+
+
+def under(x):
+    """
+    Complemento exacto de una línea Over de medio gol.
+
+    +1.5 -> -1.5
+    +2.5 -> -2.5
+    +3.5 -> -3.5
+    """
+    v = prob(x)
+
+    if v is None:
+        return None
+
+    return 1.0 - v
+
+
+def prob_1x2(lambda_local, lambda_visitante):
+    """
+    Probabilidades 1/X/2 a partir de dos Poisson
+    independientes.
+
+    1 = victoria local
+    X = empate
+    2 = victoria visitante
+    """
+    lh = num(lambda_local)
+    la = num(lambda_visitante)
+
+    if lh is None or la is None:
+        return None, None, None
+
+    if lh < 0 or la < 0:
+        return None, None, None
+
+    max_goles = 35
+
+    def dist(lam):
+        probs = [math.exp(-lam)]
+
+        for k in range(1, max_goles + 1):
+            probs.append(
+                probs[-1] * lam / k
+            )
+
+        return probs
+
+    ph = dist(lh)
+    pa = dist(la)
+
+    p1 = 0.0
+    px = 0.0
+    p2 = 0.0
+
+    for i, pi in enumerate(ph):
+        for j, pj in enumerate(pa):
+            pr = pi * pj
+
+            if i > j:
+                p1 += pr
+            elif i == j:
+                px += pr
+            else:
+                p2 += pr
+
+    total = p1 + px + p2
+
+    if total <= 0:
+        return None, None, None
+
+    return (
+        p1 / total,
+        px / total,
+        p2 / total,
+    )
+
+
+def dec(x, n=2):
+    v = num(x)
+    if v is None:
+        return "N/D"
+    return f"{v:.{n}f}"
+
+
+def prob(x):
+    if x is None:
+        return None
+
+    if isinstance(x, str):
+        s = x.strip()
+
+        try:
+            if s.endswith("%"):
+                return float(s[:-1]) / 100
+            x = float(s)
+        except Exception:
+            return None
+
+    v = num(x)
+
+    if v is None:
+        return None
+
+    if 1 < v <= 100:
+        v /= 100
+
+    return v
+
+
+def pct(x):
+    v = prob(x)
+
+    if v is None:
+        return "N/D"
+
+    return f"{v:.1%}"
+
+
+def valor(d, *claves):
+    if not isinstance(d, dict):
+        return None
+
+    for k in claves:
+        if d.get(k) is not None:
+            return d.get(k)
+
+    return None
+
+
+def normalizar(s):
+    s = str(s or "").strip().casefold()
+
+    s = "".join(
+        c
+        for c in unicodedata.normalize(
+            "NFKD",
+            s,
+        )
+        if not unicodedata.combining(c)
+    )
+
+    s = re.sub(
+        r"\s+\([^)]*\)$",
+        "",
+        s,
+    )
+
+    s = re.sub(
+        r"[^a-z0-9]+",
+        " ",
+        s,
+    )
+
+    return " ".join(s.split())
+
+
+def norm_key(s):
+    return normalizar(
+        str(s).replace("_", " ")
+    ).replace(" ", "")
+
+
+def clase_estado(valor):
+    v = normalizar(valor)
+
+    mapa = {
+        "alta": "state-good",
+        "fuerte": "state-good",
+
+        "media": "state-mid",
+
+        "baja": "state-bad",
+        "debil": "state-bad",
+
+        "fueramodelo": "state-off",
+        "sinanalizar": "state-off",
+        "nd": "state-off",
+    }
+
+    return mapa.get(
+        v.replace(" ", ""),
+        "state-off",
+    )
+
+
+def mid_partido(p):
+    return (
+        p.get("match_id")
+        or p.get("id")
+        or p.get("flashscore_id")
+    )
+
+
+def nombre_local(p):
+    return (
+        p.get("local")
+        or p.get("equipo_local")
+        or "Local"
+    )
+
+
+def nombre_visitante(p):
+    return (
+        p.get("visitante")
+        or p.get("equipo_visitante")
+        or "Visitante"
+    )
+
+
+# ============================================================
+# HISTORY
+# ============================================================
+
+def seccion_history(
+    history,
+    tipo,
+    equipo=None,
+):
+    if not isinstance(history, dict):
+        return None
+
+    secciones = history.get(
+        "secciones",
+        [],
+    )
+
+    for s in secciones:
+        if s.get("tipo_estimado") == tipo:
+            return s
+
+    if equipo:
+        ne = normalizar(equipo)
+
+        candidatos = []
+
+        for s in secciones:
+            if s.get("tipo_estimado") == "h2h":
+                continue
+
+            titulo = str(
+                s.get("titulo") or ""
+            )
+
+            titulo = re.sub(
+                r"^ÚLTIMOS PARTIDOS:\s*",
+                "",
+                titulo,
+                flags=re.I,
+            )
+
+            if normalizar(titulo) == ne:
+                candidatos.append(s)
+
+        if len(candidatos) == 1:
+            return candidatos[0]
+
+    return None
+
+
+def goles_fila(f):
+    gl = valor(
+        f,
+        "goles_local",
+        "gol_local",
+        "home_score",
+        "score_home",
+    )
+
+    gv = valor(
+        f,
+        "goles_visitante",
+        "gol_visitante",
+        "away_score",
+        "score_away",
+    )
+
+    gl = num(gl)
+    gv = num(gv)
+
+    if gl is not None and gv is not None:
+        return int(gl), int(gv)
+
+    resultado = str(
+        valor(
+            f,
+            "resultado",
+            "score",
+            "marcador",
+        )
+        or ""
+    )
+
+    m = re.search(
+        r"(\d+)\s*[-:]\s*(\d+)",
+        resultado,
+    )
+
+    if m:
+        return (
+            int(m.group(1)),
+            int(m.group(2)),
+        )
+
+    return None, None
+
+
+def datos_fila(f):
+    return {
+        "fecha": valor(
+            f,
+            "fecha",
+            "date",
+        ),
+        "competicion": valor(
+            f,
+            "competicion",
+            "liga",
+            "tournament",
+        ),
+        "local": valor(
+            f,
+            "local",
+            "equipo_local",
+            "home",
+        ),
+        "visitante": valor(
+            f,
+            "visitante",
+            "equipo_visitante",
+            "away",
+        ),
+    }
+
+
+def perspectiva(f, equipo):
+    d = datos_fila(f)
+
+    gl, gv = goles_fila(f)
+
+    if gl is None or gv is None:
+        return None
+
+    ne = normalizar(equipo)
+
+    nl = normalizar(d["local"])
+    nv = normalizar(d["visitante"])
+
+    if ne == nl:
+        gf = gl
+        ga = gv
+        sede = "L"
+
+    elif ne == nv:
+        gf = gv
+        ga = gl
+        sede = "V"
+
+    else:
+        return None
+
+    if gf > ga:
+        res = "G"
+    elif gf == ga:
+        res = "E"
+    else:
+        res = "P"
+
+    return {
+        "gf": gf,
+        "ga": ga,
+        "tg": gf + ga,
+        "btts": int(
+            gf > 0 and ga > 0
+        ),
+        "o25": int(
+            gf + ga >= 3
+        ),
+        "resultado": res,
+        "sede": sede,
+    }
+
+
+def resumen_forma(
+    filas,
+    equipo,
+    limite,
+    sede=None,
+):
+    validos = []
+
+    for f in filas:
+        x = perspectiva(
+            f,
+            equipo,
+        )
+
+        if not x:
+            continue
+
+        if sede and x["sede"] != sede:
+            continue
+
+        validos.append(x)
+
+        if len(validos) >= limite:
+            break
+
+    if not validos:
+        return None
+
+    n = len(validos)
+
+    return {
+        "n": n,
+        "gf": sum(
+            x["gf"]
+            for x in validos
+        ) / n,
+        "ga": sum(
+            x["ga"]
+            for x in validos
+        ) / n,
+        "tg": sum(
+            x["tg"]
+            for x in validos
+        ) / n,
+        "o25": sum(
+            x["o25"]
+            for x in validos
+        ) / n,
+        "btts": sum(
+            x["btts"]
+            for x in validos
+        ) / n,
+        "g": sum(
+            x["resultado"] == "G"
+            for x in validos
+        ),
+        "e": sum(
+            x["resultado"] == "E"
+            for x in validos
+        ),
+        "p": sum(
+            x["resultado"] == "P"
+            for x in validos
+        ),
+    }
+
+
+def render_forma_stats(
+    filas,
+    equipo,
+    es_local,
+):
+    l5 = resumen_forma(
+        filas,
+        equipo,
+        5,
+    )
+
+    l10 = resumen_forma(
+        filas,
+        equipo,
+        10,
+    )
+
+    sede = resumen_forma(
+        filas,
+        equipo,
+        20,
+        "L" if es_local else "V",
+    )
+
+    def fila(
+        nombre,
+        d,
+    ):
+        if not d:
+            return f"""
+            <tr>
+              <td>{esc(nombre)}</td>
+              <td colspan="7">N/D</td>
+            </tr>
+            """
+
+        return f"""
+        <tr>
+          <td><strong>{esc(nombre)}</strong></td>
+          <td>{d['n']}</td>
+          <td>{d['gf']:.2f}</td>
+          <td>{d['ga']:.2f}</td>
+          <td>{d['tg']:.2f}</td>
+          <td>{d['o25']:.0%}</td>
+          <td>{d['btts']:.0%}</td>
+          <td>
+            <span class="mini win">{d['g']}G</span>
+            <span class="mini draw">{d['e']}E</span>
+            <span class="mini loss">{d['p']}P</span>
+          </td>
+        </tr>
+        """
+
+    return f"""
+    <table class="mini-table">
+      <thead>
+        <tr>
+          <th>Muestra</th>
+          <th>PJ</th>
+          <th>GF/PJ</th>
+          <th>GC/PJ</th>
+          <th>TG/PJ</th>
+          <th>O2.5</th>
+          <th>BTTS</th>
+          <th>G/E/P</th>
+        </tr>
+      </thead>
+      <tbody>
+        {fila("L5", l5)}
+        {fila("L10", l10)}
+        {fila(
+            "Como local"
+            if es_local
+            else "Como visitante",
+            sede,
+        )}
+      </tbody>
+    </table>
+    """
+
+
+def render_ultimos(
+    filas,
+    equipo,
+    limite=10,
+):
+    salida = []
+
+    usados = 0
+
+    for f in filas:
+        if usados >= limite:
+            break
+
+        d = datos_fila(f)
+        x = perspectiva(
+            f,
+            equipo,
+        )
+
+        if not x:
+            continue
+
+        gl, gv = goles_fila(f)
+
+        clase = {
+            "G": "win",
+            "E": "draw",
+            "P": "loss",
+        }.get(
+            x["resultado"],
+            "",
+        )
+
+        salida.append(
+            f"""
+            <tr>
+              <td>{esc(d['fecha'])}</td>
+              <td>{esc(d['competicion'])}</td>
+              <td>{esc(d['local'])}</td>
+              <td class="score">
+                {gl} - {gv}
+              </td>
+              <td>{esc(d['visitante'])}</td>
+              <td>
+                <span class="badge-result {clase}">
+                  {x['resultado']}
+                </span>
+              </td>
+            </tr>
+            """
+        )
+
+        usados += 1
+
+    if not salida:
+        return """
+        <div class="empty">
+          No hay últimos partidos utilizables.
+        </div>
+        """
+
+    return f"""
+    <table class="recent-table">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Competición</th>
+          <th>Local</th>
+          <th>Marcador</th>
+          <th>Visitante</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {''.join(salida)}
+      </tbody>
+    </table>
+    """
+
+
+# ============================================================
+# CLASIFICACIÓN
+# ============================================================
+
+STANDING_ALIASES = {
+    "pos": [
+        "pos",
+        "posicion",
+        "position",
+        "puesto",
+        "rank",
+    ],
+    "equipo": [
+        "equipo",
+        "team",
+        "club",
+        "nombre",
+        "name",
+    ],
+    "pj": [
+        "pj",
+        "partidos",
+        "played",
+        "j",
+    ],
+    "pg": [
+        "pg",
+        "ganados",
+        "wins",
+        "g",
+    ],
+    "pe": [
+        "pe",
+        "empates",
+        "draws",
+        "e",
+    ],
+    "pp": [
+        "pp",
+        "perdidos",
+        "losses",
+        "p",
+    ],
+    "gf": [
+        "gf",
+        "golesfavor",
+        "goalsfor",
+    ],
+    "gc": [
+        "gc",
+        "ga",
+        "golescontra",
+        "goalsagainst",
+    ],
+    "dg": [
+        "dg",
+        "gd",
+        "diferencia",
+        "goaldifference",
+    ],
+    "pts": [
+        "pts",
+        "puntos",
+        "points",
+    ],
+}
+
+
+def row_value(
+    row,
+    aliases,
+):
+    mapa = {
+        norm_key(k): v
+        for k, v in row.items()
+    }
+
+    for a in aliases:
+        k = norm_key(a)
+
+        if k in mapa:
+            return mapa[k]
+
+    return None
+
+
+def caminar_listas(
+    obj,
+    path="",
+):
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            nuevo = (
+                f"{path}.{k}"
+                if path
+                else str(k)
+            )
+
+            yield from caminar_listas(
+                v,
+                nuevo,
+            )
+
+    elif isinstance(obj, list):
+        if (
+            len(obj) >= 2
+            and all(
+                isinstance(x, dict)
+                for x in obj
+            )
+        ):
+            yield path, obj
+
+        for i, v in enumerate(obj):
+            if isinstance(
+                v,
+                (dict, list),
+            ):
+                yield from caminar_listas(
+                    v,
+                    f"{path}[{i}]",
+                )
+
+
+def mejor_tabla_standings(data):
+    if not data:
+        return None
+
+    mejor = None
+    mejor_score = -1
+
+    for path, filas in caminar_listas(
+        data
+    ):
+        if not filas:
+            continue
+
+        muestra = filas[:5]
+
+        score = 0
+
+        for campo in (
+            "equipo",
+            "pos",
+            "pj",
+            "pts",
+            "gf",
+            "gc",
+        ):
+            encontrados = sum(
+                row_value(
+                    r,
+                    STANDING_ALIASES[
+                        campo
+                    ],
+                )
+                is not None
+                for r in muestra
+            )
+
+            if encontrados:
+                score += 1
+
+        if score > mejor_score:
+            mejor_score = score
+            mejor = (
+                path,
+                filas,
+            )
+
+    if mejor_score < 2:
+        return None
+
+    return mejor
+
+
+def render_standings(
+    data,
+    local,
+    visitante,
+):
+    mejor = mejor_tabla_standings(
+        data
+    )
+
+    if not mejor:
+        return """
+        <div class="empty">
+          Clasificación común no disponible
+          para este partido.
+        </div>
+        """
+
+    _, filas = mejor
+
+    nl = normalizar(local)
+    nv = normalizar(visitante)
+
+    rows = []
+
+    for r in filas:
+        equipo = row_value(
+            r,
+            STANDING_ALIASES["equipo"],
+        )
+
+        if equipo is None:
+            continue
+
+        ne = normalizar(equipo)
+
+        cls = ""
+
+        if ne == nl or ne == nv:
+            cls = "standing-highlight"
+
+        rows.append(
+            f"""
+            <tr class="{cls}">
+              <td>{esc(row_value(r, STANDING_ALIASES['pos']))}</td>
+              <td class="team-cell">{esc(equipo)}</td>
+              <td>{esc(row_value(r, STANDING_ALIASES['pj']))}</td>
+              <td>{esc(row_value(r, STANDING_ALIASES['pg']))}</td>
+              <td>{esc(row_value(r, STANDING_ALIASES['pe']))}</td>
+              <td>{esc(row_value(r, STANDING_ALIASES['pp']))}</td>
+              <td>{esc(row_value(r, STANDING_ALIASES['gf']))}</td>
+              <td>{esc(row_value(r, STANDING_ALIASES['gc']))}</td>
+              <td>{esc(row_value(r, STANDING_ALIASES['dg']))}</td>
+              <td><strong>{esc(row_value(r, STANDING_ALIASES['pts']))}</strong></td>
+            </tr>
+            """
+        )
+
+    if not rows:
+        return """
+        <div class="empty">
+          Clasificación encontrada,
+          pero sin filas interpretables.
+        </div>
+        """
+
+    return f"""
+    <div class="table-scroll">
+    <table class="standings-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Equipo</th>
+          <th>PJ</th>
+          <th>PG</th>
+          <th>PE</th>
+          <th>PP</th>
+          <th>GF</th>
+          <th>GC</th>
+          <th>DG</th>
+          <th>PTS</th>
+        </tr>
+      </thead>
+      <tbody>
+        {''.join(rows)}
+      </tbody>
+    </table>
+    </div>
+    """
+
+
+# ============================================================
+# xG
+# ============================================================
+
+def xg_window(d):
+    if not isinstance(d, dict):
+        return None
+
+    n = valor(
+        d,
+        "n",
+        "partidos",
+        "disponibles",
+        "count",
+    )
+
+    xgf = valor(
+        d,
+        "xgf",
+        "xGF",
+        "xg_favor",
+    )
+
+    xga = valor(
+        d,
+        "xga",
+        "xGA",
+        "xg_contra",
+    )
+
+    if (
+        num(xgf) is None
+        and num(xga) is None
+    ):
+        return None
+
+    return {
+        "n": n,
+        "xgf": num(xgf),
+        "xga": num(xga),
+    }
+
+
+def buscar_xg_bloques(
+    obj,
+    path="",
+    salida=None,
+):
+    if salida is None:
+        salida = []
+
+    if isinstance(obj, dict):
+        keys = {
+            norm_key(k): k
+            for k in obj
+        }
+
+        l5_key = keys.get("l5")
+        l10_key = keys.get("l10")
+
+        if l5_key or l10_key:
+            l5 = (
+                xg_window(
+                    obj.get(l5_key)
+                )
+                if l5_key
+                else None
+            )
+
+            l10 = (
+                xg_window(
+                    obj.get(l10_key)
+                )
+                if l10_key
+                else None
+            )
+
+            if l5 or l10:
+                nombre = (
+                    valor(
+                        obj,
+                        "equipo",
+                        "team",
+                        "nombre",
+                    )
+                    or path.split(".")[-1]
+                    or "Equipo"
+                )
+
+                salida.append(
+                    {
+                        "nombre": nombre,
+                        "l5": l5,
+                        "l10": l10,
+                    }
+                )
+
+        for k, v in obj.items():
+            if isinstance(
+                v,
+                (dict, list),
+            ):
+                buscar_xg_bloques(
+                    v,
+                    (
+                        f"{path}.{k}"
+                        if path
+                        else str(k)
+                    ),
+                    salida,
+                )
+
+    elif isinstance(obj, list):
+        for i, v in enumerate(obj):
+            if isinstance(
+                v,
+                (dict, list),
+            ):
+                buscar_xg_bloques(
+                    v,
+                    f"{path}[{i}]",
+                    salida,
+                )
+
+    return salida
+
+
+def resumen_xg_reporte(partidos, n):
+    partidos = (
+        partidos
+        if isinstance(partidos, list)
+        else []
+    )
+
+    muestra = partidos[:n]
+
+    disponibles = []
+
+    for partido in muestra:
+        if not isinstance(partido, dict):
+            continue
+
+        xgf = num(
+            partido.get("xgf")
+        )
+
+        xga = num(
+            partido.get("xga")
+        )
+
+        if (
+            partido.get("xg_disponible")
+            and xgf is not None
+            and xga is not None
+        ):
+            disponibles.append(
+                (xgf, xga)
+            )
+
+    if not disponibles:
+        return {
+            "n": 0,
+            "objetivo": (
+                len(muestra)
+                if muestra
+                else n
+            ),
+            "xgf": None,
+            "xga": None,
+        }
+
+    return {
+        "n": len(disponibles),
+        "objetivo": (
+            len(muestra)
+            if muestra
+            else n
+        ),
+        "xgf": sum(
+            x[0]
+            for x in disponibles
+        ) / len(disponibles),
+        "xga": sum(
+            x[1]
+            for x in disponibles
+        ) / len(disponibles),
+    }
+
+
+
+def buscar_clave_recursiva(obj, clave):
+    if isinstance(obj, dict):
+        if clave in obj:
+            return obj[clave]
+
+        for v in obj.values():
+            encontrado = buscar_clave_recursiva(
+                v,
+                clave,
+            )
+
+            if encontrado is not None:
+                return encontrado
+
+    elif isinstance(obj, list):
+        for v in obj:
+            encontrado = buscar_clave_recursiva(
+                v,
+                clave,
+            )
+
+            if encontrado is not None:
+                return encontrado
+
+    return None
+
+
+def resumen_xg_directo(partidos, n):
+    partidos = (
+        partidos
+        if isinstance(partidos, list)
+        else []
+    )
+
+    muestra = partidos[:n]
+
+    validos = []
+
+    for partido in muestra:
+        if not isinstance(partido, dict):
+            continue
+
+        xgf = num(
+            partido.get("xgf")
+        )
+
+        xga = num(
+            partido.get("xga")
+        )
+
+        if (
+            xgf is not None
+            and xga is not None
+        ):
+            validos.append(
+                (xgf, xga)
+            )
+
+    if not validos:
+        return {
+            "n": 0,
+            "objetivo": len(muestra),
+            "xgf": None,
+            "xga": None,
+        }
+
+    return {
+        "n": len(validos),
+        "objetivo": len(muestra),
+        "xgf": sum(
+            x[0]
+            for x in validos
+        ) / len(validos),
+        "xga": sum(
+            x[1]
+            for x in validos
+        ) / len(validos),
+    }
+
+
+def render_xg(
+    xg,
+    lambda_comparison,
+    local,
+    visitante,
+):
+    bloques = []
+
+    # --------------------------------------------------------
+    # A. XG HISTÓRICO
+    # --------------------------------------------------------
+
+    filas = []
+
+    if isinstance(xg, dict):
+        for lado, equipo_fallback in (
+            ("local", local),
+            ("visitante", visitante),
+        ):
+            bloque = xg.get(
+                lado,
+                {},
+            )
+
+            if not isinstance(
+                bloque,
+                dict,
+            ):
+                continue
+
+            equipo = (
+                bloque.get("equipo")
+                or equipo_fallback
+            )
+
+            partidos = bloque.get(
+                "partidos",
+                [],
+            )
+
+            for n in (5, 10):
+                r = resumen_xg_directo(
+                    partidos,
+                    n,
+                )
+
+                if (
+                    r["xgf"] is None
+                    and r["xga"] is None
+                ):
+                    continue
+
+                filas.append(
+                    f"""
+                    <tr>
+                      <td>
+                        <strong>{esc(equipo)}</strong>
+                      </td>
+
+                      <td>L{n}</td>
+
+                      <td>
+                        {r['n']}/{r['objetivo']}
+                      </td>
+
+                      <td>
+                        {dec(r['xgf'], 3)}
+                      </td>
+
+                      <td>
+                        {dec(r['xga'], 3)}
+                      </td>
+                    </tr>
+                    """
+                )
+
+    if filas:
+        bloques.append(
+            f"""
+            <h4>xG histórico observado</h4>
+
+            <table class="mini-table">
+              <thead>
+                <tr>
+                  <th>Equipo</th>
+                  <th>Muestra</th>
+                  <th>Cobertura</th>
+                  <th>xGF/PJ</th>
+                  <th>xGA/PJ</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {''.join(filas)}
+              </tbody>
+            </table>
+            """
+        )
+
+    # --------------------------------------------------------
+    # B. XG CRUZADO DEL PARTIDO
+    # --------------------------------------------------------
+
+    filas_cruzadas = []
+
+    for clave, etiqueta in (
+        ("D_xG_L5", "xG cruzado L5"),
+        ("E_xG_L10", "xG cruzado L10"),
+        ("I_forma_xG_5_10", "xG combinado 5/10"),
+    ):
+        metodo = buscar_clave_recursiva(
+            lambda_comparison,
+            clave,
+        )
+
+        if not isinstance(
+            metodo,
+            dict,
+        ):
+            continue
+
+        lh = num(
+            metodo.get("local")
+        )
+
+        la = num(
+            metodo.get("visitante")
+        )
+
+        if lh is None or la is None:
+            continue
+
+        filas_cruzadas.append(
+            f"""
+            <tr>
+              <td>
+                <strong>{esc(etiqueta)}</strong>
+              </td>
+
+              <td>
+                {dec(lh, 3)}
+              </td>
+
+              <td>
+                {dec(la, 3)}
+              </td>
+
+              <td>
+                <strong>
+                  {dec(lh + la, 3)}
+                </strong>
+              </td>
+            </tr>
+            """
+        )
+
+    if filas_cruzadas:
+        bloques.append(
+            f"""
+            <h4>
+              Goles esperados derivados de xG
+              para este partido
+            </h4>
+
+            <table class="mini-table">
+              <thead>
+                <tr>
+                  <th>Método</th>
+                  <th>{esc(local)}</th>
+                  <th>{esc(visitante)}</th>
+                  <th>Total esperado</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {''.join(filas_cruzadas)}
+              </tbody>
+            </table>
+            """
+        )
+
+    if not bloques:
+        return """
+        <div class="empty">
+          No fue posible recuperar datos xG
+          para este encuentro.
+        </div>
+        """
+
+    return f"""
+    <div class="observed-note">
+      <strong>xGF/PJ</strong>:
+      expected goals generados históricamente.
+
+      <strong>xGA/PJ</strong>:
+      expected goals concedidos históricamente.
+
+      El bloque de xG cruzado convierte esos
+      datos históricos en una expectativa
+      específica para el partido.
+    </div>
+
+    {''.join(bloques)}
+    """
+
+
+# ============================================================
+# H2H
+# ============================================================
+
+def render_h2h_metricas(h2h):
+    if not isinstance(
+        h2h,
+        dict,
+    ):
+        return ""
+
+    filas = []
+
+    for nombre in (
+        "H5",
+        "H10",
+        "H20",
+        "PONDERADO",
+    ):
+        d = h2h.get(nombre)
+
+        if not isinstance(d, dict):
+            continue
+
+        n = valor(
+            d,
+            "n",
+            "partidos",
+        )
+
+        gfl = valor(
+            d,
+            "gf_local",
+            "goles_local",
+        )
+
+        gfv = valor(
+            d,
+            "gf_visitante",
+            "goles_visitante",
+        )
+
+        total = valor(
+            d,
+            "total",
+            "tg",
+        )
+
+        o15 = valor(
+            d,
+            "over_1_5",
+            "mas_1_5",
+            "p_2plus",
+            "2+",
+        )
+
+        o25 = valor(
+            d,
+            "over_2_5",
+            "mas_2_5",
+            "p_3plus",
+            "3+",
+        )
+
+        o35 = valor(
+            d,
+            "over_3_5",
+            "mas_3_5",
+            "p_4plus",
+            "4+",
+        )
+
+        btts = valor(
+            d,
+            "btts",
+            "BTTS",
+        )
+
+        filas.append(
+            f"""
+            <tr>
+              <td><strong>{nombre}</strong></td>
+              <td>{esc(n)}</td>
+              <td>{dec(gfl, 2)}</td>
+              <td>{dec(gfv, 2)}</td>
+              <td>{dec(total, 2)}</td>
+              <td>{pct(o15)}</td>
+              <td>{pct(o25)}</td>
+              <td>{pct(o35)}</td>
+              <td>{pct(btts)}</td>
+            </tr>
+            """
+        )
+
+    if not filas:
+        return ""
+
+    return f"""
+    <table class="mini-table">
+      <thead>
+        <tr>
+          <th>H2H</th>
+          <th>N</th>
+          <th>GF L</th>
+          <th>GF V</th>
+          <th>Total</th>
+          <th>1.5+</th>
+          <th>2.5+</th>
+          <th>3.5+</th>
+          <th>BTTS</th>
+        </tr>
+      </thead>
+      <tbody>
+        {''.join(filas)}
+      </tbody>
+    </table>
+    """
+
+
+# ============================================================
+# ESTADO DE FUENTES
+# ============================================================
+
+def fuente_badge(
+    nombre,
+    existe,
+):
+    cls = (
+        "source-ok"
+        if existe
+        else "source-miss"
+    )
+
+    txt = (
+        "OK"
+        if existe
+        else "N/D"
+    )
+
+    return f"""
+    <span class="source {cls}">
+      {esc(nombre)} · {txt}
+    </span>
+    """
+
+
+# ============================================================
+# RENDER PARTIDO
+# ============================================================
+
+def render_partido(
+    p,
+    indice,
+):
+    mid = mid_partido(p)
+
+    local = nombre_local(p)
+    visitante = nombre_visitante(p)
+
+    carpeta = (
+        MATCHES / mid
+        if mid
+        else None
+    )
+
+    history = (
+        cargar(
+            carpeta / "history.json"
+        )
+        if carpeta
+        else None
+    )
+
+    standings = (
+        cargar(
+            carpeta / "standings.json"
+        )
+        if carpeta
+        else None
+    )
+
+    xg = (
+        cargar(
+            carpeta / "xg_history.json"
+        )
+        if carpeta
+        else None
+    )
+
+    enriched = (
+        cargar(
+            carpeta / "enriched.json"
+        )
+        if carpeta
+        else None
+    )
+
+    h2h = (
+        cargar(
+            carpeta / "h2h_analysis.json"
+        )
+        if carpeta
+        else None
+    )
+
+    lambda_comparison = (
+        cargar(
+            carpeta / "lambda_comparison.json"
+        )
+        if carpeta
+        else None
+    )
+
+    result = (
+        cargar(
+            carpeta / "result.json"
+        )
+        if carpeta
+        else None
+    )
+
+    conf_file = (
+        cargar(
+            carpeta / "confidence_v2.json"
+        )
+        if carpeta
+        else None
+    )
+
+    conf = (
+        p.get("confidence_v2")
+        or conf_file
+        or {}
+    )
+
+    detalle = conf.get(
+        "detalle_v1",
+        {},
+    )
+
+    razones = detalle.get(
+        "razones",
+        [],
+    )
+
+    alertas = (
+        p.get("alertas_calidad")
+        or detalle.get("alertas")
+        or []
+    )
+
+    muestras = detalle.get(
+        "muestras",
+        {},
+    )
+
+    hora = (
+        p.get("hora")
+        or p.get("time")
+        or ""
+    )
+
+    competicion = (
+        p.get("competicion")
+        or p.get("liga")
+        or ""
+    )
+
+    pais = (
+        p.get("pais")
+        or ""
+    )
+
+    lh = valor(
+        p,
+        "lambda_local",
+        "lambda_home",
+    )
+
+    la = valor(
+        p,
+        "lambda_visitante",
+        "lambda_away",
+    )
+
+    lt = valor(
+        p,
+        "lambda_total",
+        "total_lambda",
+    )
+
+    p15 = valor(
+        p,
+        "+1.5",
+        "over_1_5",
+    )
+
+    p25 = valor(
+        p,
+        "+2.5",
+        "over_2_5",
+    )
+
+    p35 = valor(
+        p,
+        "+3.5",
+        "over_3_5",
+    )
+
+    p45 = valor(
+        p,
+        "+4.5",
+        "over_4_5",
+    )
+
+    btts = valor(
+        p,
+        "BTTS",
+        "btts",
+        "p_btts",
+    )
+
+    calidad = p.get(
+        "calidad_datos",
+        conf.get(
+            "calidad_datos_global",
+            "N/D",
+        ),
+    )
+
+    confianza_btts = p.get(
+        "confianza_btts",
+        (
+            conf.get(
+                "mercados",
+                {},
+            )
+            .get(
+                "BTTS",
+                {},
+            )
+            .get(
+                "confianza_predictiva",
+                "N/D",
+            )
+        ),
+    )
+
+    sec_l = seccion_history(
+        history,
+        "equipo_local",
+        local,
+    )
+
+    sec_v = seccion_history(
+        history,
+        "equipo_visitante",
+        visitante,
+    )
+
+    sec_h = seccion_history(
+        history,
+        "h2h",
+    )
+
+    filas_l = (
+        sec_l.get("partidos", [])
+        if sec_l
+        else []
+    )
+
+    filas_v = (
+        sec_v.get("partidos", [])
+        if sec_v
+        else []
+    )
+
+    filas_h = (
+        sec_h.get("partidos", [])
+        if sec_h
+        else []
+    )
+
+    fuentes = "".join([
+        fuente_badge(
+            "Historial",
+            history is not None,
+        ),
+        fuente_badge(
+            "Clasificación",
+            standings is not None,
+        ),
+        fuente_badge(
+            "xG",
+            xg is not None,
+        ),
+        fuente_badge(
+            "Enriched",
+            enriched is not None,
+        ),
+        fuente_badge(
+            "H2H",
+            h2h is not None,
+        ),
+        fuente_badge(
+            "Resultado modelo",
+            result is not None,
+        ),
+    ])
+
+    razones_html = (
+        "".join(
+            f"<li>{esc(r)}</li>"
+            for r in razones
+        )
+        or "<li>Sin razones adicionales.</li>"
+    )
+
+    alertas_html = (
+        "".join(
+            f"<li>{esc(a)}</li>"
+            for a in alertas
+        )
+        or "<li>Sin alertas relevantes.</li>"
+    )
+
+    h2h_metricas = render_h2h_metricas(
+        h2h
+    )
+
+    h2h_recientes = render_ultimos(
+        filas_h,
+        local,
+        10,
+    )
+
+    return f"""
+    <section
+      class="match-card"
+      id="partido-{indice}"
+    >
+
+      <div class="match-head">
+
+        <div>
+          <div class="eyebrow">
+            #{indice}
+            &nbsp;·&nbsp;
+            {esc(competicion)}
+            {(' · ' + esc(pais)) if pais else ''}
+          </div>
+
+          <h2>
+            {esc(local)}
+            <span>vs</span>
+            {esc(visitante)}
+          </h2>
+
+          <div class="match-meta">
+            {esc(hora)}
+            &nbsp;·&nbsp;
+            Match ID: {esc(mid)}
+          </div>
+        </div>
+
+        <div class="quality-box">
+          <span class="quality-label">
+            Calidad de datos
+          </span>
+
+          <strong class="quality-value">
+            {esc(calidad)}
+          </strong>
+
+          <span class="quality-label">
+            Confianza BTTS
+          </span>
+
+          <strong class="quality-value">
+            {esc(confianza_btts)}
+          </strong>
+        </div>
+
+      </div>
+
+
+      <div class="sources">
+        {fuentes}
+      </div>
+
+
+      <div class="section-title">
+        Estimación del modelo BT0
+      </div>
+
+      <div class="model-grid">
+
+        <div class="metric">
+          <span>λ {esc(local)}</span>
+          <strong>{dec(lh)}</strong>
+        </div>
+
+        <div class="metric">
+          <span>λ {esc(visitante)}</span>
+          <strong>{dec(la)}</strong>
+        </div>
+
+        <div class="metric primary">
+          <span>λ total</span>
+          <strong>{dec(lt)}</strong>
+        </div>
+
+        <div class="metric metric-over">
+          <span>1.5+ goles</span>
+          <strong>{pct(p15)}</strong>
+        </div>
+
+        <div class="metric metric-over-main">
+          <span>2.5+ goles</span>
+          <strong>{pct(p25)}</strong>
+        </div>
+
+        <div class="metric metric-over">
+          <span>3.5+ goles</span>
+          <strong>{pct(p35)}</strong>
+        </div>
+
+        <div class="metric">
+          <span>BTTS</span>
+          <strong>{pct(btts)}</strong>
+        </div>
+
+        <div class="metric metric-home-win">
+          <span>Victoria local · 1</span>
+          <strong>{pct(prob_1x2(lh, la)[0])}</strong>
+        </div>
+
+        <div class="metric metric-draw">
+          <span>Empate · X</span>
+          <strong>{pct(prob_1x2(lh, la)[1])}</strong>
+        </div>
+
+        <div class="metric metric-away-win">
+          <span>Victoria visitante · 2</span>
+          <strong>{pct(prob_1x2(lh, la)[2])}</strong>
+        </div>
+
+        <div class="metric under-metric">
+          <span>-1.5 goles</span>
+          <strong>{pct(under(p15))}</strong>
+        </div>
+
+        <div class="metric under-metric under-metric-main">
+          <span>-2.5 goles</span>
+          <strong>{pct(under(p25))}</strong>
+        </div>
+
+        <div class="metric under-metric">
+          <span>-3.5 goles</span>
+          <strong>{pct(under(p35))}</strong>
+        </div>
+
+      </div>
+
+
+      <div class="observed-note">
+        <strong>Datos observados</strong>:
+        clasificación, resultados recientes,
+        H2H y xG provienen de los archivos
+        scrapeados.
+
+        <strong>Estimaciones</strong>:
+        λ y probabilidades son salidas de
+        J_BT_sin_temporada / Poisson.
+
+        Las probabilidades 1/X/2 representan
+        victoria local, empate y victoria visitante.
+        Por ahora no tienen una categoría de
+        confianza predictiva FUERTE/MEDIA/DÉBIL
+        validada.
+      </div>
+
+
+      <details open>
+
+        <summary>
+          Clasificación / tabla de liga
+        </summary>
+
+        <div class="detail-body">
+          {render_standings(
+              standings,
+              local,
+              visitante,
+          )}
+        </div>
+
+      </details>
+
+
+      <div class="two-col">
+
+        <details open>
+
+          <summary>
+            Forma — {esc(local)}
+          </summary>
+
+          <div class="detail-body">
+
+            {render_forma_stats(
+                filas_l,
+                local,
+                True,
+            )}
+
+            <h4>
+              Últimos 10 partidos
+            </h4>
+
+            {render_ultimos(
+                filas_l,
+                local,
+                10,
+            )}
+
+          </div>
+
+        </details>
+
+
+        <details open>
+
+          <summary>
+            Forma — {esc(visitante)}
+          </summary>
+
+          <div class="detail-body">
+
+            {render_forma_stats(
+                filas_v,
+                visitante,
+                False,
+            )}
+
+            <h4>
+              Últimos 10 partidos
+            </h4>
+
+            {render_ultimos(
+                filas_v,
+                visitante,
+                10,
+            )}
+
+          </div>
+
+        </details>
+
+      </div>
+
+
+      <details open>
+
+        <summary>
+          Expected Goals — xG
+        </summary>
+
+        <div class="detail-body">
+          {render_xg(
+              xg,
+              lambda_comparison,
+              local,
+              visitante,
+          )}
+        </div>
+
+      </details>
+
+
+      <details>
+
+        <summary>
+          Enfrentamientos directos — H2H
+        </summary>
+
+        <div class="detail-body">
+
+          {h2h_metricas}
+
+          <h4>
+            H2H recientes observados
+          </h4>
+
+          {h2h_recientes}
+
+          <div class="method-note">
+            El H2H se muestra como contexto.
+            No forma parte del BT0 principal.
+          </div>
+
+        </div>
+
+      </details>
+
+
+      <div class="two-col">
+
+        <details>
+
+          <summary>
+            Calidad de muestra
+          </summary>
+
+          <div class="detail-body">
+
+            <table class="kv">
+              <tr>
+                <td>Forma local</td>
+                <td>{esc(muestras.get('forma_local', 'N/D'))}</td>
+              </tr>
+              <tr>
+                <td>Forma visitante</td>
+                <td>{esc(muestras.get('forma_visitante', 'N/D'))}</td>
+              </tr>
+              <tr>
+                <td>Casa local</td>
+                <td>{esc(muestras.get('casa_local', 'N/D'))}</td>
+              </tr>
+              <tr>
+                <td>Fuera visitante</td>
+                <td>{esc(muestras.get('fuera_visitante', 'N/D'))}</td>
+              </tr>
+              <tr>
+                <td>xG bilateral</td>
+                <td>{esc(detalle.get('xg_bilateral', 'N/D'))}</td>
+              </tr>
+              <tr>
+                <td>Dispersión de señales</td>
+                <td>{dec(
+                    detalle.get(
+                        'dispersion_lambda_senales'
+                    ),
+                    3,
+                )}</td>
+              </tr>
+              <tr>
+                <td>Score calidad</td>
+                <td>{esc(detalle.get('score', 'N/D'))}</td>
+              </tr>
+            </table>
+
+          </div>
+
+        </details>
+
+
+        <details>
+
+          <summary>
+            Razones y alertas
+          </summary>
+
+          <div class="detail-body">
+
+            <h4>Razones</h4>
+            <ul class="clean-list">
+              {razones_html}
+            </ul>
+
+            <h4>Alertas</h4>
+            <ul class="clean-list warnings">
+              {alertas_html}
+            </ul>
+
+          </div>
+
+        </details>
+
+      </div>
+
+
+      <div class="back-top">
+        <a href="#top">
+          ↑ Volver al ranking
+        </a>
+      </div>
+
+    </section>
+    """
+
+
+# ============================================================
+# MAIN
+# ============================================================
+
+def main():
+    if not SRC.exists():
+        raise SystemExit(
+            "No existe "
+            "data/day_predictions_v2.json"
+        )
+
+    datos = cargar(SRC)
+
+    if not datos:
+        raise SystemExit(
+            "No pude leer day_predictions_v2.json"
+        )
+
+    partidos = datos.get(
+        "partidos",
+        []
+    )
+
+    if not partidos:
+        raise SystemExit(
+            "No hay partidos analizados "
+            "en la ventana."
+        )
+
+    # ----------------------------------------
+    # Ranking resumen
+    # ----------------------------------------
+
+    resumen = []
+
+    convencionales = 0
+    fuera = 0
+    fuertes_btts = 0
+
+    for i, p in enumerate(
+        partidos,
+        1,
+    ):
+        local = nombre_local(p)
+        visitante = nombre_visitante(p)
+
+        lh = valor(
+            p,
+            "lambda_local",
+            "lambda_home",
+        )
+
+        la = valor(
+            p,
+            "lambda_visitante",
+            "lambda_away",
+        )
+
+        lt = valor(
+            p,
+            "lambda_total",
+            "total_lambda",
+        )
+
+        p15 = valor(
+            p,
+            "+1.5",
+            "over_1_5",
+        )
+
+        p25 = valor(
+            p,
+            "+2.5",
+            "over_2_5",
+        )
+
+        p35 = valor(
+            p,
+            "+3.5",
+            "over_3_5",
+        )
+
+        p45 = valor(
+            p,
+            "+4.5",
+            "over_4_5",
+        )
+
+        btts = valor(
+            p,
+            "BTTS",
+            "btts",
+            "p_btts",
+        )
+
+        calidad = p.get(
+            "calidad_datos",
+            "N/D",
+        )
+
+        conf = p.get(
+            "confianza_btts",
+            "N/D",
+        )
+
+        if calidad == "FUERA_MODELO":
+            fuera += 1
+        else:
+            convencionales += 1
+
+        if conf == "FUERTE":
+            fuertes_btts += 1
+
+        hora = (
+            p.get("hora")
+            or ""
+        )
+
+        comp = (
+            p.get("competicion")
+            or p.get("liga")
+            or ""
+        )
+
+        resumen.append(
+            f"""
+            <tr>
+              <td>{i}</td>
+
+              <td class="team-cell">
+                <a href="#partido-{i}">
+                  <strong>
+                    {esc(local)}
+                    vs
+                    {esc(visitante)}
+                  </strong>
+                </a>
+
+                <small>
+                  {esc(hora)}
+                  ·
+                  {esc(comp)}
+                </small>
+              </td>
+
+              <td>{dec(lh)}</td>
+              <td>{dec(la)}</td>
+              <td><strong>{dec(lt)}</strong></td>
+
+              <td class="over-prob over-soft">
+                {pct(p15)}
+              </td>
+
+              <td class="over-prob over-main">
+                {pct(p25)}
+              </td>
+
+              <td class="over-prob over-deep">
+                {pct(p35)}
+              </td>
+
+              <td class="under-prob under-soft">
+                {pct(under(p15))}
+              </td>
+
+              <td class="under-prob under-main">
+                {pct(under(p25))}
+              </td>
+
+              <td class="under-prob under-deep">
+                {pct(under(p35))}
+              </td>
+
+              <td class="btts-prob">
+                {pct(btts)}
+              </td>
+
+              <td class="prob-home-win">
+                {pct(prob_1x2(lh, la)[0])}
+              </td>
+
+              <td class="prob-draw">
+                {pct(prob_1x2(lh, la)[1])}
+              </td>
+
+              <td class="prob-away-win">
+                {pct(prob_1x2(lh, la)[2])}
+              </td>
+
+              <td>
+                <span class="status {clase_estado(calidad)}">
+                  {esc(calidad)}
+                </span>
+              </td>
+
+              <td>
+                <span class="status {clase_estado(conf)}">
+                  {esc(conf)}
+                </span>
+              </td>
+            </tr>
+            """
+        )
+
+    detalles = "".join(
+        render_partido(
+            p,
+            i,
+        )
+        for i, p in enumerate(
+            partidos,
+            1,
+        )
+    )
+
+    documento = f"""<!doctype html>
+<html lang="es">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1"
+>
+
+<title>
+Match Goals AI — Reporte profesional V2
+</title>
+
+<style>
+
+:root {{
+    --bg: #f3f5f8;
+    --panel: #ffffff;
+    --ink: #172033;
+    --muted: #667085;
+    --border: #dfe3ea;
+    --soft: #f8fafc;
+    --accent: #2347a5;
+    --green: #16794b;
+    --green-bg: #e9f7ef;
+    --amber: #9a6700;
+    --amber-bg: #fff7dd;
+    --red: #b42318;
+    --red-bg: #fff0ee;
+}}
+
+* {{
+    box-sizing: border-box;
+}}
+
+html {{
+    scroll-behavior: smooth;
+}}
+
+body {{
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family:
+        Inter,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+    line-height: 1.45;
+}}
+
+.container {{
+    max-width: 1700px;
+    margin: 0 auto;
+    padding: 28px;
+}}
+
+.hero {{
+    background:
+        linear-gradient(
+            135deg,
+            #172554,
+            #2347a5
+        );
+    color: white;
+    border-radius: 18px;
+    padding: 30px 34px;
+    box-shadow:
+        0 12px 32px rgba(0,0,0,.12);
+    margin-bottom: 24px;
+}}
+
+.hero h1 {{
+    margin: 0 0 8px;
+    font-size: 34px;
+}}
+
+.hero p {{
+    margin: 4px 0;
+    opacity: .9;
+}}
+
+.summary-grid {{
+    display: grid;
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(160px, 1fr)
+        );
+    gap: 14px;
+    margin-top: 22px;
+}}
+
+.summary-box {{
+    background:
+        rgba(255,255,255,.11);
+    border:
+        1px solid
+        rgba(255,255,255,.18);
+    border-radius: 12px;
+    padding: 14px;
+}}
+
+.summary-box span {{
+    display: block;
+    opacity: .8;
+    font-size: 13px;
+}}
+
+.summary-box strong {{
+    display: block;
+    margin-top: 3px;
+    font-size: 25px;
+}}
+
+.panel {{
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow:
+        0 4px 18px rgba(16,24,40,.05);
+    margin-bottom: 24px;
+    overflow: hidden;
+}}
+
+.panel-head {{
+    padding: 20px 22px 12px;
+}}
+
+.panel-head h2 {{
+    margin: 0;
+}}
+
+.table-scroll {{
+    overflow-x: auto;
+}}
+
+table {{
+    width: 100%;
+    border-collapse: collapse;
+}}
+
+th {{
+    background: #f5f7fa;
+    color: #344054;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+}}
+
+th,
+td {{
+    border-bottom:
+        1px solid var(--border);
+    padding: 11px 12px;
+    text-align: center;
+    vertical-align: middle;
+}}
+
+.team-cell {{
+    text-align: left;
+}}
+
+.team-cell a {{
+    color: var(--ink);
+    text-decoration: none;
+}}
+
+.team-cell a:hover {{
+    color: var(--accent);
+}}
+
+.team-cell small {{
+    display: block;
+    color: var(--muted);
+    margin-top: 3px;
+}}
+
+.rank-prob {{
+    font-weight: 800;
+    color: var(--accent);
+}}
+
+.under-prob {{
+    font-weight: 800;
+    color: #6941c6;
+    background: #faf7ff;
+}}
+
+.under-metric {{
+    border-color: #ddd6fe;
+    background: #faf7ff;
+}}
+
+.under-metric strong {{
+    color: #6941c6;
+}}
+
+/* =====================================================
+   PALETA DE MERCADOS
+   Over = azul
+   Under = naranja
+   BTTS = turquesa
+   ===================================================== */
+
+.th-over {{
+    background: #eef4ff;
+    color: #234e9c;
+}}
+
+.th-under {{
+    background: #fff4e8;
+    color: #9a4d0b;
+}}
+
+.th-btts {{
+    background: #eaf8f7;
+    color: #08756d;
+}}
+
+
+/* OVER */
+
+.over-prob {{
+    font-weight: 700;
+}}
+
+.over-soft {{
+    color: #315d9f;
+    background: #f7f9fe;
+}}
+
+.over-main {{
+    color: #174ea6;
+    background: #eaf2ff;
+    font-weight: 900;
+}}
+
+.over-deep {{
+    color: #3730a3;
+    background: #f3f2ff;
+}}
+
+
+/* UNDER */
+
+.under-prob {{
+    font-weight: 700;
+}}
+
+.under-soft {{
+    color: #a85b14;
+    background: #fffaf4;
+}}
+
+.under-main {{
+    color: #b45309;
+    background: #fff1df;
+    font-weight: 900;
+}}
+
+.under-deep {{
+    color: #92400e;
+    background: #fff6eb;
+}}
+
+
+/* BTTS */
+
+.btts-prob {{
+    color: #08756d;
+    background: #edf9f7;
+    font-weight: 800;
+}}
+
+
+/* 1X2 */
+
+.th-1x2-home {{
+    background: #ecfdf3;
+    color: #166534;
+}}
+
+.th-1x2-draw {{
+    background: #f2f4f7;
+    color: #475467;
+}}
+
+.th-1x2-away {{
+    background: #fff1f3;
+    color: #9f1239;
+}}
+
+.prob-home-win {{
+    background: #f0fdf4;
+    color: #166534;
+    font-weight: 800;
+}}
+
+.prob-draw {{
+    background: #f8fafc;
+    color: #475467;
+    font-weight: 800;
+}}
+
+.prob-away-win {{
+    background: #fff5f6;
+    color: #9f1239;
+    font-weight: 800;
+}}
+
+.metric-home-win {{
+    background: #f0fdf4;
+    border-color: #bbefcc;
+}}
+
+.metric-home-win strong {{
+    color: #166534;
+}}
+
+.metric-draw {{
+    background: #f8fafc;
+    border-color: #d0d5dd;
+}}
+
+.metric-draw strong {{
+    color: #475467;
+}}
+
+.metric-away-win {{
+    background: #fff5f6;
+    border-color: #fecdd3;
+}}
+
+.metric-away-win strong {{
+    color: #9f1239;
+}}
+
+
+/* ESTADOS */
+
+.status {{
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: .015em;
+}}
+
+.state-good {{
+    color: #126a43;
+    background: #e8f7ef;
+    border: 1px solid #b8e2ca;
+}}
+
+.state-mid {{
+    color: #8a5b00;
+    background: #fff6d8;
+    border: 1px solid #eed893;
+}}
+
+.state-bad {{
+    color: #a52a22;
+    background: #fff0ee;
+    border: 1px solid #efc0bb;
+}}
+
+.state-off {{
+    color: #667085;
+    background: #f2f4f7;
+    border: 1px solid #d0d5dd;
+}}
+
+.match-card {{
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    margin: 26px 0;
+    overflow: hidden;
+    box-shadow:
+        0 6px 24px rgba(16,24,40,.06);
+}}
+
+.match-head {{
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 26px 28px;
+    background:
+        linear-gradient(
+            180deg,
+            #ffffff,
+            #f8fafc
+        );
+    border-bottom:
+        1px solid var(--border);
+}}
+
+.eyebrow {{
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+}}
+
+.match-head h2 {{
+    margin: 5px 0;
+    font-size: 28px;
+}}
+
+.match-head h2 span {{
+    color: var(--muted);
+    font-weight: 400;
+    font-size: 19px;
+    margin: 0 7px;
+}}
+
+.match-meta {{
+    color: var(--muted);
+}}
+
+.quality-box {{
+    min-width: 180px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 12px 16px;
+}}
+
+.quality-label {{
+    display: block;
+    color: var(--muted);
+    font-size: 12px;
+}}
+
+.quality-value {{
+    display: block;
+    margin: 2px 0 10px;
+}}
+
+.sources {{
+    padding: 13px 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    border-bottom:
+        1px solid var(--border);
+}}
+
+.source {{
+    border-radius: 999px;
+    padding: 5px 9px;
+    font-size: 12px;
+    font-weight: 700;
+}}
+
+.source-ok {{
+    color: var(--green);
+    background: var(--green-bg);
+}}
+
+.source-miss {{
+    color: var(--red);
+    background: var(--red-bg);
+}}
+
+.section-title {{
+    padding: 20px 28px 8px;
+    font-size: 18px;
+    font-weight: 800;
+}}
+
+.model-grid {{
+    padding: 8px 28px 22px;
+    display: grid;
+    grid-template-columns:
+        repeat(
+            8,
+            minmax(120px, 1fr)
+        );
+    gap: 10px;
+}}
+
+.metric {{
+    background: var(--soft);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+}}
+
+.metric span {{
+    display: block;
+    color: var(--muted);
+    font-size: 12px;
+}}
+
+.metric strong {{
+    font-size: 20px;
+}}
+
+.metric.primary {{
+    border-color: #b6c7fa;
+    background: #f2f5ff;
+}}
+
+.metric-over {{
+    border-color: #cfddf5;
+    background: #f7f9fe;
+}}
+
+.metric-over strong {{
+    color: #315d9f;
+}}
+
+.metric-over-main {{
+    border-color: #a9c6f5;
+    background: #eaf2ff;
+}}
+
+.metric-over-main strong {{
+    color: #174ea6;
+}}
+
+.under-metric {{
+    border-color: #f1d2ad;
+    background: #fffaf4;
+}}
+
+.under-metric strong {{
+    color: #a85b14;
+}}
+
+.under-metric-main {{
+    border-color: #e7b879;
+    background: #fff1df;
+}}
+
+.under-metric-main strong {{
+    color: #b45309;
+}}
+
+.observed-note {{
+    margin: 0 28px 22px;
+    padding: 12px 14px;
+    border-left:
+        4px solid var(--accent);
+    background: #f6f8ff;
+    color: #475467;
+    font-size: 13px;
+}}
+
+details {{
+    border-top:
+        1px solid var(--border);
+}}
+
+summary {{
+    cursor: pointer;
+    font-size: 17px;
+    font-weight: 800;
+    padding: 17px 28px;
+    background: #fbfcfe;
+}}
+
+.detail-body {{
+    padding: 5px 28px 24px;
+}}
+
+.two-col {{
+    display: grid;
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0,1fr)
+        );
+}}
+
+.two-col details {{
+    border-right:
+        1px solid var(--border);
+}}
+
+.two-col details:last-child {{
+    border-right: none;
+}}
+
+.mini-table,
+.recent-table,
+.standings-table {{
+    font-size: 13px;
+}}
+
+.mini-table th,
+.mini-table td,
+.recent-table th,
+.recent-table td,
+.standings-table th,
+.standings-table td {{
+    padding: 8px 9px;
+}}
+
+.score {{
+    font-weight: 800;
+    white-space: nowrap;
+}}
+
+.badge-result,
+.mini {{
+    display: inline-block;
+    padding: 3px 7px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 800;
+}}
+
+.win {{
+    color: var(--green);
+    background: var(--green-bg);
+}}
+
+.draw {{
+    color: var(--amber);
+    background: var(--amber-bg);
+}}
+
+.loss {{
+    color: var(--red);
+    background: var(--red-bg);
+}}
+
+.standing-highlight {{
+    background: #eef4ff;
+    font-weight: 700;
+}}
+
+.empty {{
+    padding: 18px;
+    color: var(--muted);
+    background: var(--soft);
+    border-radius: 10px;
+}}
+
+.method-note {{
+    margin-top: 14px;
+    padding: 11px 13px;
+    color: #475467;
+    background: #f8fafc;
+    border-radius: 9px;
+    font-size: 13px;
+}}
+
+.kv {{
+    max-width: 650px;
+}}
+
+.kv td:first-child {{
+    text-align: left;
+    color: var(--muted);
+}}
+
+.kv td:last-child {{
+    font-weight: 700;
+}}
+
+.clean-list {{
+    padding-left: 20px;
+}}
+
+.warnings {{
+    color: #7a2e0e;
+}}
+
+.back-top {{
+    padding: 13px 28px 20px;
+    text-align: right;
+}}
+
+.back-top a {{
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 700;
+}}
+
+.footer {{
+    color: var(--muted);
+    font-size: 12px;
+    text-align: center;
+    padding: 25px;
+}}
+
+@media
+(max-width: 1100px) {{
+
+    .model-grid {{
+        grid-template-columns:
+            repeat(4,1fr);
+    }}
+
+    .summary-grid {{
+        grid-template-columns:
+            repeat(2,1fr);
+    }}
+
+    .two-col {{
+        grid-template-columns: 1fr;
+    }}
+
+    .match-head {{
+        flex-direction: column;
+    }}
+}}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div
+  class="container"
+  id="top"
+>
+
+  <header class="hero">
+
+    <h1>
+      Match Goals AI
+    </h1>
+
+    <p>
+      Reporte profesional ·
+      Ventana analizada de 4 horas
+    </p>
+
+    <p>
+      Modelo principal:
+      <strong>
+        J_BT_sin_temporada / BT0
+      </strong>
+    </p>
+
+    <div class="summary-grid">
+
+      <div class="summary-box">
+        <span>
+          Partidos analizados
+        </span>
+        <strong>
+          {len(partidos)}
+        </strong>
+      </div>
+
+      <div class="summary-box">
+        <span>
+          Fútbol convencional
+        </span>
+        <strong>
+          {convencionales}
+        </strong>
+      </div>
+
+      <div class="summary-box">
+        <span>
+          Fuera de modelo
+        </span>
+        <strong>
+          {fuera}
+        </strong>
+      </div>
+
+      <div class="summary-box">
+        <span>
+          BTTS confianza FUERTE
+        </span>
+        <strong>
+          {fuertes_btts}
+        </strong>
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <section class="panel">
+
+    <div class="panel-head">
+
+      <h2>
+        Ranking de la ventana
+      </h2>
+
+      <p>
+        Ordenado por probabilidad
+        estimada de 2.5+ goles.
+        La tabla actual se conserva
+        íntegramente.
+      </p>
+
+    </div>
+
+    <div class="table-scroll">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Partido</th>
+            <th>λ L</th>
+            <th>λ V</th>
+            <th>λ total</th>
+            <th class="th-over">1.5+</th>
+            <th class="th-over">2.5+</th>
+            <th class="th-over">3.5+</th>
+
+            <th class="th-under">-1.5</th>
+            <th class="th-under">-2.5</th>
+            <th class="th-under">-3.5</th>
+
+            <th class="th-btts">BTTS</th>
+
+            <th class="th-1x2-home">
+              1
+            </th>
+
+            <th class="th-1x2-draw">
+              X
+            </th>
+
+            <th class="th-1x2-away">
+              2
+            </th>
+
+            <th>Calidad</th>
+            <th>Conf. BTTS</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {''.join(resumen)}
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+
+  <h1>
+    Expediente completo
+    partido por partido
+  </h1>
+
+  {detalles}
+
+
+  <div class="footer">
+
+    Probabilidades = estimaciones,
+    no certezas.
+
+    Calidad de datos y confianza
+    predictiva son conceptos distintos.
+
+    H2H se mantiene como información
+    contextual y no modifica BT0.
+
+  </div>
+
+</div>
+
+</body>
+</html>
+"""
+
+    OUT.write_text(
+        documento,
+        encoding="utf-8",
+    )
+
+    print("=" * 86)
+    print("REPORTE PROFESIONAL — VENTANA 4H")
+    print("=" * 86)
+    print("Partidos           :", len(partidos))
+    print("Convencionales     :", convencionales)
+    print("Fuera de modelo    :", fuera)
+    print("BTTS FUERTE        :", fuertes_btts)
+    print()
+    print("HTML:", OUT)
+    print("=" * 86)
+
+
+if __name__ == "__main__":
+    main()

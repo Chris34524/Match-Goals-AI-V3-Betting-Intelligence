@@ -1,0 +1,890 @@
+import argparse
+import json
+import re
+from pathlib import Path
+
+from playwright.sync_api import (
+    sync_playwright,
+)
+
+
+def numero(valor):
+    if valor is None:
+        return None
+
+    valor = valor.strip().replace(
+        ",",
+        ".",
+    )
+
+    if not re.fullmatch(
+        r"\d+(?:\.\d+)?",
+        valor,
+    ):
+        return None
+
+    return float(valor)
+
+
+def extraer_xg_pagina(
+    page,
+    partido,
+):
+    url = partido.get("url")
+
+    resultado = {
+        "match_id": partido.get(
+            "match_id"
+        ),
+        "url": url,
+        "fecha": partido.get(
+            "fecha"
+        ),
+        "competicion_codigo": partido.get(
+            "competicion_codigo"
+        ),
+        "competicion": partido.get(
+            "competicion"
+        ),
+        "local": partido.get(
+            "local"
+        ),
+        "visitante": partido.get(
+            "visitante"
+        ),
+        "goles_local": partido.get(
+            "goles_local"
+        ),
+        "goles_visitante": partido.get(
+            "goles_visitante"
+        ),
+        "xg_local": None,
+        "xg_visitante": None,
+        "xg_disponible": False,
+        "estado_xg": None,
+    }
+
+    if not url:
+        resultado["estado_xg"] = (
+            "sin_url"
+        )
+        return resultado
+
+    try:
+        response = page.goto(
+            url,
+            wait_until="domcontentloaded",
+            timeout=60000,
+        )
+
+        if (
+            response is not None
+            and response.status >= 400
+        ):
+            resultado["estado_xg"] = (
+                f"http_{response.status}"
+            )
+            return resultado
+
+        page.wait_for_timeout(
+            1800
+        )
+
+        etiqueta = page.get_by_text(
+            "Goles esperados (xG)",
+            exact=True,
+        )
+
+        # En algunos partidos la estadística
+        # ya está cargada aunque no hayamos
+        # pulsado explícitamente la pestaña.
+        #
+        # Si no aparece, intentamos abrir
+        # Estadísticas mediante texto visible.
+        if etiqueta.count() == 0:
+
+            candidatos = page.get_by_text(
+                "ESTADÍSTICAS",
+                exact=True,
+            )
+
+            for i in range(
+                candidatos.count()
+            ):
+                candidato = (
+                    candidatos.nth(i)
+                )
+
+                try:
+                    if candidato.is_visible():
+                        candidato.click()
+
+                        page.wait_for_timeout(
+                            1200
+                        )
+
+                        break
+
+                except Exception:
+                    continue
+
+            etiqueta = page.get_by_text(
+                "Goles esperados (xG)",
+                exact=True,
+            )
+
+        if etiqueta.count() == 0:
+            resultado["estado_xg"] = (
+                "xg_no_disponible"
+            )
+            return resultado
+
+        # La estructura observada es:
+        #
+        # <div labelRow>
+        #   <div>VALOR LOCAL</div>
+        #   <div>Goles esperados (xG)</div>
+        #   <div>VALOR VISITANTE</div>
+        # </div>
+        #
+        # La etiqueta está dos niveles por
+        # debajo de labelRow.
+        fila = (
+            etiqueta.first
+            .locator("xpath=../..")
+        )
+
+        textos = fila.locator(
+            ":scope > div"
+        )
+
+        if textos.count() < 3:
+            resultado["estado_xg"] = (
+                "estructura_xg_desconocida"
+            )
+            return resultado
+
+        texto_local = (
+            textos.nth(0)
+            .inner_text()
+            .strip()
+        )
+
+        texto_visitante = (
+            textos.nth(2)
+            .inner_text()
+            .strip()
+        )
+
+        xg_local = numero(
+            texto_local
+        )
+
+        xg_visitante = numero(
+            texto_visitante
+        )
+
+        if (
+            xg_local is None
+            or xg_visitante is None
+        ):
+            resultado["estado_xg"] = (
+                "valores_xg_invalidos"
+            )
+
+            return resultado
+
+        resultado["xg_local"] = (
+            xg_local
+        )
+
+        resultado["xg_visitante"] = (
+            xg_visitante
+        )
+
+        resultado["xg_disponible"] = True
+        resultado["estado_xg"] = "ok"
+
+        return resultado
+
+    except Exception as exc:
+        resultado["estado_xg"] = (
+            "error"
+        )
+
+        resultado["error"] = str(
+            exc
+        )
+
+        return resultado
+
+
+def perspectiva_equipo(
+    partido,
+    equipo,
+):
+    registro = dict(
+        partido
+    )
+
+    registro["equipo"] = equipo
+
+    if (
+        partido.get("local")
+        == equipo
+    ):
+        registro[
+            "condicion_equipo"
+        ] = "local"
+
+        registro["gf"] = partido.get(
+            "goles_local"
+        )
+
+        registro["gc"] = partido.get(
+            "goles_visitante"
+        )
+
+        registro["xgf"] = partido.get(
+            "xg_local"
+        )
+
+        registro["xga"] = partido.get(
+            "xg_visitante"
+        )
+
+    elif (
+        partido.get("visitante")
+        == equipo
+    ):
+        registro[
+            "condicion_equipo"
+        ] = "visitante"
+
+        registro["gf"] = partido.get(
+            "goles_visitante"
+        )
+
+        registro["gc"] = partido.get(
+            "goles_local"
+        )
+
+        registro["xgf"] = partido.get(
+            "xg_visitante"
+        )
+
+        registro["xga"] = partido.get(
+            "xg_local"
+        )
+
+    else:
+        registro[
+            "condicion_equipo"
+        ] = None
+
+        registro["gf"] = None
+        registro["gc"] = None
+        registro["xgf"] = None
+        registro["xga"] = None
+
+    return registro
+
+
+def resumen_ventana(
+    partidos,
+    n,
+):
+    muestra = partidos[:n]
+
+    disponibles = [
+        p
+        for p in muestra
+        if (
+            p.get("xg_disponible")
+            and p.get("xgf")
+            is not None
+            and p.get("xga")
+            is not None
+        )
+    ]
+
+    resultado = {
+        "objetivo": n,
+        "partidos_considerados": len(
+            muestra
+        ),
+        "partidos_con_xg": len(
+            disponibles
+        ),
+        "cobertura_xg": 0.0,
+        "xgf_total": None,
+        "xga_total": None,
+        "xgf_promedio": None,
+        "xga_promedio": None,
+    }
+
+    if muestra:
+        resultado[
+            "cobertura_xg"
+        ] = (
+            len(disponibles)
+            / len(muestra)
+        )
+
+    if not disponibles:
+        return resultado
+
+    xgf_total = sum(
+        p["xgf"]
+        for p in disponibles
+    )
+
+    xga_total = sum(
+        p["xga"]
+        for p in disponibles
+    )
+
+    resultado[
+        "xgf_total"
+    ] = xgf_total
+
+    resultado[
+        "xga_total"
+    ] = xga_total
+
+    resultado[
+        "xgf_promedio"
+    ] = (
+        xgf_total
+        / len(disponibles)
+    )
+
+    resultado[
+        "xga_promedio"
+    ] = (
+        xga_total
+        / len(disponibles)
+    )
+
+    return resultado
+
+
+
+def ruta_cache_xg(
+    match_id,
+):
+    if not match_id:
+        return None
+
+    carpeta_cache = (
+        Path("data")
+        / "xg_cache"
+    )
+
+    carpeta_cache.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    return (
+        carpeta_cache
+        / f"{match_id}.json"
+    )
+
+
+def leer_cache_xg(
+    match_id,
+):
+    ruta = ruta_cache_xg(
+        match_id
+    )
+
+    if (
+        ruta is None
+        or not ruta.exists()
+    ):
+        return None
+
+    try:
+        with ruta.open(
+            encoding="utf-8"
+        ) as f:
+            resultado = json.load(f)
+
+        # Sólo aceptamos registros que tengan
+        # un estado reconocido.
+        if resultado.get(
+            "estado_xg"
+        ) not in (
+            "ok",
+            "xg_no_disponible",
+        ):
+            return None
+
+        return resultado
+
+    except (
+        OSError,
+        json.JSONDecodeError,
+    ):
+        return None
+
+
+def guardar_cache_xg(
+    resultado,
+):
+    match_id = resultado.get(
+        "match_id"
+    )
+
+    estado = resultado.get(
+        "estado_xg"
+    )
+
+    # No persistimos errores temporales.
+    if (
+        not match_id
+        or estado not in (
+            "ok",
+            "xg_no_disponible",
+        )
+    ):
+        return False
+
+    ruta = ruta_cache_xg(
+        match_id
+    )
+
+    ruta.write_text(
+        json.dumps(
+            resultado,
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
+    return True
+
+def main():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--match-id",
+        required=True,
+    )
+
+    parser.add_argument(
+        "--target",
+        type=int,
+        default=10,
+    )
+
+    args = parser.parse_args()
+
+    carpeta = (
+        Path("data")
+        / "matches"
+        / args.match_id
+    )
+
+    ruta_history = (
+        carpeta
+        / "history.json"
+    )
+
+    ruta_salida = (
+        carpeta
+        / "xg_history.json"
+    )
+
+    if not ruta_history.exists():
+        raise SystemExit(
+            f"No existe: {ruta_history}"
+        )
+
+    with ruta_history.open(
+        encoding="utf-8"
+    ) as f:
+        history = json.load(f)
+
+    partido_principal = history[
+        "partido"
+    ]
+
+    equipo_local = partido_principal[
+        "local"
+    ]
+
+    equipo_visitante = (
+        partido_principal[
+            "visitante"
+        ]
+    )
+
+    seccion_local = next(
+        s
+        for s in history["secciones"]
+        if s["tipo_estimado"]
+        == "equipo_local"
+    )
+
+    seccion_visitante = next(
+        s
+        for s in history["secciones"]
+        if s["tipo_estimado"]
+        == "equipo_visitante"
+    )
+
+    # Excluimos siempre el propio partido
+    # objetivo. Esto evita data leakage cuando
+    # analizamos retrospectivamente un encuentro
+    # que Flashscore ya muestra como terminado.
+    match_id_objetivo = (
+        partido_principal.get("id")
+        or args.match_id
+    )
+
+    historicos_local = [
+        p
+        for p in seccion_local["partidos"]
+        if p.get("match_id")
+        != match_id_objetivo
+    ][:args.target]
+
+    historicos_visitante = [
+        p
+        for p in seccion_visitante["partidos"]
+        if p.get("match_id")
+        != match_id_objetivo
+    ][:args.target]
+
+    # Unimos los partidos por match_id para
+    # evitar consultar dos veces el mismo
+    # encuentro.
+    unicos = {}
+
+    for p in (
+        historicos_local
+        + historicos_visitante
+    ):
+        match_id = p.get(
+            "match_id"
+        )
+
+        clave = (
+            match_id
+            or p.get("url")
+        )
+
+        if clave:
+            unicos.setdefault(
+                clave,
+                p,
+            )
+
+    print("=" * 76)
+    print("EXTRACTOR XG")
+    print("=" * 76)
+
+    print(
+        equipo_local,
+        "vs",
+        equipo_visitante,
+    )
+
+    print(
+        "Objetivo:",
+        args.target,
+        "partidos por equipo",
+    )
+
+    print(
+        "Partidos únicos a revisar:",
+        len(unicos),
+    )
+
+    cache = {}
+
+    cache_hits = 0
+    consultas_web = 0
+    guardados_cache = 0
+
+    with sync_playwright() as p:
+
+        browser = p.chromium.launch(
+            headless=True
+        )
+
+        page = browser.new_page(
+            viewport={
+                "width": 1400,
+                "height": 1000,
+            }
+        )
+
+        total = len(unicos)
+
+        for numero_actual, (
+            clave,
+            historico,
+        ) in enumerate(
+            unicos.items(),
+            start=1,
+        ):
+            print()
+            print(
+                f"[{numero_actual}/{total}]",
+                historico.get(
+                    "local"
+                ),
+                "vs",
+                historico.get(
+                    "visitante"
+                ),
+            )
+
+            match_id_historico = (
+                historico.get(
+                    "match_id"
+                )
+            )
+
+            resultado = leer_cache_xg(
+                match_id_historico
+            )
+
+            if resultado is not None:
+                cache_hits += 1
+
+                print(
+                    "Fuente: CACHE"
+                )
+
+            else:
+                consultas_web += 1
+
+                print(
+                    "Fuente: WEB"
+                )
+
+                resultado = (
+                    extraer_xg_pagina(
+                        page,
+                        historico,
+                    )
+                )
+
+                if guardar_cache_xg(
+                    resultado
+                ):
+                    guardados_cache += 1
+
+            cache[clave] = resultado
+
+            if resultado[
+                "xg_disponible"
+            ]:
+                print(
+                    "xG:",
+                    resultado[
+                        "xg_local"
+                    ],
+                    "-",
+                    resultado[
+                        "xg_visitante"
+                    ],
+                )
+            else:
+                print(
+                    "xG:",
+                    resultado[
+                        "estado_xg"
+                    ],
+                )
+
+        browser.close()
+
+    def obtener_resultados(
+        historicos,
+        equipo,
+    ):
+        salida = []
+
+        for historico in historicos:
+
+            clave = (
+                historico.get(
+                    "match_id"
+                )
+                or historico.get(
+                    "url"
+                )
+            )
+
+            resultado = cache.get(
+                clave
+            )
+
+            if resultado is None:
+                continue
+
+            salida.append(
+                perspectiva_equipo(
+                    resultado,
+                    equipo,
+                )
+            )
+
+        return salida
+
+    resultados_local = (
+        obtener_resultados(
+            historicos_local,
+            equipo_local,
+        )
+    )
+
+    resultados_visitante = (
+        obtener_resultados(
+            historicos_visitante,
+            equipo_visitante,
+        )
+    )
+
+    salida = {
+        "match_id": args.match_id,
+        "partido": {
+            "local": equipo_local,
+            "visitante": (
+                equipo_visitante
+            ),
+        },
+        "objetivo_por_equipo": (
+            args.target
+        ),
+        "local": {
+            "equipo": equipo_local,
+            "partidos": (
+                resultados_local
+            ),
+            "l5": resumen_ventana(
+                resultados_local,
+                5,
+            ),
+            "l10": resumen_ventana(
+                resultados_local,
+                10,
+            ),
+        },
+        "visitante": {
+            "equipo": (
+                equipo_visitante
+            ),
+            "partidos": (
+                resultados_visitante
+            ),
+            "l5": resumen_ventana(
+                resultados_visitante,
+                5,
+            ),
+            "l10": resumen_ventana(
+                resultados_visitante,
+                10,
+            ),
+        },
+    }
+
+    ruta_salida.write_text(
+        json.dumps(
+            salida,
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
+    print()
+    print("=" * 76)
+    print("RESUMEN")
+    print("=" * 76)
+
+    for lado in (
+        "local",
+        "visitante",
+    ):
+        r = salida[lado]
+
+        print()
+        print(
+            r["equipo"]
+        )
+
+        for ventana in (
+            "l5",
+            "l10",
+        ):
+            v = r[ventana]
+
+            print(
+                ventana.upper(),
+                "| xG:",
+                f"{v['partidos_con_xg']}/"
+                f"{v['partidos_considerados']}",
+                "| xGF/PJ:",
+                (
+                    round(
+                        v[
+                            "xgf_promedio"
+                        ],
+                        3,
+                    )
+                    if v[
+                        "xgf_promedio"
+                    ] is not None
+                    else None
+                ),
+                "| xGA/PJ:",
+                (
+                    round(
+                        v[
+                            "xga_promedio"
+                        ],
+                        3,
+                    )
+                    if v[
+                        "xga_promedio"
+                    ] is not None
+                    else None
+                ),
+            )
+
+    print()
+    print("=" * 76)
+    print("CACHE XG")
+    print("=" * 76)
+
+    print(
+        "Cache hits:",
+        cache_hits,
+    )
+
+    print(
+        "Consultas web:",
+        consultas_web,
+    )
+
+    print(
+        "Nuevos guardados:",
+        guardados_cache,
+    )
+
+    print()
+    print(
+        "Guardado en:",
+        ruta_salida,
+    )
+
+
+if __name__ == "__main__":
+    main()

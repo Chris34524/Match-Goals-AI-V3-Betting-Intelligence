@@ -1,0 +1,308 @@
+import argparse
+import json
+from pathlib import Path
+
+from playwright.sync_api import sync_playwright
+
+from scraper.match_selector import (
+    buscar_por_id,
+)
+
+
+OBJETIVO_PARTIDOS = 20
+MAX_CLICKS_POR_SECCION = 6
+
+
+def leer_argumentos():
+    parser = argparse.ArgumentParser(
+        description=(
+            "Extrae historial "
+            "de un partido."
+        )
+    )
+
+    parser.add_argument(
+        "--match-id",
+        required=True,
+        help="ID de Flashscore",
+    )
+
+    return parser.parse_args()
+
+
+def obtener_titulo_seccion(seccion):
+    texto = seccion.inner_text().strip()
+
+    if not texto:
+        return "Sin título"
+
+    return texto.splitlines()[0].strip()
+
+
+def extraer_filas(seccion):
+    filas = seccion.locator(
+        ".h2h__row"
+    )
+
+    datos = []
+
+    for i in range(filas.count()):
+        texto = (
+            filas
+            .nth(i)
+            .inner_text()
+            .strip()
+        )
+
+        if texto:
+            datos.append(texto)
+
+    return datos
+
+
+def ampliar_seccion(
+    page,
+    seccion,
+    objetivo,
+):
+    titulo = obtener_titulo_seccion(
+        seccion
+    )
+
+    print("\n" + "-" * 70)
+    print(titulo)
+    print("-" * 70)
+
+    clicks = 0
+
+    while clicks < MAX_CLICKS_POR_SECCION:
+        cantidad_actual = (
+            seccion
+            .locator(".h2h__row")
+            .count()
+        )
+
+        print(
+            f"Filas actuales: "
+            f"{cantidad_actual}"
+        )
+
+        if cantidad_actual >= objetivo:
+            print(
+                f"Objetivo alcanzado: "
+                f"{cantidad_actual}"
+            )
+            break
+
+        botones = seccion.get_by_text(
+            "Mostrar más partidos",
+            exact=True,
+        )
+
+        if botones.count() == 0:
+            print(
+                "No hay más partidos "
+                "para cargar."
+            )
+            break
+
+        try:
+            botones.first.scroll_into_view_if_needed()
+
+            botones.first.click()
+
+            clicks += 1
+
+            print(
+                f"Click {clicks} realizado."
+            )
+
+            page.wait_for_timeout(2000)
+
+        except Exception as error:
+            print(
+                "Error ampliando sección: "
+                f"{error}"
+            )
+            break
+
+    cantidad_final = (
+        seccion
+        .locator(".h2h__row")
+        .count()
+    )
+
+    print(
+        f"Filas finales: "
+        f"{cantidad_final}"
+    )
+
+
+def main():
+    args = leer_argumentos()
+
+    partido = buscar_por_id(
+        args.match_id
+    )
+
+    print("=" * 70)
+    print("EXTRACTOR DE HISTORIAL")
+    print("=" * 70)
+
+    print(
+        f"\n{partido['local']} "
+        f"vs {partido['visitante']}"
+    )
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch(
+            headless=True
+        )
+
+        page = browser.new_page(
+            viewport={
+                "width": 1920,
+                "height": 1080,
+            },
+            locale="es-MX",
+        )
+
+        print("\nAbriendo partido...")
+
+        response = page.goto(
+            partido["url"],
+            wait_until="domcontentloaded",
+            timeout=60_000,
+        )
+
+        if response:
+            print(
+                f"HTTP: {response.status}"
+            )
+
+        page.wait_for_timeout(4000)
+
+        h2h = page.get_by_text(
+            "H2H",
+            exact=True,
+        )
+
+        if h2h.count() == 0:
+            raise RuntimeError(
+                "No encontramos pestaña H2H."
+            )
+
+        h2h.first.click()
+
+        page.wait_for_timeout(4000)
+
+        secciones = page.locator(
+            ".h2h__section"
+        )
+
+        if secciones.count() < 2:
+            raise RuntimeError(
+                "No encontramos suficientes "
+                "secciones H2H."
+            )
+
+        print(
+            f"\nSecciones encontradas: "
+            f"{secciones.count()}"
+        )
+
+        ampliar_seccion(
+            page,
+            secciones.nth(0),
+            OBJETIVO_PARTIDOS,
+        )
+
+        ampliar_seccion(
+            page,
+            secciones.nth(1),
+            OBJETIVO_PARTIDOS,
+        )
+
+        resultado = {
+            "partido": partido,
+            "objetivo_partidos": (
+                OBJETIVO_PARTIDOS
+            ),
+            "numero_secciones": (
+                secciones.count()
+            ),
+            "secciones": [],
+        }
+
+        for i in range(
+            secciones.count()
+        ):
+            seccion = secciones.nth(i)
+
+            filas = extraer_filas(
+                seccion
+            )
+
+            resultado[
+                "secciones"
+            ].append(
+                {
+                    "indice": i,
+                    "titulo": (
+                        obtener_titulo_seccion(
+                            seccion
+                        )
+                    ),
+                    "numero_filas": len(
+                        filas
+                    ),
+                    "filas": filas,
+                }
+            )
+
+        directorio = (
+            Path("data/matches")
+            / partido["id"]
+        )
+
+        directorio.mkdir(
+            parents=True,
+            exist_ok=True,
+        )
+
+        ruta = (
+            directorio
+            / "history.json"
+        )
+
+        ruta.write_text(
+            json.dumps(
+                resultado,
+                ensure_ascii=False,
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
+
+        print("\n" + "=" * 70)
+        print("RESUMEN")
+        print("=" * 70)
+
+        for seccion in resultado[
+            "secciones"
+        ]:
+            print(
+                f"{seccion['indice'] + 1} | "
+                f"{seccion['titulo']} | "
+                f"{seccion['numero_filas']}"
+            )
+
+        print(
+            f"\nGuardado en: {ruta}"
+        )
+
+        browser.close()
+
+
+if __name__ == "__main__":
+    main()
