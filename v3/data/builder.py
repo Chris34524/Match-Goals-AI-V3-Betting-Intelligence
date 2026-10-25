@@ -9,9 +9,10 @@ from pathlib import Path
 
 from v3.data.schema import (SCHEMA_VERSION, FEATURE_VERSION, Metadata, TeamSample,
                             ChampionPrediction, Labels)
-from v3.data.validation import day, timestamp, number, prediction_errors, label_values
+from v3.data.validation import day, timestamp, prediction_errors, label_values
+from v3.data.temporal import sample_reasons, eligible_status
 
-BUILDER_VERSION = '1.2.1'
+BUILDER_VERSION = '1.3.0'
 CHAMPION = 'J_BT_sin_temporada'
 RELEVANT = ('history.json', 'result.json', 'lambda_comparison.json',
             'xg_history.json', 'standings.json', 'enriched.json', 'h2h_analysis.json')
@@ -104,6 +105,8 @@ def normalize(folder, pool_entries=(), pool_error=None):
     claimed_ids = set()
     # Stable explicit precedence; all contradictory identities remain visible.
     for name in sorted(artifacts, key=lambda n: (n != 'history.json', n)):
+        if name in ('champion_snapshot.json', 'lambda_comparison.json'):
+            continue  # Predictions never supply identity or prematch metadata.
         obj = artifacts[name]
         partido = obj.get('partido', {})
         if not isinstance(partido, dict):
@@ -181,20 +184,18 @@ def normalize(folder, pool_entries=(), pool_error=None):
                         mark('invalid_history_sample')
                         continue
                     sample_id = sample.get('match_id')
-                    sample_day = day(sample.get('fecha'))
-                    if not isinstance(sample_id, str) or not sample_id or not sample_day:
-                        mark('unverified_history_sample')
+                    violations = sample_reasons(folder.name, meta['date'],
+                                                sample_id, sample.get('fecha'))
+                    if violations:
+                        for reason in violations:
+                            mark('input_temporal:' + reason,
+                                 reason in ('target_in_input', 'future_input',
+                                            'same_day_input_without_verified_time'))
                         continue
                     if sample_id in ids:
                         mark('duplicate_history_sample')
                         continue
                     ids.add(sample_id)
-                    if not day(meta['date']):
-                        mark('unverified_history_target_date')
-                        continue
-                    if sample_id == folder.name or sample_day >= day(meta['date']):
-                        mark('temporal_history_violation', True)
-                        continue
                     if sample.get('resultado_parseado') is not True:
                         continue
                     if not all(type(sample.get(k)) is int and sample[k] >= 0 for k in ('goles_local', 'goles_visitante')):
@@ -329,7 +330,7 @@ def normalize(folder, pool_entries=(), pool_error=None):
     row = dict(schema_version=SCHEMA_VERSION, feature_version=FEATURE_VERSION,
                metadata=meta, inputs=inputs, predictions=predictions, labels=labels,
                audit=dict(feature_cutoff=meta['kickoff'], temporal_status=status,
-                          eligible=status == 'OK', reasons=sorted(set(reasons)),
+                          eligible=eligible_status(status), reasons=sorted(set(reasons)),
                           quality_flags=sorted(set(flags)), provenance=provenance))
     return row, counts, claimed_ids
 

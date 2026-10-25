@@ -105,3 +105,70 @@ Dos builds completos produjeron SHA-256
 Se verificaron 66,314 archivos fuente sin cambios de contenido ni mtime.
 `compileall` correcto y 53 tests V3 pasan. Sólo se generan las salidas locales
 en `data/derived/`; ningún archivo de `data/` se incluye en el commit.
+
+## Quality gates 1.3
+
+```bash
+python -m v3.data.quality --dataset data/derived/dataset_v3.jsonl
+PYTHONPATH=. python tests/v3/verify_real_quality.py
+```
+
+El reporte es JSON determinista, sólo lee archivos y no reescribe el dataset.
+Busca automáticamente `<dataset_stem>_manifest.json`; `--manifest RUTA` permite
+seleccionar otro. Si no existe manifest, indica `present=false` sin inventar una
+comparación. Contrasta filas, elegibilidad, labels del pool, motivos principales
+y SHA-256. Devuelve código 1 ante duplicados, inconsistencias estructurales o
+diferencias con el manifest; código 2 ante JSONL/manifest ilegible o inválido.
+No imprime un reporte parcial si falla una línea: también rechaza líneas vacías,
+claves repetidas y números no finitos. Un dataset vacío produce conteos cero.
+
+Incluye distribución por fecha (con `unknown`), estados temporales, cobertura por
+valor de history_count home/away, todos los motivos ordenados por frecuencia y
+nombre, labels y Champion. Los motivos principales siguen la convención del
+manifest. Las inconsistencias incluyen contrato, tipos de conteos, gate temporal,
+identidad, procedencia histórica y aislamiento de artefactos. Los conteos de
+historia se contrastan con las muestras de provenance. El reporte verifica lo
+que acredita el contrato; la auditoría opcional reconstruye desde las fuentes
+reales para comprobar aislamiento mediante mutaciones, sin escribir en `data/`.
+
+`v3.data.temporal.sample_reasons` centraliza exclusión de target, futuro, mismo
+día y fecha/identidad desconocidas para adaptadores actuales y futuros. La
+política permanece a resolución de día; ninguna hora raw autoriza mismo día.
+Los motivos nuevos `input_temporal:*` distinguen cada causa y se ordenan sin
+corregir evidencia. Los snapshots Champion y lambda_comparison quedan fuera de
+la selección de metadata además de inputs. Evidencia de identidad operativa
+contradictoria sigue bloqueando la fila; labels/predicciones inválidos conservan
+los bloqueos de integridad de 1.2, sin corregir valores ni autorizar features.
+Los adaptadores xG/agregados siguen excluidos hasta acreditar su linaje.
+
+### Validación real 1.3 sobre el dataset conservado de 1.2.1
+
+4256 filas: 2896 elegibles y 1360 no elegibles. Manifest coincidente en todos
+los campos contrastados y SHA-256
+`fa732fdb2a7be786c99495bebbafa03956d52407e4a64d84aeb1293529a43e06`.
+500 filas con labels del pool, 4108 con predicciones Champion; cero match_id
+duplicados e inconsistencias estructurales. Estados: OK=2896, ERROR=1288,
+REVIEW=72. Fechas verificadas entre 2025-02-12 y 2026-10-25; 7 desconocidas.
+History_count conocido: 4028 filas por lado; desconocido: 228 por lado.
+
+Principales motivos (primer motivo por fila):
+
+| Motivo | Filas |
+| --- | ---: |
+| temporal_history_violation | 1128 |
+| h2h_team_conflict | 144 |
+| incomplete_history_evidence | 86 |
+| unverified_history_sample | 2 |
+
+Contando todos los motivos, temporal_history_violation aparece en 1148 filas,
+incomplete_history_evidence en 230 e insufficient_input_evidence en 226.
+Estos nombres pertenecen al dataset 1.2 preservado; una nueva generación 1.3
+usa los motivos temporales desglosados.
+
+La auditoría comparó las 4256 filas desde fuentes reales: quitar pool, mutar
+scores de las 500 etiquetas y quitar ambos artefactos de predicciones produjo
+cero cambios de inputs o metadata. Quitar pool también produjo cero cambios de
+estado/elegibilidad/motivos. Inputs y metadata reconstruidos coinciden con el
+dataset original en todas las filas. No se compara distribución deportiva entre
+subgrupos etiquetados y no etiquetados: se compara cada identidad consigo misma.
+Ningún archivo histórico ni salida de `data/` se modifica para esta validación.
