@@ -11,7 +11,7 @@ from v3.data.schema import (SCHEMA_VERSION, FEATURE_VERSION, Metadata, TeamSampl
                             ChampionPrediction, Labels)
 from v3.data.validation import day, timestamp, number, prediction_errors, label_values
 
-BUILDER_VERSION = '1.2.0'
+BUILDER_VERSION = '1.2.1'
 CHAMPION = 'J_BT_sin_temporada'
 RELEVANT = ('history.json', 'result.json', 'lambda_comparison.json',
             'xg_history.json', 'standings.json', 'enriched.json', 'h2h_analysis.json')
@@ -35,7 +35,31 @@ def unique_object(pairs):
     return result
 
 
-def normalize(folder):
+ADAPTED = {'history.json', 'result.json', 'lambda_comparison.json', 'champion_snapshot.json'}
+
+
+def read_pool(path):
+    """Index only exact match_id; preserve every duplicate for conflict validation."""
+    if not path.exists():
+        return {}, Counter({'absent:backtest_pool.json': 1}), None
+    try:
+        if path.is_symlink():
+            raise ValueError('symlink pool')
+        obj = json.loads(path.read_text(encoding='utf-8'), parse_constant=reject_constant,
+                         object_pairs_hook=unique_object)
+        if not isinstance(obj, dict) or not isinstance(obj.get('partidos'), list):
+            raise ValueError('expected partidos list')
+        index = {}
+        for entry in obj['partidos']:
+            if not isinstance(entry, dict) or not isinstance(entry.get('match_id'), str) or not entry['match_id']:
+                raise ValueError('missing exact match_id')
+            index.setdefault(entry['match_id'], []).append(entry)
+        return index, Counter(), None
+    except (OSError, ValueError, UnicodeError):
+        return {}, Counter({'invalid:backtest_pool.json': 1}), 'invalid_artifact:backtest_pool.json'
+
+
+def normalize(folder, pool_entries=(), pool_error=None):
     reasons, flags, provenance, artifacts = [], [], [], {}
     counts = Counter()
     status = 'OK'
@@ -54,7 +78,9 @@ def normalize(folder):
                                observed_at=obj.get('observed_at') if timestamp(obj.get('observed_at')) else None,
                                available_at=obj.get('available_at') if timestamp(obj.get('available_at')) else None))
 
-    paths = sorted(folder.glob('*.json'))
+    paths = sorted(p for p in folder.glob('*.json') if p.name in ADAPTED)
+    flags.extend('unused_input_artifact:' + name for name in RELEVANT
+                 if name not in ADAPTED and (folder / name).exists())
     for name in RELEVANT:
         if not (folder / name).exists():
             counts['absent:' + name] += 1
@@ -125,23 +151,12 @@ def normalize(folder):
                   bilateral_xg_available=None, standings_available=None,
                   h2h_available=None, h2h_count=None)
 
-    def available(name, obj):
-        at = timestamp(obj.get('available_at'))
-        # Without a trusted cutoff, only availability strictly before target day.
-        if not at or not day(meta['date']):
-            mark('unverified_availability:' + name)
-            return False
-        if (cutoff and at > cutoff) or (not cutoff and at.date() >= day(meta['date'])):
-            mark('late_availability:' + name, True)
-            return False
-        return True
-
     # Counts only from explicitly recognized raw history sections. No aggregates.
     history = artifacts.get('history.json')
     if history and 'secciones' in history:
         if not isinstance(history['secciones'], list):
             mark('invalid_structure:history.json:secciones')
-        elif available('history.json', history):
+        else:
             seen_sections = set()
             for section in history['secciones']:
                 if not isinstance(section, dict) or not isinstance(section.get('titulo'), str) or not isinstance(section.get('partidos'), list):
@@ -174,6 +189,9 @@ def normalize(folder):
                         mark('duplicate_history_sample')
                         continue
                     ids.add(sample_id)
+                    if not day(meta['date']):
+                        mark('unverified_history_target_date')
+                        continue
                     if sample_id == folder.name or sample_day >= day(meta['date']):
                         mark('temporal_history_violation', True)
                         continue
@@ -197,11 +215,12 @@ def normalize(folder):
                     inputs[side]['venue_history_count'] = sum(s.get('local' if side == 'home' else 'visitante') == team for s in valid)
                 else:
                     inputs.update(h2h_available=bool(valid), h2h_count=len(valid))
-                trace('inputs', 'inputs.' + key, 'history.json', history)
-    for name in ('xg_history.json', 'standings.json', 'enriched.json', 'h2h_analysis.json'):
-        if name in artifacts:
-            # No verified adapter for their temporal lineage: never import aggregates.
-            flags.append('unused_input_artifact:' + name)
+                for sample in valid:
+                    # A date is evidence at day resolution, never a fabricated timestamp.
+                    trace('inputs', 'inputs.' + key + '.sample:' + sample['match_id']
+                          + '.date:' + day(sample['fecha']).isoformat(), 'history.json', {})
+                    provenance[-1]['source'] = 'flashscore:historical_sample_date'
+
     temporal = artifacts.get('result.json', {}).get('integridad_temporal')
     if temporal is not None:
         state = temporal.get('estado') if isinstance(temporal, dict) else None
@@ -265,6 +284,44 @@ def normalize(folder):
             labels = None
         else:
             trace('labels', 'labels', 'result.json', result)
+    # Retrospective results never contribute metadata, inputs or temporal evidence.
+    if pool_error:
+        mark(pool_error)
+    pool_labels = None
+    pool_invalid = False
+    for entry in pool_entries:
+        for field, alias in (('home_team', 'local'), ('away_team', 'visitante')):
+            if alias in entry and (not isinstance(entry[alias], str) or not entry[alias].strip()
+                                   or (meta[field] is not None and entry[alias] != meta[field])):
+                mark('identity_conflict:' + field + ':backtest_pool.json', True)
+                pool_invalid = True
+        if 'id' in entry and entry['id'] != folder.name:
+            mark('identity_conflict:match_id:backtest_pool.json', True)
+            pool_invalid = True
+        if not all(type(entry.get(k)) is int and entry[k] >= 0
+                   for k in ('goles_local', 'goles_visitante')):
+            mark('invalid_label:backtest_pool.json', True)
+            pool_invalid = True
+            continue
+        candidate = dict.fromkeys(Labels.__annotations__)
+        candidate.update(home_goals=entry['goles_local'], away_goals=entry['goles_visitante'])
+        candidate.update(label_values(candidate['home_goals'], candidate['away_goals']))
+        if pool_labels is not None and pool_labels != candidate:
+            mark('conflicting_labels:backtest_pool.json', True)
+            pool_invalid = True
+        pool_labels = candidate
+    if pool_labels is not None and labels is not None:
+        if any(labels[k] is not None and labels[k] != pool_labels[k]
+               for k in pool_labels if k != 'settled_at'):
+            mark('conflicting_labels:settlement:backtest_pool.json', True)
+            pool_invalid = True
+    if pool_invalid:
+        labels = None
+    elif pool_labels is not None:
+        if labels is None:
+            labels = pool_labels
+        trace('labels', 'labels', 'backtest_pool.json', {})
+        provenance[-1]['artifact'] = 'backtest_pool.json'
     if all(inputs[side]['history_count'] is None for side in ('home', 'away')):
         mark('insufficient_input_evidence')
     if not all(inputs[side]['history_count'] is not None for side in ('home', 'away')):
@@ -286,7 +343,7 @@ def flatten(value, prefix=''):
     return {prefix: dumps(value)}
 
 
-def build_dataset(source_root='data/matches', output_dir='data/derived', limit=None):
+def build_dataset(source_root='data/matches', output_dir='data/derived', limit=None, backtest_pool=None):
     source, output = Path(source_root), Path(output_dir)
     if not source.is_dir():
         raise ValueError('source-root must be an existing directory')
@@ -304,9 +361,13 @@ def build_dataset(source_root='data/matches', output_dir='data/derived', limit=N
     folders = sorted(p for p in source.iterdir() if p.is_dir() and not p.is_symlink())
     if limit:
         folders = folders[:limit]
-    rows, counts, identities = [], Counter(), {}
+    pool_path = Path(backtest_pool) if backtest_pool is not None else source.parent / 'backtest_pool.json'
+    if pool_path.resolve() in {(output / n).resolve() for n in names}:
+        raise ValueError('output must not overwrite backtest pool')
+    pool, counts, pool_error = read_pool(pool_path)
+    rows, identities = [], {}
     for folder in folders:
-        row, found, claims = normalize(folder)
+        row, found, claims = normalize(folder, pool.get(folder.name, ()), pool_error)
         counts.update(found)
         rows.append(row)
         for identity in claims | {folder.name}:
@@ -327,6 +388,8 @@ def build_dataset(source_root='data/matches', output_dir='data/derived', limit=N
                     source_root=source.name, directories_inspected=len(folders),
                     rows_emitted=len(rows), eligible_rows=sum(r['audit']['eligible'] for r in rows),
                     ineligible_rows=sum(not r['audit']['eligible'] for r in rows),
+                    labels_from_backtest_pool=sum(any(p['group'] == 'labels' and p['artifact'] == 'backtest_pool.json'
+                                                      for p in r['audit']['provenance']) for r in rows),
                     primary_reasons=dict(sorted(reasons.items())),
                     artifact_counts=dict(sorted(counts.items())),
                     jsonl_sha256=hashlib.sha256(content).hexdigest())
@@ -347,9 +410,10 @@ def main():
     parser.add_argument('--source-root', default='data/matches')
     parser.add_argument('--output-dir', default='data/derived')
     parser.add_argument('--limit', type=int)
+    parser.add_argument('--backtest-pool', help='optional pool; defaults to source-root sibling backtest_pool.json')
     args = parser.parse_args()
     try:
-        manifest = build_dataset(args.source_root, args.output_dir, args.limit)
+        manifest = build_dataset(args.source_root, args.output_dir, args.limit, args.backtest_pool)
     except (OSError, ValueError) as exc:
         parser.exit(2, str(exc) + '\n')
     print(dumps(manifest))

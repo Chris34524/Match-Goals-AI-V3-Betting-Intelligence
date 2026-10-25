@@ -51,8 +51,7 @@ def test_minimal_and_optional_null(tmp_path):
         assert set(value) == set(contract.__annotations__)
 
 
-@pytest.mark.parametrize('change', [dict(available_at=None), dict(available_at='2026-10-25T00:00:00Z'),
-                                    dict(partido={}), dict(secciones='bad')])
+@pytest.mark.parametrize('change', [dict(partido={}), dict(secciones='bad')])
 def test_incomplete_temporal_or_structure(tmp_path, change):
     _, row = run(tmp_path, **change)
     assert not row['audit']['eligible']
@@ -90,7 +89,7 @@ def test_source_temporal_status(tmp_path, status):
     assert not rows(output)[0]['audit']['eligible']
 
 
-@pytest.mark.parametrize('field,value', [('match_id', 'a'), ('fecha', '24.10.26'), ('fecha', None)])
+@pytest.mark.parametrize('field,value', [('match_id', 'a'), ('fecha', '24.10.26'), ('fecha', '25.10.26'), ('fecha', 'invalid'), ('fecha', None)])
 def test_sample_temporal_checks(tmp_path, field, value):
     source, output = tmp_path / 'sources', tmp_path / 'out'
     folder = write(source)
@@ -244,3 +243,135 @@ def test_no_label_leakage(tmp_path):
         score_scope='REGULATION', home_goals=20, away_goals=10)))
     build_dataset(source, output)
     assert rows(output)[0]['inputs'] == before
+
+
+@pytest.mark.parametrize('availability', [None, '2026-10-25T00:00:00Z'])
+def test_raw_history_uses_sample_dates(tmp_path, availability):
+    folder, row = run(tmp_path, available_at=availability)
+    assert row['audit']['eligible']
+    evidence = [p for p in row['audit']['provenance'] if p['group'] == 'inputs']
+    assert len(evidence) == 2
+    assert all(p['source'] == 'flashscore:historical_sample_date' and
+               '.date:2026-10-19' in p['field'] and p['available_at'] is None for p in evidence)
+    history = json.loads((folder / 'history.json').read_text())
+    history.pop('available_at')
+    put(folder, 'history.json', history)
+    build_dataset(folder.parent, tmp_path / 'output')
+    rebuilt = rows(tmp_path / 'output')[0]
+    assert rebuilt['audit']['eligible']
+    assert rebuilt['inputs'] == row['inputs']
+
+
+def pool_entry(**changes):
+    entry = dict(match_id='a', local='Home', visitante='Away', goles_local=2, goles_visitante=1)
+    entry.update(changes)
+    return entry
+
+
+def test_pool_labels_and_no_leakage(tmp_path):
+    source, output = tmp_path / 'sources', tmp_path / 'out'
+    write(source, available_at=None)
+    build_dataset(source, output)
+    before = rows(output)[0]
+    pool = tmp_path / 'backtest_pool.json'
+    put(tmp_path, pool.name, dict(partidos=[pool_entry()]))
+    original = pool.read_bytes(), pool.stat().st_mtime_ns
+    manifest = build_dataset(source, output)
+    row = rows(output)[0]
+    assert row['inputs'] == before['inputs']
+    assert row['metadata'] == before['metadata']
+    assert row['audit']['eligible'] == before['audit']['eligible']
+    assert row['labels'] == dict(settled_at=None, home_goals=2, away_goals=1,
+        total_goals=3, label_btts=True, label_1x2='1', label_over_1_5=True,
+        label_over_2_5=True, label_over_3_5=False, label_over_4_5=False)
+    assert manifest['labels_from_backtest_pool'] == 1
+    assert any(p['artifact'] == pool.name for p in row['audit']['provenance'])
+    assert original == (pool.read_bytes(), pool.stat().st_mtime_ns)
+    first = (output / 'dataset_v3.jsonl').read_bytes()
+    assert build_dataset(source, output)['jsonl_sha256'] == manifest['jsonl_sha256']
+    assert first == (output / 'dataset_v3.jsonl').read_bytes()
+
+
+@pytest.mark.parametrize('change', [dict(local='Wrong'), dict(visitante='Wrong'),
+    dict(id='other'), dict(goles_local=True), dict(goles_local=-1),
+    dict(goles_visitante=1.5), dict(goles_local=None)])
+def test_pool_invalid_identity_or_score(tmp_path, change):
+    source, output = tmp_path / 'sources', tmp_path / 'out'
+    write(source)
+    put(tmp_path, 'pool.json', dict(partidos=[pool_entry(**change)]))
+    build_dataset(source, output, backtest_pool=tmp_path / 'pool.json')
+    row = rows(output)[0]
+    assert row['labels'] is None
+    assert row['audit']['temporal_status'] == 'ERROR'
+    assert not row['audit']['eligible']
+
+
+@pytest.mark.parametrize('conflict', [False, True])
+def test_pool_settlement_conflict(tmp_path, conflict):
+    source, output = tmp_path / 'sources', tmp_path / 'out'
+    folder = write(source)
+    put(folder, 'result.json', dict(settlement=dict(status='FINISHED', score_scope='REGULATION',
+        home_goals=0 if conflict else 2, away_goals=1)))
+    put(tmp_path, 'backtest_pool.json', dict(partidos=[pool_entry()]))
+    build_dataset(source, output)
+    row = rows(output)[0]
+    assert row['audit']['eligible'] is not conflict
+    assert (row['labels'] is None) is conflict
+    if conflict:
+        assert row['audit']['temporal_status'] == 'ERROR'
+        assert 'conflicting_labels:settlement:backtest_pool.json' in row['audit']['reasons']
+
+
+def test_pool_duplicate_conflict_and_exact_lookup(tmp_path):
+    source, output = tmp_path / 'sources', tmp_path / 'out'
+    write(source)
+    pool = tmp_path / 'backtest_pool.json'
+    put(tmp_path, pool.name, dict(partidos=[pool_entry(match_id='A')]))
+    build_dataset(source, output)
+    assert rows(output)[0]['labels'] is None
+    put(tmp_path, pool.name, dict(partidos=[pool_entry(), pool_entry(goles_local=3)]))
+    build_dataset(source, output)
+    assert rows(output)[0]['audit']['temporal_status'] == 'ERROR'
+    assert rows(output)[0]['labels'] is None
+
+
+def test_pool_absent_or_invalid(tmp_path):
+    source, output = tmp_path / 'sources', tmp_path / 'out'
+    write(source)
+    build_dataset(source, output, backtest_pool=tmp_path / 'missing.json')
+    assert rows(output)[0]['audit']['eligible']
+    assert rows(output)[0]['labels'] is None
+    put(tmp_path, 'pool.json', {})
+    build_dataset(source, output, backtest_pool=tmp_path / 'pool.json')
+    assert not rows(output)[0]['audit']['eligible']
+    assert 'invalid_artifact:backtest_pool.json' in rows(output)[0]['audit']['reasons']
+
+
+@pytest.mark.parametrize('name', ['unknown.json', 'standings.json', 'enriched.json', 'xg_history.json'])
+def test_unadapted_json_does_not_contaminate(tmp_path, name):
+    source, output = tmp_path / 'sources', tmp_path / 'out'
+    folder = write(source)
+    build_dataset(source, output)
+    before = rows(output)[0]
+    put(folder, name, dict(match_id='wrong', partido=dict(local='Wrong', fecha='bad')))
+    build_dataset(source, output)
+    row = rows(output)[0]
+    assert row['metadata'] == before['metadata']
+    assert row['inputs'] == before['inputs']
+    assert row['audit']['eligible']
+    (folder / name).write_text('{')
+    build_dataset(source, output)
+    assert rows(output)[0]['audit']['eligible']
+
+
+def test_pool_cannot_authorize_late_history(tmp_path):
+    source, output = tmp_path / 'sources', tmp_path / 'out'
+    folder = write(source)
+    history = json.loads((folder / 'history.json').read_text())
+    history['secciones'][0]['partidos'][0]['fecha'] = '24.10.26'
+    put(folder, 'history.json', history)
+    put(tmp_path, 'backtest_pool.json', dict(partidos=[pool_entry()]))
+    build_dataset(source, output)
+    row = rows(output)[0]
+    assert row['labels'] is not None
+    assert not row['audit']['eligible']

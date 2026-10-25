@@ -32,7 +32,8 @@ sólo el nombre de esa raíz para evitar rutas personales.
 
 ## Adaptadores y decisiones conservadoras
 
-* Identidad: `partido` en objetos JSON por partido, aliases explícitos del
+* Identidad: `partido` únicamente en `history.json`, `result.json`,
+  `lambda_comparison.json` y `champion_snapshot.json`, aliases explícitos del
   contrato. Se contrastan todos los IDs y metadatos presentes. El directorio
   proporciona el identificador Flashscore; claims repetidos entre directorios
   bloquean ambas filas, sin emitir IDs duplicados ni seleccionar silenciosamente.
@@ -40,9 +41,12 @@ sólo el nombre de esa raíz para evitar rutas personales.
   y `ENFRENTAMIENTOS...`. Sólo se cuentan muestras parseadas, scores enteros,
   IDs únicos, fecha anterior al target y equipo verificable. Target, mismo día
   y futuro se excluyen y bloquean elegibilidad. Fechas desconocidas requieren
-  revisión. Se exige `available_at` ISO con offset del artefacto; captura/mtime
-  no acreditan disponibilidad. Sin kickoff fiable, disponibilidad debe ser
-  estrictamente anterior al día objetivo. No se infiere offset desde `hora`.
+  revisión. No se exige `available_at` del archivo raw: cada muestra terminada
+  acredita su anterioridad por su propia fecha. Provenance usa
+  `source=flashscore:historical_sample_date` y una referencia de muestra/fecha
+  en `field`; `available_at` queda null, sin inventar una hora de disponibilidad.
+  Captura/mtime del archivo no acreditan disponibilidad. Esta regla no se aplica
+  a agregados. No se infiere offset desde `hora`.
 * `xg_history`, standings, enriquecidos y H2H agregado quedan sin incorporar:
   sus agregados no acreditan linaje temporal completo en las muestras reales
   inspeccionadas. Sus inputs permanecen null y se registra la omisión como flag.
@@ -61,20 +65,43 @@ sólo el nombre de esa raíz para evitar rutas personales.
   Labels suministrados inconsistentes bloquean la fila y dejan labels null.
   Esta forma explícita también permite probar liquidaciones sin confundir
   predicciones ni scores en vivo con resultados finales.
+* Pool retrospectivo opcional: `--backtest-pool RUTA` o, por defecto,
+  `backtest_pool.json` junto a `source-root` (para `data/matches`,
+  `data/backtest_pool.json`). La API acepta `backtest_pool=RUTA`. Si no existe,
+  el build continúa con labels null salvo liquidación explícita. Se adapta
+  exclusivamente el objeto `{"partidos": [...]}` real, indexado por `match_id`
+  exacto; no se hace fallback a `id`. Identidad presente e `id` se contrastan;
+  goles deben ser enteros no negativos (booleanos excluidos). Sólo aporta labels,
+  nunca metadata, inputs ni disponibilidad. Duplicados se validan todos: scores
+  o identidades contradictorias producen ERROR y labels null. Un conflicto con
+  settlement también bloquea la fila sin escoger una fuente. El manifest cuenta
+  `labels_from_backtest_pool`; provenance identifica `backtest_pool.json`.
+  Un pool inválido exige revisión; uno ausente no bloquea.
+* JSON sin adaptador, incluso malformado, se ignora para identidad y elegibilidad.
+  Agregados conocidos no usados sólo aportan flags de omisión.
 * El `integridad_temporal.estado` distinto de OK bloquea la fila incluso con
   historias verificadas. OK por sí solo nunca acredita las fuentes.
 
-JSON inválido, claves JSON repetidas, codificación ilegible y estructuras no
-reconocidas producen revisión explícita. Se rechazan salidas que se solapen con
+En fuentes adaptadas, JSON inválido, claves JSON repetidas, codificación ilegible
+y estructuras no reconocidas producen revisión explícita. Se rechazan salidas que se solapen con
 la raíz fuente y archivos de salida symlink; no se siguen directorios symlink.
 El builder sólo escribe los tres archivos declarados dentro de output-dir.
 No integra ni altera el pipeline operativo. Las salidas permanecen locales.
 
 ## Validación local de implementación
 
-Build limitado a los primeros cinco directorios: cinco filas, cero elegibles;
-cuatro REVIEW por disponibilidad temporal no acreditada y una ERROR por
-contradicción de local/visitante en `00XSw78l/standings.json`. No se resolvió
-el conflicto escogiendo un equipo arbitrariamente. Dos builds dieron el mismo
-SHA-256 y se verificaron hash y mtime de los 45 archivos fuente sin cambios.
+La corrección 1.2.1 incluye tests de historial raw sin disponibilidad del archivo,
+fechas bloqueadas, separación de labels, pool opcional, conflictos y artefactos
+sin adaptador. La validación real ejecuta dos builds completos y compara SHA-256,
+contenido y mtime de todas las fuentes de `data/` fuera de `derived/`.
 Los archivos de salida con enlaces duros también se rechazan para proteger fuentes.
+
+Validación real de 1.2.1: 4,256 directorios/filas, 2,896 elegibles,
+1,360 no elegibles y 500 filas con labels del pool. Motivos principales:
+`temporal_history_violation=1128`, `h2h_team_conflict=144`,
+`incomplete_history_evidence=86`, `unverified_history_sample=2`.
+Dos builds completos produjeron SHA-256
+`fa732fdb2a7be786c99495bebbafa03956d52407e4a64d84aeb1293529a43e06`.
+Se verificaron 66,314 archivos fuente sin cambios de contenido ni mtime.
+`compileall` correcto y 53 tests V3 pasan. Sólo se generan las salidas locales
+en `data/derived/`; ningún archivo de `data/` se incluye en el commit.
