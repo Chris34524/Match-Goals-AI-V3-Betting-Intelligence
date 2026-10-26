@@ -10,8 +10,8 @@ from v3.features.history_adapter import read_history, target_metadata, team_hist
 
 FEATURE_VERSION = '2.6.0'
 METRICS = ('sample_count', 'btts_rate', 'over_1_5_rate', 'over_2_5_rate',
-           'over_3_5_rate', 'home_gf_mean', 'home_ga_mean', 'away_gf_mean', 'away_ga_mean')
-# 14 canonical 2.1 columns plus 4 explicit away-perspective aliases.
+           'over_3_5_rate', 'home_gf_mean', 'home_ga_mean')
+# Only canonical columns: away GF = home GA; away GA = home GF.
 SPECS = tuple(f'h2h_{metric}_h{n}' for n in (5, 10) for metric in METRICS)
 BLOCKED = {}
 
@@ -76,7 +76,7 @@ def materialize(history, target_id, source_error=None):
                     threshold = int(metric.split('_')[1])
                     value = sum(s['gf'] + s['ga'] > threshold for s in selected)/len(selected)
                 else:
-                    field = 'gf' if metric in ('home_gf_mean', 'away_ga_mean') else 'ga'
+                    field = 'gf' if metric == 'home_gf_mean' else 'ga'
                     value = sum(s[field] for s in selected)/len(selected)
             features[f'h2h_{metric}_h{n}'] = dict(value=value, reason=reason, sample_count=count, window=key)
     return dict(match_id=target_id, feature_version=FEATURE_VERSION, catalog_version=CATALOG_VERSION,

@@ -1,6 +1,7 @@
 from copy import deepcopy
 import pytest
-from v3.features.h2h import materialize, build_features
+from v3.features.catalog import CATALOG
+from v3.features.h2h import SPECS, materialize, build_features
 from test_form_engine import history, sample
 
 
@@ -18,10 +19,15 @@ def pair_history(n=5):
 def test_orientation_and_auxiliary_isolation():
     h = pair_history()
     r = materialize(h, 'target')
-    assert len(r['features']) == 18
+    assert len(SPECS) == 14
+    assert set(SPECS) == {s.name for s in CATALOG if s.name.startswith('h2h_')}
+    assert set(r['features']) == set(SPECS)
+    assert not any(name.startswith('h2h_away_gf_mean_') for name in r['features'])
+    assert not any(name.startswith('h2h_away_ga_mean_') for name in r['features'])
     assert r['features']['h2h_home_gf_mean_h5']['value'] == 2
-    assert r['features']['h2h_away_ga_mean_h5']['value'] == 2
-    assert r['features']['h2h_away_gf_mean_h5']['value'] == 1
+    for cap in (5, 10):
+        assert r['features'][f'h2h_home_gf_mean_h{cap}']['value'] == 2
+        assert r['features'][f'h2h_home_ga_mean_h{cap}']['value'] == 1
     h['secciones'] = h['secciones'][-1:]
     h['result'] = {'score': 99}
     assert materialize(h, 'target') == r
