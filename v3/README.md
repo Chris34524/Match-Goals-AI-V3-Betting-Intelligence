@@ -248,3 +248,6 @@ python -m v3.features.surface_audit --source-root data/matches > /tmp/matches-su
 
 `surface_availability` y `capture_policy` son independientes. Esta fase no
 implementa captura nueva ni habilita automatización de Flashscore.
+
+Feature Engine de forma L5/L10 y venue (Roadmap 2.2):
+[contrato, ejecución y cobertura real](../docs/v3/form-engine.md).
