@@ -1,0 +1,54 @@
+{
+  "capture_policy": {
+    "existing_local": 148,
+    "manual_or_permitted_source": 25,
+    "requires_authorization": 116
+  },
+  "families": 17,
+  "family": {
+    "availability_lineup": 19,
+    "base_h2h_auxiliary": 14,
+    "base_recent_form": 32,
+    "base_sample_quality": 8,
+    "base_strength": 4,
+    "base_temporal_context": 10,
+    "base_venue_form": 32,
+    "base_xg": 18,
+    "discipline": 12,
+    "fixture_metadata": 9,
+    "news_context": 4,
+    "observable_context": 29,
+    "odds_market": 11,
+    "player_performance": 33,
+    "player_profile": 11,
+    "standings_snapshot": 9,
+    "team_match_stats": 34
+  },
+  "level": {
+    "context": 39,
+    "discipline": 12,
+    "lineup": 19,
+    "match": 36,
+    "news": 4,
+    "player": 44,
+    "team": 135
+  },
+  "priority": {
+    "P0": 77,
+    "P1": 147,
+    "P2": 56,
+    "P3": 9
+  },
+  "signals": 289,
+  "status": {
+    "available": 86,
+    "blocked": 35,
+    "planned": 168
+  },
+  "surface_availability": {
+    "competition_dependent": 102,
+    "observed_local": 148,
+    "unknown": 36,
+    "visible_public": 3
+  }
+}
