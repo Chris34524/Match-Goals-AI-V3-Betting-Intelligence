@@ -113,7 +113,7 @@ def _build():
             add(f'{side}_{metric}_capped_l10', 'temporal_context',
                 f'Consecutive prefix satisfying {predicate} in latest 10 eligible observed matches; '
                 'capped at 10 and at observed sample length, not an uncensored true streak.',
-                side, 'L10', 1, markets, 'planned')
+                side, 'L10', 1, markets, 'available', dtype='int')
         for metric, formula in (('standing_position', 'pre-target league rank'),
                                 ('standing_points_per_game', 'pre-target points / played; null if played <= 0')):
             add(f'{side}_{metric}', 'strength', formula, side, 'as_of_target', 1,

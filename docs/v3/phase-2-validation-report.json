@@ -1,0 +1,3903 @@
+{
+  "analysis_fingerprint": {
+    "comparison": "every path, content SHA-256 and mtime_ns; only __pycache__/*.pyc/*.pyo ignored",
+    "final": {
+      "content_sha256": "651fc57547d73dbb9b5b128c0958eb16994d2ae3d4254afa86057005063d7f20",
+      "files": 85,
+      "mtime_sha256": "0e0956d605af99cc4c70bae5faf44561b162147731909e20cb31a4c584a4c900"
+    },
+    "initial": {
+      "content_sha256": "651fc57547d73dbb9b5b128c0958eb16994d2ae3d4254afa86057005063d7f20",
+      "files": 85,
+      "mtime_sha256": "0e0956d605af99cc4c70bae5faf44561b162147731909e20cb31a4c584a4c900"
+    },
+    "unchanged": true
+  },
+  "baseline": {
+    "issue_access": "gh attempted issues 18..25; network unavailable; local docs/catalog and user scope used",
+    "regression_hashes": {
+      "form_features.jsonl": "779040a01b40f0099d260438199dcbefdc0d052bb8cca0fda39ec8f2ab1033b4",
+      "form_manifest.json": "3964f2062b71f6554c6370b336e5bba7b738ed387d343ac018b16364a0e70829",
+      "temporal_features.jsonl": "22f3f0a0e83b23b704932436cc9dbfe5e49a54c95e8f6576cc765052527042aa",
+      "temporal_manifest.json": "20fe3df7920ffd1f82d11cb7490bbba06154e0d9a2befb2780cb9990412e6b32",
+      "xg_features.jsonl": "7003af3f3a66f0ae6d0c6cee3992e82f8b803f2ccc1f6d9bf31759b74a74a614",
+      "xg_manifest.json": "7a7e4d41d8f6b1792dd606dd00b20a4face9ce8c44dba8518329e44b948879fe"
+    },
+    "test_count": 649
+  },
+  "batch_counts": {
+    "blocked": 91,
+    "implemented": 14
+  },
+  "blocked_features": [
+    {
+      "code_implemented": false,
+      "definition": "Explicit dated availability status; unknown is not available.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "availability",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "family": "temporal_context",
+      "markets": [
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_days_rest",
+      "phase": "2.4",
+      "reason": "Truncated history does not certify latest-match completeness. Require complete dated fixture ledger through cutoff, including intervening fixtures.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "family": "xg",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_goals_per_xg_l10",
+      "phase": "2.3",
+      "reason": "Raw per-match xG exists partially, but no accredited as-of revision/availability lineage for xG values or validated bilateral adapter. To enable: reconcile IDs/dates/teams with history, validate finite nonnegative paired xG/xGA and orientation, document provider publication/revision availability before cutoff, and audit every contributing sample. Aggregate l5/l10 alone is insufficient.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "family": "xg",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_goals_per_xg_l5",
+      "phase": "2.3",
+      "reason": "Raw per-match xG exists partially, but no accredited as-of revision/availability lineage for xG values or validated bilateral adapter. To enable: reconcile IDs/dates/teams with history, validate finite nonnegative paired xG/xGA and orientation, document provider publication/revision availability before cutoff, and audit every contributing sample. Aggregate l5/l10 alone is insufficient.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "family": "temporal_context",
+      "markets": [
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_matches_last_14_days",
+      "phase": "2.4",
+      "reason": "History cap and unparsed/missing fixtures cannot certify 14-day completeness. Require complete fixture ledger for interval, including zero-match evidence.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "mean(points_earned - (3 - opponent_prior_ppg)) over last 10; requires validated opponent_prior_ppg for every fixture",
+      "family": "strength",
+      "markets": [
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_opponent_adjusted_form",
+      "phase": "2.5",
+      "reason": "No accredited opponent identity registry and independently dated opponent fixture lineage before each evaluated historical fixture; capped target histories are not a reliable opponent schedule. Current standings lack historical publication snapshots and constituent results. Own rolling points would duplicate form without measuring rival quality.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "mean(opponent_prior_GA/n) over last 10 eligible fixtures; n=10 for each opponent",
+      "family": "strength",
+      "markets": [
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_opponent_conceding_strength",
+      "phase": "2.5",
+      "reason": "No accredited opponent identity registry and independently dated opponent fixture lineage before each evaluated historical fixture; capped target histories are not a reliable opponent schedule. Current standings lack historical publication snapshots and constituent results. Own rolling points would duplicate form without measuring rival quality.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "mean((3*wins + draws)/n) for each opponent, using its own N prior fixtures before the evaluated fixture; N=10",
+      "family": "strength",
+      "markets": [
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_opponent_results_strength",
+      "phase": "2.5",
+      "reason": "No accredited opponent identity registry and independently dated opponent fixture lineage before each evaluated historical fixture; capped target histories are not a reliable opponent schedule. Current standings lack historical publication snapshots and constituent results. Own rolling points would duplicate form without measuring rival quality.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "mean(opponent_prior_GF/n) over last 10 eligible fixtures; n=10 for each opponent",
+      "family": "strength",
+      "markets": [
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_opponent_scoring_strength",
+      "phase": "2.5",
+      "reason": "No accredited opponent identity registry and independently dated opponent fixture lineage before each evaluated historical fixture; capped target histories are not a reliable opponent schedule. Current standings lack historical publication snapshots and constituent results. Own rolling points would duplicate form without measuring rival quality.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "mean(opponent_prior_ppg) over last 10 eligible fixtures",
+      "family": "strength",
+      "markets": [
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_schedule_strength",
+      "phase": "2.5",
+      "reason": "No accredited opponent identity registry and independently dated opponent fixture lineage before each evaluated historical fixture; capped target histories are not a reliable opponent schedule. Current standings lack historical publication snapshots and constituent results. Own rolling points would duplicate form without measuring rival quality.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "pre-target competition points / played; played > 0",
+      "family": "strength",
+      "markets": [
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_standing_points_per_game",
+      "phase": "2.5",
+      "reason": "No accredited opponent identity registry and independently dated opponent fixture lineage before each evaluated historical fixture; capped target histories are not a reliable opponent schedule. Current standings lack historical publication snapshots and constituent results. Own rolling points would duplicate form without measuring rival quality.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "rank in accredited pre-target competition/season table",
+      "family": "strength",
+      "markets": [
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_standing_position",
+      "phase": "2.5",
+      "reason": "No accredited opponent identity registry and independently dated opponent fixture lineage before each evaluated historical fixture; capped target histories are not a reliable opponent schedule. Current standings lack historical publication snapshots and constituent results. Own rolling points would duplicate form without measuring rival quality.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": true,
+      "family": "xg",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_xg_mean_l10",
+      "phase": "2.3",
+      "reason": "Raw per-match xG exists partially, but no accredited as-of revision/availability lineage for xG values or validated bilateral adapter. To enable: reconcile IDs/dates/teams with history, validate finite nonnegative paired xG/xGA and orientation, document provider publication/revision availability before cutoff, and audit every contributing sample. Aggregate l5/l10 alone is insufficient.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": true,
+      "family": "xg",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_xg_mean_l5",
+      "phase": "2.3",
+      "reason": "Raw per-match xG exists partially, but no accredited as-of revision/availability lineage for xG values or validated bilateral adapter. To enable: reconcile IDs/dates/teams with history, validate finite nonnegative paired xG/xGA and orientation, document provider publication/revision availability before cutoff, and audit every contributing sample. Aggregate l5/l10 alone is insufficient.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": true,
+      "family": "xg",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_xg_sample_count_l10",
+      "phase": "2.3",
+      "reason": "Raw per-match xG exists partially, but no accredited as-of revision/availability lineage for xG values or validated bilateral adapter. To enable: reconcile IDs/dates/teams with history, validate finite nonnegative paired xG/xGA and orientation, document provider publication/revision availability before cutoff, and audit every contributing sample. Aggregate l5/l10 alone is insufficient.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": true,
+      "family": "xg",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_xg_sample_count_l5",
+      "phase": "2.3",
+      "reason": "Raw per-match xG exists partially, but no accredited as-of revision/availability lineage for xG values or validated bilateral adapter. To enable: reconcile IDs/dates/teams with history, validate finite nonnegative paired xG/xGA and orientation, document provider publication/revision availability before cutoff, and audit every contributing sample. Aggregate l5/l10 alone is insufficient.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": true,
+      "family": "xg",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_xga_mean_l10",
+      "phase": "2.3",
+      "reason": "Raw per-match xG exists partially, but no accredited as-of revision/availability lineage for xG values or validated bilateral adapter. To enable: reconcile IDs/dates/teams with history, validate finite nonnegative paired xG/xGA and orientation, document provider publication/revision availability before cutoff, and audit every contributing sample. Aggregate l5/l10 alone is insufficient.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": true,
+      "family": "xg",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_xga_mean_l5",
+      "phase": "2.3",
+      "reason": "Raw per-match xG exists partially, but no accredited as-of revision/availability lineage for xG values or validated bilateral adapter. To enable: reconcile IDs/dates/teams with history, validate finite nonnegative paired xG/xGA and orientation, document provider publication/revision availability before cutoff, and audit every contributing sample. Aggregate l5/l10 alone is insufficient.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Official named substitutes in a pre-cutoff snapshot.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "bench",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Sum bench players prior per-90 production under predeclared metric/minute threshold; no post-target rating.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "bench_strength",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider-defined regulation big_chances per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "big_chances",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider-defined regulation big_chances_missed per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "big_chances_missed",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": true,
+      "family": "xg",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "bilateral_xg_available_l10",
+      "phase": "2.3",
+      "reason": "Raw per-match xG exists partially, but no accredited as-of revision/availability lineage for xG values or validated bilateral adapter. To enable: reconcile IDs/dates/teams with history, validate finite nonnegative paired xG/xGA and orientation, document provider publication/revision availability before cutoff, and audit every contributing sample. Aggregate l5/l10 alone is insufficient.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": true,
+      "family": "xg",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "bilateral_xg_available_l5",
+      "phase": "2.3",
+      "reason": "Raw per-match xG exists partially, but no accredited as-of revision/availability lineage for xG values or validated bilateral adapter. To enable: reconcile IDs/dates/teams with history, validate finite nonnegative paired xG/xGA and orientation, document provider publication/revision availability before cutoff, and audit every contributing sample. Aggregate l5/l10 alone is insufficient.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider-defined regulation blocked_shots per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "blocked_shots",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Sum disjoint card events over n complete prior matches; n and yellow/red components explicit.",
+      "family": "discipline",
+      "markets": [
+        "CARDS_FUTURE"
+      ],
+      "name": "cards_per_match",
+      "phase": "2.10",
+      "prerequisites": "Permitted source, complete event ledger and correction history; stable event/dismissal/player/team IDs; second-yellow linked without duplicate reds; competition rules when deriving sanctions.",
+      "reason": "No complete dated card/foul event ledger, stable player/event IDs or accredited publications. A red-card absence mention is not chronology, sanction duration or served-match evidence.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider-defined regulation corners per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "CORNERS_FUTURE"
+      ],
+      "name": "corners",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Membership of unordered stable team-ID pair in dated curated rivalry registry.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "derby_rivalry",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Published registry effective before cutoff; no sentiment or geographical guess.",
+      "reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Consecutive eligible fixtures with at least one defined card event; cap/sample/censoring retained; complete ledger required.",
+      "family": "discipline",
+      "markets": [
+        "CARDS_FUTURE"
+      ],
+      "name": "disciplinary_streaks",
+      "phase": "2.10",
+      "prerequisites": "Permitted source, complete event ledger and correction history; stable event/dismissal/player/team IDs; second-yellow linked without duplicate reds; competition rules when deriving sanctions.",
+      "reason": "No complete dated card/foul event ledger, stable player/event IDs or accredited publications. A red-card absence mention is not chronology, sanction duration or served-match evidence.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Recorded regulation fouls with provider definition; no inference about emotional aggression.",
+      "family": "discipline",
+      "markets": [
+        "CARDS_FUTURE"
+      ],
+      "name": "discipline_fouls",
+      "phase": "2.10",
+      "prerequisites": "Permitted source, complete event ledger and correction history; stable event/dismissal/player/team IDs; second-yellow linked without duplicate reds; competition rules when deriving sanctions.",
+      "reason": "No complete dated card/foul event ledger, stable player/event IDs or accredited publications. A red-card absence mention is not chronology, sanction duration or served-match evidence.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider-defined regulation duels per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "duels",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider-defined regulation duels_won per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "duels_won",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Ordered period, elapsed minute, added time, sequence and event IDs; corrections and rescinded events retained.",
+      "family": "discipline",
+      "markets": [
+        "CARDS_FUTURE"
+      ],
+      "name": "event_chronology",
+      "phase": "2.10",
+      "prerequisites": "Permitted source, complete event ledger and correction history; stable event/dismissal/player/team IDs; second-yellow linked without duplicate reds; competition rules when deriving sanctions.",
+      "reason": "No complete dated card/foul event ledger, stable player/event IDs or accredited publications. A red-card absence mention is not chronology, sanction duration or served-match evidence.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Official scheduled competition stage equals final.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "final",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Official pre-cutoff fixture stage; never infer from outcome or title winner.",
+      "reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Vector of accredited final/knockout/title/relegation/qualification flags; no subjective scalar.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "fixture_importance",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Each constituent proxy individually accredited; missing constituents stay unknown, not false.",
+      "reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Official or predicted formation with explicit snapshot kind, never infer official from prediction.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "formation",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider-defined regulation fouls per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "fouls",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider-defined regulation goals_prevented per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "goalkeeper",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "goals_prevented",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "family": "temporal_context",
+      "markets": [
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_days_rest",
+      "phase": "2.4",
+      "reason": "Truncated history does not certify latest-match completeness. Require complete dated fixture ledger through cutoff, including intervening fixtures.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "family": "xg",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_goals_per_xg_l10",
+      "phase": "2.3",
+      "reason": "Raw per-match xG exists partially, but no accredited as-of revision/availability lineage for xG values or validated bilateral adapter. To enable: reconcile IDs/dates/teams with history, validate finite nonnegative paired xG/xGA and orientation, document provider publication/revision availability before cutoff, and audit every contributing sample. Aggregate l5/l10 alone is insufficient.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "family": "xg",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_goals_per_xg_l5",
+      "phase": "2.3",
+      "reason": "Raw per-match xG exists partially, but no accredited as-of revision/availability lineage for xG values or validated bilateral adapter. To enable: reconcile IDs/dates/teams with history, validate finite nonnegative paired xG/xGA and orientation, document provider publication/revision availability before cutoff, and audit every contributing sample. Aggregate l5/l10 alone is insufficient.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "family": "temporal_context",
+      "markets": [
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_matches_last_14_days",
+      "phase": "2.4",
+      "reason": "History cap and unparsed/missing fixtures cannot certify 14-day completeness. Require complete fixture ledger for interval, including zero-match evidence.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "mean(points_earned - (3 - opponent_prior_ppg)) over last 10; requires validated opponent_prior_ppg for every fixture",
+      "family": "strength",
+      "markets": [
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_opponent_adjusted_form",
+      "phase": "2.5",
+      "reason": "No accredited opponent identity registry and independently dated opponent fixture lineage before each evaluated historical fixture; capped target histories are not a reliable opponent schedule. Current standings lack historical publication snapshots and constituent results. Own rolling points would duplicate form without measuring rival quality.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "mean(opponent_prior_GA/n) over last 10 eligible fixtures; n=10 for each opponent",
+      "family": "strength",
+      "markets": [
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_opponent_conceding_strength",
+      "phase": "2.5",
+      "reason": "No accredited opponent identity registry and independently dated opponent fixture lineage before each evaluated historical fixture; capped target histories are not a reliable opponent schedule. Current standings lack historical publication snapshots and constituent results. Own rolling points would duplicate form without measuring rival quality.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "mean((3*wins + draws)/n) for each opponent, using its own N prior fixtures before the evaluated fixture; N=10",
+      "family": "strength",
+      "markets": [
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_opponent_results_strength",
+      "phase": "2.5",
+      "reason": "No accredited opponent identity registry and independently dated opponent fixture lineage before each evaluated historical fixture; capped target histories are not a reliable opponent schedule. Current standings lack historical publication snapshots and constituent results. Own rolling points would duplicate form without measuring rival quality.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "mean(opponent_prior_GF/n) over last 10 eligible fixtures; n=10 for each opponent",
+      "family": "strength",
+      "markets": [
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_opponent_scoring_strength",
+      "phase": "2.5",
+      "reason": "No accredited opponent identity registry and independently dated opponent fixture lineage before each evaluated historical fixture; capped target histories are not a reliable opponent schedule. Current standings lack historical publication snapshots and constituent results. Own rolling points would duplicate form without measuring rival quality.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "mean(opponent_prior_ppg) over last 10 eligible fixtures",
+      "family": "strength",
+      "markets": [
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_schedule_strength",
+      "phase": "2.5",
+      "reason": "No accredited opponent identity registry and independently dated opponent fixture lineage before each evaluated historical fixture; capped target histories are not a reliable opponent schedule. Current standings lack historical publication snapshots and constituent results. Own rolling points would duplicate form without measuring rival quality.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "pre-target competition points / played; played > 0",
+      "family": "strength",
+      "markets": [
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_standing_points_per_game",
+      "phase": "2.5",
+      "reason": "No accredited opponent identity registry and independently dated opponent fixture lineage before each evaluated historical fixture; capped target histories are not a reliable opponent schedule. Current standings lack historical publication snapshots and constituent results. Own rolling points would duplicate form without measuring rival quality.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "rank in accredited pre-target competition/season table",
+      "family": "strength",
+      "markets": [
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_standing_position",
+      "phase": "2.5",
+      "reason": "No accredited opponent identity registry and independently dated opponent fixture lineage before each evaluated historical fixture; capped target histories are not a reliable opponent schedule. Current standings lack historical publication snapshots and constituent results. Own rolling points would duplicate form without measuring rival quality.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": true,
+      "family": "xg",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_xg_mean_l10",
+      "phase": "2.3",
+      "reason": "Raw per-match xG exists partially, but no accredited as-of revision/availability lineage for xG values or validated bilateral adapter. To enable: reconcile IDs/dates/teams with history, validate finite nonnegative paired xG/xGA and orientation, document provider publication/revision availability before cutoff, and audit every contributing sample. Aggregate l5/l10 alone is insufficient.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": true,
+      "family": "xg",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_xg_mean_l5",
+      "phase": "2.3",
+      "reason": "Raw per-match xG exists partially, but no accredited as-of revision/availability lineage for xG values or validated bilateral adapter. To enable: reconcile IDs/dates/teams with history, validate finite nonnegative paired xG/xGA and orientation, document provider publication/revision availability before cutoff, and audit every contributing sample. Aggregate l5/l10 alone is insufficient.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": true,
+      "family": "xg",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_xg_sample_count_l10",
+      "phase": "2.3",
+      "reason": "Raw per-match xG exists partially, but no accredited as-of revision/availability lineage for xG values or validated bilateral adapter. To enable: reconcile IDs/dates/teams with history, validate finite nonnegative paired xG/xGA and orientation, document provider publication/revision availability before cutoff, and audit every contributing sample. Aggregate l5/l10 alone is insufficient.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": true,
+      "family": "xg",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_xg_sample_count_l5",
+      "phase": "2.3",
+      "reason": "Raw per-match xG exists partially, but no accredited as-of revision/availability lineage for xG values or validated bilateral adapter. To enable: reconcile IDs/dates/teams with history, validate finite nonnegative paired xG/xGA and orientation, document provider publication/revision availability before cutoff, and audit every contributing sample. Aggregate l5/l10 alone is insufficient.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": true,
+      "family": "xg",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_xga_mean_l10",
+      "phase": "2.3",
+      "reason": "Raw per-match xG exists partially, but no accredited as-of revision/availability lineage for xG values or validated bilateral adapter. To enable: reconcile IDs/dates/teams with history, validate finite nonnegative paired xG/xGA and orientation, document provider publication/revision availability before cutoff, and audit every contributing sample. Aggregate l5/l10 alone is insufficient.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": true,
+      "family": "xg",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_xga_mean_l5",
+      "phase": "2.3",
+      "reason": "Raw per-match xG exists partially, but no accredited as-of revision/availability lineage for xG values or validated bilateral adapter. To enable: reconcile IDs/dates/teams with history, validate finite nonnegative paired xG/xGA and orientation, document provider publication/revision availability before cutoff, and audit every contributing sample. Aggregate l5/l10 alone is insufficient.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Explicit confirmed illness report, distinct from injury and unknown absence.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "illness",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Explicit confirmed injury report with player ID and effective date.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "injury",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Confirmed unavailable member of top-3 players by prior-10-fixture minute share.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "key_player_absence",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Predeclared key-player rule, complete minutes and timestamped confirmed availability.",
+      "reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Status of players selected by top-3 share of prior 10 fixture minutes; complete historical minutes and as-of status required.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "key_player_availability",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Confirmed return of predeclared key player after recorded absence sequence.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "key_player_return",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Stable IDs, dated availability sequence and complete minutes for key-player rule.",
+      "reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Scheduled match belongs to knockout stage under competition rules.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "knockout",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Official dated stage/fixture identity and season rules before cutoff.",
+      "reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Intersection of current official XI and previous eligible official XI divided by 11.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "lineup_continuity",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Symmetric difference size between official XI and latest strictly earlier predicted XI.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "lineup_surprise",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Separately versioned predicted and official snapshots, both published before decision cutoff.",
+      "reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "True iff independently confirmed appointment effective time lies in [cutoff-14 days, cutoff); false only with complete appointment coverage.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "manager_changed_14d",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Official dated appointment, stable manager/team IDs, publication before cutoff and full interval coverage.",
+      "reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Count complete eligible team fixtures since confirmed appointment; indicator count < N with N declared before modeling.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "manager_first_n_matches",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Appointment evidence plus complete all-competition fixture ledger through cutoff.",
+      "reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Historical regulation playing minutes with provider substitution/stoppage convention.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "minutes",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Structured attributed competition_stakes event; no psychological sentiment or private-state inference.",
+      "family": "news_context_p3",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "news_competition_stakes",
+      "phase": "2.12",
+      "prerequisites": "Permitted ingestion source and independent publication/revision evidence; bounded source excerpt, stable entity ID, versioned extraction and confidence; schema validity alone is not permission or timestamp accreditation.",
+      "reason": "No permitted news provider or independently timestamped local corpus. Existing preview snapshot lacks publication/revision accreditation; no retrospective backfill or mass acquisition.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Structured attributed injury_confirmed event; no psychological sentiment or private-state inference.",
+      "family": "news_context_p3",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "news_injury_confirmed",
+      "phase": "2.12",
+      "prerequisites": "Permitted ingestion source and independent publication/revision evidence; bounded source excerpt, stable entity ID, versioned extraction and confidence; schema validity alone is not permission or timestamp accreditation.",
+      "reason": "No permitted news provider or independently timestamped local corpus. Existing preview snapshot lacks publication/revision accreditation; no retrospective backfill or mass acquisition.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Structured attributed lineup_statement event; no psychological sentiment or private-state inference.",
+      "family": "news_context_p3",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "news_lineup_statement",
+      "phase": "2.12",
+      "prerequisites": "Permitted ingestion source and independent publication/revision evidence; bounded source excerpt, stable entity ID, versioned extraction and confidence; schema validity alone is not permission or timestamp accreditation.",
+      "reason": "No permitted news provider or independently timestamped local corpus. Existing preview snapshot lacks publication/revision accreditation; no retrospective backfill or mass acquisition.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Structured attributed manager_change event; no psychological sentiment or private-state inference.",
+      "family": "news_context_p3",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "news_manager_change",
+      "phase": "2.12",
+      "prerequisites": "Permitted ingestion source and independent publication/revision evidence; bounded source excerpt, stable entity ID, versioned extraction and confidence; schema validity alone is not permission or timestamp accreditation.",
+      "reason": "No permitted news provider or independently timestamped local corpus. Existing preview snapshot lacks publication/revision accreditation; no retrospective backfill or mass acquisition.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Structured attributed rotation_statement event; no psychological sentiment or private-state inference.",
+      "family": "news_context_p3",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "news_rotation_statement",
+      "phase": "2.12",
+      "prerequisites": "Permitted ingestion source and independent publication/revision evidence; bounded source excerpt, stable entity ID, versioned extraction and confidence; schema validity alone is not permission or timestamp accreditation.",
+      "reason": "No permitted news provider or independently timestamped local corpus. Existing preview snapshot lacks publication/revision accreditation; no retrospective backfill or mass acquisition.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Structured attributed suspension_confirmed event; no psychological sentiment or private-state inference.",
+      "family": "news_context_p3",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "news_suspension_confirmed",
+      "phase": "2.12",
+      "prerequisites": "Permitted ingestion source and independent publication/revision evidence; bounded source excerpt, stable entity ID, versioned extraction and confidence; schema validity alone is not permission or timestamp accreditation.",
+      "reason": "No permitted news provider or independently timestamped local corpus. Existing preview snapshot lacks publication/revision accreditation; no retrospective backfill or mass acquisition.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Structured attributed transfer_status event; no psychological sentiment or private-state inference.",
+      "family": "news_context_p3",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "news_transfer_status",
+      "phase": "2.12",
+      "prerequisites": "Permitted ingestion source and independent publication/revision evidence; bounded source excerpt, stable entity ID, versioned extraction and confidence; schema validity alone is not permission or timestamp accreditation.",
+      "reason": "No permitted news provider or independently timestamped local corpus. Existing preview snapshot lacks publication/revision accreditation; no retrospective backfill or mass acquisition.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Explicit published squad omission; no inferred cause.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "not_in_squad",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Official announced eleven player IDs and separately versioned publication snapshot.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "official_starting_xi",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider-defined regulation offsides per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "offsides",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider-defined regulation pass_accuracy per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "pass_accuracy",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider-defined regulation passes per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "passes",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider-defined regulation passes_completed per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "passes_completed",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Prior match official assists with provider definition and correction lineage.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "player_assists",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Disjoint dated card events attributed to stable player ID, with team stint and rescissions.",
+      "family": "discipline",
+      "markets": [
+        "CARDS_FUTURE"
+      ],
+      "name": "player_cards",
+      "phase": "2.10",
+      "prerequisites": "Permitted source, complete event ledger and correction history; stable event/dismissal/player/team IDs; second-yellow linked without duplicate reds; competition rules when deriving sanctions.",
+      "reason": "No complete dated card/foul event ledger, stable player/event IDs or accredited publications. A red-card absence mention is not chronology, sanction duration or served-match evidence.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Prior match regulation goals attributed to stable player ID with own-goal rules.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "player_goals",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider match rating, definition/version and historical publication; competition average is distinct.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "player_rating",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Prior match regulation shots attributed to stable player ID.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "player_shots",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider-defined regulation possession per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "possession",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider predicted eleven IDs; never substitute official XI or merge their histories.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "predicted_xi",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Qualification outcome remains mathematically affected by target result.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "qualification_stakes",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Historical pre-cutoff table, remaining fixtures, qualification places and tiebreaks.",
+      "reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Sum accredited minutes in [cutoff-14 days, cutoff); requires complete all-competition ledger.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "recent_minutes_load",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Dismissals = direct-red dismissals plus second-yellow dismissals, each dismissal ID once; market settlement may use different weights.",
+      "family": "discipline",
+      "markets": [
+        "CARDS_FUTURE"
+      ],
+      "name": "red_cards",
+      "phase": "2.10",
+      "prerequisites": "Permitted source, complete event ledger and correction history; stable event/dismissal/player/team IDs; second-yellow linked without duplicate reds; competition rules when deriving sanctions.",
+      "reason": "No complete dated card/foul event ledger, stable player/event IDs or accredited publications. A red-card absence mention is not chronology, sanction duration or served-match evidence.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Relegation outcome remains mathematically affected by target result.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "relegation_stakes",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Historical pre-cutoff table, remaining fixtures, deductions and competition rules.",
+      "reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Confirmed return following recorded injury, not silence or retrospective appearance.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "return_from_injury",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "11 minus official XI intersection size; full official XIs required.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "rotation",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "11 minus intersection size of current and previous official starting XI.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "rotation_intensity",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Two complete official XIs with publication before respective cutoffs; never predicted as official.",
+      "reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider-defined regulation save_percentage per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "goalkeeper",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "save_percentage",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider-defined regulation saves per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "goalkeeper",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "saves",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "One dismissal linked to its triggering second caution; provider synthetic red row is not another dismissal.",
+      "family": "discipline",
+      "markets": [
+        "CARDS_FUTURE"
+      ],
+      "name": "second_yellow_red",
+      "phase": "2.10",
+      "prerequisites": "Permitted source, complete event ledger and correction history; stable event/dismissal/player/team IDs; second-yellow linked without duplicate reds; competition rules when deriving sanctions.",
+      "reason": "No complete dated card/foul event ledger, stable player/event IDs or accredited publications. A red-card absence mention is not chronology, sanction duration or served-match evidence.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider-defined regulation shots per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "shots",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider-defined regulation shots_faced per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "goalkeeper",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "shots_faced",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider-defined regulation shots_off_target per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "shots_off_target",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider-defined regulation shots_on_target per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "shots_on_target",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider persistent player ID reconciled across team transfers; shirt number/name is insufficient.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "stable_player_ids",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Count official starts over last 10 complete eligible appearances/fixtures; denominator explicit.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "starts",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Count appearances from bench over last 10 eligible team fixtures; unused bench excluded.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "sub_appearances",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Effective competition-specific sanction with served-match ledger and appeal updates.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "suspension",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider-defined regulation tackles per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "tackles",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Disjoint dated card events attributed to team ID; staff/bench scope explicit.",
+      "family": "discipline",
+      "markets": [
+        "CARDS_FUTURE"
+      ],
+      "name": "team_cards",
+      "phase": "2.10",
+      "prerequisites": "Permitted source, complete event ledger and correction history; stable event/dismissal/player/team IDs; second-yellow linked without duplicate reds; competition rules when deriving sanctions.",
+      "reason": "No complete dated card/foul event ledger, stable player/event IDs or accredited publications. A red-card absence mention is not chronology, sanction duration or served-match evidence.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Title outcome remains mathematically affected by target result under season rules.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "title_race",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Historical pre-cutoff table, remaining fixtures and tiebreaks; current standings forbidden.",
+      "reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider-defined regulation touches_in_opposition_box per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "touches_in_opposition_box",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Official leg index, aggregate score from completed prior leg and current season tie rules.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "two_leg_tie_context",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Tie/leg IDs, regulation scope, accredited earlier leg result and rules (including away-goals rule where applicable).",
+      "reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider-defined regulation xa per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "xa",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider-defined regulation xgot per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "xgot",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Provider-defined regulation xgot_faced per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "goalkeeper",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "xgot_faced",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "status": "blocked"
+    },
+    {
+      "code_implemented": false,
+      "definition": "Observable yellow events excluding provider duplicate representations; retain whether a caution is second-yellow.",
+      "family": "discipline",
+      "markets": [
+        "CARDS_FUTURE"
+      ],
+      "name": "yellow_cards",
+      "phase": "2.10",
+      "prerequisites": "Permitted source, complete event ledger and correction history; stable event/dismissal/player/team IDs; second-yellow linked without duplicate reds; competition rules when deriving sanctions.",
+      "reason": "No complete dated card/foul event ledger, stable player/event IDs or accredited publications. A red-card absence mention is not chronology, sanction duration or served-match evidence.",
+      "status": "blocked"
+    }
+  ],
+  "branch": "feature/phase2-batch-2.4-2.12",
+  "contract_hashes": {
+    "docs/v3/phase-2/contracts/2.10.json": "d3bcfc18f94eb1178cc48662bdc6120d176cacb5ff084a14b5367677f4205f0d",
+    "docs/v3/phase-2/contracts/2.11.json": "6ea530c5525ec87d4f4e263a3fd7401a33bc1549305514c86892cf57a99662c6",
+    "docs/v3/phase-2/contracts/2.12.json": "6e9fc53a27162560713bebbfa82e0c1994a08ca614cc27491d9d816ed65384cb",
+    "docs/v3/phase-2/contracts/2.5.json": "3442dedacf71449d1359ff398e9cf3f704df997f2970cb4a8fa23cca3da89822",
+    "docs/v3/phase-2/contracts/2.8.json": "d48216006f45f568c8c2864d80baf323fd304c1a8f879fb380e315e95ad99868",
+    "docs/v3/phase-2/contracts/2.9.json": "8a50abef4d1e5ec5e4b03ad3d72471c87d8b6ca2736de7ec5e4bdcb29f91bb8c",
+    "docs/v3/phase-2/source-matrix.json": "04d05a2578f03a59beeb745d2caa452c1a342e113c46c2b1efc11d22e0a4de15"
+  },
+  "counting_policy": "Unique inventory names: 118 original sided/window columns plus 87 extensions/candidate entries; exactly 14 canonical H2H columns, no aliases. Candidate entries in 2.8+ are not sided/window-expanded or independent statistical concepts. Contracts/source rows/validators are infrastructure, not implemented sporting features. Available code without accredited real sporting values remains blocked.",
+  "coverage": {
+    "blocked_families": "0/4344 accredited targets for strength, advanced/keeper, player/lineup, discipline, objective context and news; xG numeric means/bilateral 0/4344. Non-null zero sample counts are diagnostic, not accredited xG sporting values.",
+    "form": {
+      "complete_all": 3016,
+      "complete_family:recent_form": 3893,
+      "complete_family:sample_quality": 4108,
+      "complete_family:venue_form": 3016,
+      "complete_market:1X2_EXPERIMENTAL": 3016,
+      "complete_market:BTTS": 3016,
+      "complete_market:OVER_1_5": 3016,
+      "complete_market:OVER_2_5": 3016,
+      "complete_market:OVER_3_5": 3016,
+      "nonnull_values": 278896,
+      "windows:away_l10": 3961,
+      "windows:away_l5": 4041,
+      "windows:away_venue_l10": 3375,
+      "windows:away_venue_l5": 3968,
+      "windows:home_l10": 3977,
+      "windows:home_l5": 4050,
+      "windows:home_venue_l10": 3399,
+      "windows:home_venue_l5": 3981
+    },
+    "h2h": {
+      "features": {
+        "h2h_btts_rate_h10": {
+          "nonnull": 2948,
+          "null": 1396,
+          "reasons": {
+            "insufficient_sample": 1389,
+            "missing_or_invalid_history": 7
+          }
+        },
+        "h2h_btts_rate_h5": {
+          "nonnull": 2948,
+          "null": 1396,
+          "reasons": {
+            "insufficient_sample": 1389,
+            "missing_or_invalid_history": 7
+          }
+        },
+        "h2h_home_ga_mean_h10": {
+          "nonnull": 2948,
+          "null": 1396,
+          "reasons": {
+            "insufficient_sample": 1389,
+            "missing_or_invalid_history": 7
+          }
+        },
+        "h2h_home_ga_mean_h5": {
+          "nonnull": 2948,
+          "null": 1396,
+          "reasons": {
+            "insufficient_sample": 1389,
+            "missing_or_invalid_history": 7
+          }
+        },
+        "h2h_home_gf_mean_h10": {
+          "nonnull": 2948,
+          "null": 1396,
+          "reasons": {
+            "insufficient_sample": 1389,
+            "missing_or_invalid_history": 7
+          }
+        },
+        "h2h_home_gf_mean_h5": {
+          "nonnull": 2948,
+          "null": 1396,
+          "reasons": {
+            "insufficient_sample": 1389,
+            "missing_or_invalid_history": 7
+          }
+        },
+        "h2h_over_1_5_rate_h10": {
+          "nonnull": 2948,
+          "null": 1396,
+          "reasons": {
+            "insufficient_sample": 1389,
+            "missing_or_invalid_history": 7
+          }
+        },
+        "h2h_over_1_5_rate_h5": {
+          "nonnull": 2948,
+          "null": 1396,
+          "reasons": {
+            "insufficient_sample": 1389,
+            "missing_or_invalid_history": 7
+          }
+        },
+        "h2h_over_2_5_rate_h10": {
+          "nonnull": 2948,
+          "null": 1396,
+          "reasons": {
+            "insufficient_sample": 1389,
+            "missing_or_invalid_history": 7
+          }
+        },
+        "h2h_over_2_5_rate_h5": {
+          "nonnull": 2948,
+          "null": 1396,
+          "reasons": {
+            "insufficient_sample": 1389,
+            "missing_or_invalid_history": 7
+          }
+        },
+        "h2h_over_3_5_rate_h10": {
+          "nonnull": 2948,
+          "null": 1396,
+          "reasons": {
+            "insufficient_sample": 1389,
+            "missing_or_invalid_history": 7
+          }
+        },
+        "h2h_over_3_5_rate_h5": {
+          "nonnull": 2948,
+          "null": 1396,
+          "reasons": {
+            "insufficient_sample": 1389,
+            "missing_or_invalid_history": 7
+          }
+        },
+        "h2h_sample_count_h10": {
+          "nonnull": 4337,
+          "null": 7,
+          "reasons": {
+            "missing_or_invalid_history": 7
+          }
+        },
+        "h2h_sample_count_h5": {
+          "nonnull": 4337,
+          "null": 7,
+          "reasons": {
+            "missing_or_invalid_history": 7
+          }
+        }
+      }
+    },
+    "h2h_counts": {
+      "nonnull": 4337,
+      "total": 4344
+    },
+    "h2h_rates_means": {
+      "full_h10": 1995,
+      "full_h5": 2553,
+      "minimum_sample": 3,
+      "nonnull": 2948,
+      "percent": 67.8637,
+      "total": 4344,
+      "window_caps": [
+        5,
+        10
+      ]
+    },
+    "targets": 4344,
+    "temporal": {
+      "exclusions": {
+        "future_input": 5463,
+        "invalid_score": 67,
+        "same_day_input_without_verified_time": 2202,
+        "target_in_input": 2200,
+        "team_conflict": 74,
+        "unknown_input_identity": 80,
+        "unverified_regulation_scope": 5065
+      },
+      "features": {
+        "away_btts_streak_capped_l10": {
+          "capped": 35,
+          "censored": 86,
+          "lengths": {
+            "0": 1849,
+            "1": 977,
+            "10": 35,
+            "2": 529,
+            "3": 314,
+            "4": 180,
+            "5": 102,
+            "6": 56,
+            "7": 28,
+            "8": 20,
+            "9": 12
+          },
+          "nonnull": 4102,
+          "null": 242,
+          "partial_samples": 149,
+          "reasons": {
+            "missing_or_ambiguous_team_section": 227,
+            "missing_or_invalid_history": 7,
+            "no_eligible_samples": 8
+          }
+        },
+        "away_clean_sheet_streak_capped_l10": {
+          "capped": 0,
+          "censored": 13,
+          "lengths": {
+            "0": 2973,
+            "1": 803,
+            "10": 0,
+            "2": 223,
+            "3": 66,
+            "4": 22,
+            "5": 9,
+            "6": 4,
+            "7": 1,
+            "8": 0,
+            "9": 1
+          },
+          "nonnull": 4102,
+          "null": 242,
+          "partial_samples": 149,
+          "reasons": {
+            "missing_or_ambiguous_team_section": 227,
+            "missing_or_invalid_history": 7,
+            "no_eligible_samples": 8
+          }
+        },
+        "away_scoring_streak_capped_l10": {
+          "capped": 378,
+          "censored": 445,
+          "lengths": {
+            "0": 960,
+            "1": 760,
+            "10": 378,
+            "2": 525,
+            "3": 408,
+            "4": 336,
+            "5": 248,
+            "6": 178,
+            "7": 128,
+            "8": 88,
+            "9": 93
+          },
+          "nonnull": 4102,
+          "null": 242,
+          "partial_samples": 149,
+          "reasons": {
+            "missing_or_ambiguous_team_section": 227,
+            "missing_or_invalid_history": 7,
+            "no_eligible_samples": 8
+          }
+        },
+        "home_btts_streak_capped_l10": {
+          "capped": 30,
+          "censored": 79,
+          "lengths": {
+            "0": 1887,
+            "1": 995,
+            "10": 30,
+            "2": 521,
+            "3": 312,
+            "4": 154,
+            "5": 87,
+            "6": 44,
+            "7": 40,
+            "8": 24,
+            "9": 10
+          },
+          "nonnull": 4104,
+          "null": 240,
+          "partial_samples": 133,
+          "reasons": {
+            "missing_or_ambiguous_team_section": 227,
+            "missing_or_invalid_history": 7,
+            "no_eligible_samples": 6
+          }
+        },
+        "home_clean_sheet_streak_capped_l10": {
+          "capped": 0,
+          "censored": 10,
+          "lengths": {
+            "0": 3050,
+            "1": 755,
+            "10": 0,
+            "2": 193,
+            "3": 70,
+            "4": 27,
+            "5": 9,
+            "6": 0,
+            "7": 0,
+            "8": 0,
+            "9": 0
+          },
+          "nonnull": 4104,
+          "null": 240,
+          "partial_samples": 133,
+          "reasons": {
+            "missing_or_ambiguous_team_section": 227,
+            "missing_or_invalid_history": 7,
+            "no_eligible_samples": 6
+          }
+        },
+        "home_scoring_streak_capped_l10": {
+          "capped": 375,
+          "censored": 436,
+          "lengths": {
+            "0": 1080,
+            "1": 714,
+            "10": 375,
+            "2": 510,
+            "3": 425,
+            "4": 302,
+            "5": 214,
+            "6": 158,
+            "7": 141,
+            "8": 111,
+            "9": 74
+          },
+          "nonnull": 4104,
+          "null": 240,
+          "partial_samples": 133,
+          "reasons": {
+            "missing_or_ambiguous_team_section": 227,
+            "missing_or_invalid_history": 7,
+            "no_eligible_samples": 6
+          }
+        }
+      }
+    },
+    "xg": {
+      "bilateral_l10": 0,
+      "bilateral_l5": 0,
+      "complete:away_l10": 0,
+      "complete:away_l5": 0,
+      "complete:home_l10": 0,
+      "complete:home_l5": 0,
+      "exclusion:cache_identity_or_value_conflict": 3,
+      "exclusion:invalid_or_incomplete_bilateral_xg": 50429,
+      "exclusion:oriented_value_conflict": 419,
+      "exclusion:team_orientation_conflict": 2641,
+      "exclusion:unreconciled_history_identity": 40,
+      "exclusion:unverified_pre_target_xg_lineage": 83190,
+      "other_raw_blocked:history_raw.json": 1,
+      "other_raw_blocked:match_detail.html": 1,
+      "other_raw_blocked:match_detail.txt": 1,
+      "targets_inspected": 4344,
+      "targets_with_valid_xg": 0,
+      "xg_cache_artifacts": 28933,
+      "xg_cache_blocked_lineage": 28933,
+      "xg_cache_reconciled_identity": 28929,
+      "xg_history_artifacts": 4230,
+      "xg_history_blocked_lineage": 4230,
+      "xg_history_reconciled_identity": 4228
+    }
+  },
+  "data_fingerprint": {
+    "comparison": "every path, content SHA-256 and mtime_ns; only __pycache__/*.pyc/*.pyo ignored",
+    "final": {
+      "content_sha256": "9e4361457ac1cefce4a6b5e8dea130ac69e99e19226ad5dc7aca5037a9a84a7d",
+      "files": 67219,
+      "mtime_sha256": "26a847bc44bb8e1d4c24feba2ac3ee4cb1413dd76f8465cde2895bc53a75ac63"
+    },
+    "initial": {
+      "content_sha256": "9e4361457ac1cefce4a6b5e8dea130ac69e99e19226ad5dc7aca5037a9a84a7d",
+      "files": 67219,
+      "mtime_sha256": "26a847bc44bb8e1d4c24feba2ac3ee4cb1413dd76f8465cde2895bc53a75ac63"
+    },
+    "unchanged": true
+  },
+  "extension_version": "phase2-batch-2.12.0",
+  "feature_catalog_version": "2.1.0",
+  "feature_counts": {
+    "blocked": 113,
+    "implemented": 92,
+    "partial": 0
+  },
+  "files_added_or_modified": [
+    "docs/v3/phase-2-final.md",
+    "docs/v3/phase-2-validation-report.json",
+    "docs/v3/phase-2/checkpoints/2.10.md",
+    "docs/v3/phase-2/checkpoints/2.11.md",
+    "docs/v3/phase-2/checkpoints/2.12.md",
+    "docs/v3/phase-2/checkpoints/2.5.md",
+    "docs/v3/phase-2/checkpoints/2.6.md",
+    "docs/v3/phase-2/checkpoints/2.7.md",
+    "docs/v3/phase-2/checkpoints/2.8.md",
+    "docs/v3/phase-2/checkpoints/2.9.md",
+    "docs/v3/phase-2/contracts/2.10.json",
+    "docs/v3/phase-2/contracts/2.11.json",
+    "docs/v3/phase-2/contracts/2.12.json",
+    "docs/v3/phase-2/contracts/2.5.json",
+    "docs/v3/phase-2/contracts/2.8.json",
+    "docs/v3/phase-2/contracts/2.9.json",
+    "docs/v3/phase-2/intelligence-contracts.json",
+    "docs/v3/phase-2/local-source-inspection.json",
+    "docs/v3/phase-2/source-matrix.json",
+    "docs/v3/phase-2/source-matrix.md",
+    "tests/v3/test_h2h.py",
+    "tests/v3/test_intelligence_contracts.py",
+    "tests/v3/test_news_contract.py",
+    "tests/v3/test_phase2_validation.py",
+    "tests/v3/test_source_matrix.py",
+    "tests/v3/test_strength.py",
+    "v3/features/h2h.py",
+    "v3/features/intelligence_contracts.py",
+    "v3/features/news_contract.py",
+    "v3/features/phase2_validation.py",
+    "v3/features/source_matrix.py",
+    "v3/features/strength.py"
+  ],
+  "git_add_commit_push_executed": false,
+  "h2h_correction": {
+    "build_directories": [
+      "/tmp/phase2-h2h-correction-a",
+      "/tmp/phase2-h2h-correction-b"
+    ],
+    "byte_identical": true,
+    "features_per_row": 14,
+    "full_reproduction": {
+      "output_dir": "/tmp/phase2-final-correction",
+      "regression_hashes": {
+        "form_features.jsonl": "779040a01b40f0099d260438199dcbefdc0d052bb8cca0fda39ec8f2ab1033b4",
+        "form_manifest.json": "3964f2062b71f6554c6370b336e5bba7b738ed387d343ac018b16364a0e70829",
+        "h2h_features.jsonl": "c0c1c1d12e9dc66d7ec6460761e1b9c0d70eed5f3b4c715e2086c523190a98f5",
+        "h2h_manifest.json": "b59cc1799021e54195313c9b0ec7b660b4cf6aa8d342f4dc9e727bfeebd878e0",
+        "temporal_features.jsonl": "22f3f0a0e83b23b704932436cc9dbfe5e49a54c95e8f6576cc765052527042aa",
+        "temporal_manifest.json": "20fe3df7920ffd1f82d11cb7490bbba06154e0d9a2befb2780cb9990412e6b32",
+        "xg_features.jsonl": "7003af3f3a66f0ae6d0c6cee3992e82f8b803f2ccc1f6d9bf31759b74a74a614",
+        "xg_manifest.json": "7a7e4d41d8f6b1792dd606dd00b20a4face9ce8c44dba8518329e44b948879fe"
+      },
+      "source_unchanged": true
+    },
+    "inventory_total": 205,
+    "regression_hashes": {
+      "h2h_features.jsonl": "c0c1c1d12e9dc66d7ec6460761e1b9c0d70eed5f3b4c715e2086c523190a98f5",
+      "h2h_manifest.json": "b59cc1799021e54195313c9b0ec7b660b4cf6aa8d342f4dc9e727bfeebd878e0"
+    },
+    "targets_inspected": 4344,
+    "test_count": 798
+  },
+  "implemented_features": [
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "BTTS"
+      ],
+      "name": "away_btts_rate_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "BTTS"
+      ],
+      "name": "away_btts_rate_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "temporal_context",
+      "markets": [
+        "BTTS"
+      ],
+      "name": "away_btts_streak_capped_l10",
+      "phase": "2.4",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "BTTS",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_clean_sheet_rate_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "BTTS",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_clean_sheet_rate_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "temporal_context",
+      "markets": [
+        "BTTS",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_clean_sheet_streak_capped_l10",
+      "phase": "2.4",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "BTTS",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_failed_to_score_rate_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "BTTS",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_failed_to_score_rate_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_ga_mean_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_ga_mean_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_gf_mean_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_gf_mean_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "OVER_1_5"
+      ],
+      "name": "away_over_1_5_rate_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "OVER_1_5"
+      ],
+      "name": "away_over_1_5_rate_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "OVER_2_5"
+      ],
+      "name": "away_over_2_5_rate_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "OVER_2_5"
+      ],
+      "name": "away_over_2_5_rate_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "OVER_3_5"
+      ],
+      "name": "away_over_3_5_rate_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "OVER_3_5"
+      ],
+      "name": "away_over_3_5_rate_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "sample_quality",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_sample_count_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "sample_quality",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_sample_count_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "temporal_context",
+      "markets": [
+        "BTTS",
+        "OVER_1_5"
+      ],
+      "name": "away_scoring_streak_capped_l10",
+      "phase": "2.4",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "BTTS"
+      ],
+      "name": "away_venue_btts_rate_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "BTTS"
+      ],
+      "name": "away_venue_btts_rate_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "BTTS",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_venue_clean_sheet_rate_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "BTTS",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_venue_clean_sheet_rate_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "BTTS",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_venue_failed_to_score_rate_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "BTTS",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_venue_failed_to_score_rate_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_venue_ga_mean_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_venue_ga_mean_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_venue_gf_mean_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_venue_gf_mean_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "OVER_1_5"
+      ],
+      "name": "away_venue_over_1_5_rate_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "OVER_1_5"
+      ],
+      "name": "away_venue_over_1_5_rate_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "OVER_2_5"
+      ],
+      "name": "away_venue_over_2_5_rate_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "OVER_2_5"
+      ],
+      "name": "away_venue_over_2_5_rate_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "OVER_3_5"
+      ],
+      "name": "away_venue_over_3_5_rate_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "OVER_3_5"
+      ],
+      "name": "away_venue_over_3_5_rate_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "sample_quality",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_venue_sample_count_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "sample_quality",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "away_venue_sample_count_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "h2h_auxiliary",
+      "markets": [
+        "BTTS"
+      ],
+      "name": "h2h_btts_rate_h10",
+      "phase": "2.6",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "h2h_auxiliary",
+      "markets": [
+        "BTTS"
+      ],
+      "name": "h2h_btts_rate_h5",
+      "phase": "2.6",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "h2h_auxiliary",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "h2h_home_ga_mean_h10",
+      "phase": "2.6",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "h2h_auxiliary",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "h2h_home_ga_mean_h5",
+      "phase": "2.6",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "h2h_auxiliary",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "h2h_home_gf_mean_h10",
+      "phase": "2.6",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "h2h_auxiliary",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "h2h_home_gf_mean_h5",
+      "phase": "2.6",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "h2h_auxiliary",
+      "markets": [
+        "OVER_1_5"
+      ],
+      "name": "h2h_over_1_5_rate_h10",
+      "phase": "2.6",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "h2h_auxiliary",
+      "markets": [
+        "OVER_1_5"
+      ],
+      "name": "h2h_over_1_5_rate_h5",
+      "phase": "2.6",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "h2h_auxiliary",
+      "markets": [
+        "OVER_2_5"
+      ],
+      "name": "h2h_over_2_5_rate_h10",
+      "phase": "2.6",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "h2h_auxiliary",
+      "markets": [
+        "OVER_2_5"
+      ],
+      "name": "h2h_over_2_5_rate_h5",
+      "phase": "2.6",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "h2h_auxiliary",
+      "markets": [
+        "OVER_3_5"
+      ],
+      "name": "h2h_over_3_5_rate_h10",
+      "phase": "2.6",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "h2h_auxiliary",
+      "markets": [
+        "OVER_3_5"
+      ],
+      "name": "h2h_over_3_5_rate_h5",
+      "phase": "2.6",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "h2h_auxiliary",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "h2h_sample_count_h10",
+      "phase": "2.6",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "h2h_auxiliary",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "h2h_sample_count_h5",
+      "phase": "2.6",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "BTTS"
+      ],
+      "name": "home_btts_rate_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "BTTS"
+      ],
+      "name": "home_btts_rate_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "temporal_context",
+      "markets": [
+        "BTTS"
+      ],
+      "name": "home_btts_streak_capped_l10",
+      "phase": "2.4",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "BTTS",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_clean_sheet_rate_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "BTTS",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_clean_sheet_rate_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "temporal_context",
+      "markets": [
+        "BTTS",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_clean_sheet_streak_capped_l10",
+      "phase": "2.4",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "BTTS",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_failed_to_score_rate_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "BTTS",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_failed_to_score_rate_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_ga_mean_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_ga_mean_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_gf_mean_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_gf_mean_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "OVER_1_5"
+      ],
+      "name": "home_over_1_5_rate_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "OVER_1_5"
+      ],
+      "name": "home_over_1_5_rate_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "OVER_2_5"
+      ],
+      "name": "home_over_2_5_rate_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "OVER_2_5"
+      ],
+      "name": "home_over_2_5_rate_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "OVER_3_5"
+      ],
+      "name": "home_over_3_5_rate_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "recent_form",
+      "markets": [
+        "OVER_3_5"
+      ],
+      "name": "home_over_3_5_rate_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "sample_quality",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_sample_count_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "sample_quality",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_sample_count_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "temporal_context",
+      "markets": [
+        "BTTS",
+        "OVER_1_5"
+      ],
+      "name": "home_scoring_streak_capped_l10",
+      "phase": "2.4",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "BTTS"
+      ],
+      "name": "home_venue_btts_rate_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "BTTS"
+      ],
+      "name": "home_venue_btts_rate_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "BTTS",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_venue_clean_sheet_rate_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "BTTS",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_venue_clean_sheet_rate_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "BTTS",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_venue_failed_to_score_rate_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "BTTS",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_venue_failed_to_score_rate_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_venue_ga_mean_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_venue_ga_mean_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_venue_gf_mean_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_venue_gf_mean_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "OVER_1_5"
+      ],
+      "name": "home_venue_over_1_5_rate_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "OVER_1_5"
+      ],
+      "name": "home_venue_over_1_5_rate_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "OVER_2_5"
+      ],
+      "name": "home_venue_over_2_5_rate_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "OVER_2_5"
+      ],
+      "name": "home_venue_over_2_5_rate_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "OVER_3_5"
+      ],
+      "name": "home_venue_over_3_5_rate_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "venue_form",
+      "markets": [
+        "OVER_3_5"
+      ],
+      "name": "home_venue_over_3_5_rate_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "sample_quality",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_venue_sample_count_l10",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    },
+    {
+      "code_implemented": true,
+      "family": "sample_quality",
+      "markets": [
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "home_venue_sample_count_l5",
+      "phase": "2.2",
+      "reason": null,
+      "status": "implemented"
+    }
+  ],
+  "known_gaps": [
+    "Opponent results lineage/identity before each adjusted historical fixture is unaccredited; current standings have no as-of snapshots.",
+    "Capped observed form/streak/H2H histories do not certify all fixtures or true uncensored streaks; H2H under 3 samples stays null.",
+    "No accredited historical xG revision/publication evidence; xG code exists but numeric means remain blocked.",
+    "No permitted structured advanced/goalkeeper/player/official XI/minutes/card/context/news historical stream.",
+    "TXT/HTML isolated expected XI, ratings, injury/red-card absences, coaches and preview lack publication accreditation and stable player IDs.",
+    "No complete fixture/event/appointment ledgers, historical tables with rules/tiebreaks or licensed corpus.",
+    "Model performance, market value and calibration have not been evaluated; cards/corners are future contracts only."
+  ],
+  "leakage_controls": [
+    "Allowlisted raw history only for scores/H2H; labels/backtest_pool/result/Champion/confidence/lambda outputs excluded from feature computation.",
+    "Target, same-day, future and unknown identity/date historical matches excluded; all duplicate copies excluded.",
+    "Exact regulation score grammar and current-team orientation; no current standings as history.",
+    "No xG/stats/player/news publication inferred from file mtime or match date; independent availability evidence required.",
+    "Prematch target snapshots require independently verified publication/revision strictly before decision cutoff; predicted XI and official XI distinct.",
+    "Null plus reason; no zero-fill, imputation, retrospective backfill or relaxation of completeness/permission gates.",
+    "H2H auxiliary separated from recent_form; bounded observed windows do not imply complete fixture ledger.",
+    "No private psychological state or productive sentiment features."
+  ],
+  "operational_backup_fingerprint": {
+    "comparison": "every path, content SHA-256 and mtime_ns; only __pycache__/*.pyc/*.pyo ignored",
+    "final": {
+      "content_sha256": "7bba0fc47ab6963ca6aa1bc69320dcfcc50a488615d6f029feffa4590e0aaa04",
+      "files": 41,
+      "mtime_sha256": "afa59ccc6e3a8095677876290478af6175d852df939d21ff0b35680a2b15eae5"
+    },
+    "initial": {
+      "content_sha256": "7bba0fc47ab6963ca6aa1bc69320dcfcc50a488615d6f029feffa4590e0aaa04",
+      "files": 41,
+      "mtime_sha256": "afa59ccc6e3a8095677876290478af6175d852df939d21ff0b35680a2b15eae5"
+    },
+    "unchanged": true
+  },
+  "operational_core_unchanged": true,
+  "partial_features": [],
+  "permission_summary": {
+    "available_ingestion_providers": 0,
+    "external_source_reuse_rights": "unproven; no new automation permitted",
+    "local_inventory_only": true,
+    "new_network_capture": false,
+    "status_counts": {
+      "planned": 12,
+      "review": 12
+    }
+  },
+  "phase": "2",
+  "protected_core": {
+    "BT0_unchanged": true,
+    "J_BT_sin_temporada_unchanged": true,
+    "future_data_used": false,
+    "new_scraping_added": false,
+    "prohibited_feature_sources_used": false
+  },
+  "recommendations_for_phase_3": [
+    "Freeze allowed feature inventory and snapshot lineage; prevent blocked candidates and xG diagnostic zeros from entering training.",
+    "Evaluate baseline form/streaks first with time-based splits; add H2H only in auxiliary ablation with sample/partial flags.",
+    "Keep the canonical H2H inventory without aliases; do not promote missingness into inferred sporting zeros.",
+    "Secure a permission-backed provider with stable IDs and historical publication/revision snapshots before P1 ingestion.",
+    "Accredit full fixture/event/minutes/appointment coverage and competition rules before rest/load/cards/context.",
+    "Keep news P3 experimental and bounded; independently verify publication evidence and extraction quality before any model use."
+  ],
+  "regression_hashes": {
+    "form_features.jsonl": "779040a01b40f0099d260438199dcbefdc0d052bb8cca0fda39ec8f2ab1033b4",
+    "form_manifest.json": "3964f2062b71f6554c6370b336e5bba7b738ed387d343ac018b16364a0e70829",
+    "h2h_features.jsonl": "c0c1c1d12e9dc66d7ec6460761e1b9c0d70eed5f3b4c715e2086c523190a98f5",
+    "h2h_manifest.json": "b59cc1799021e54195313c9b0ec7b660b4cf6aa8d342f4dc9e727bfeebd878e0",
+    "temporal_features.jsonl": "22f3f0a0e83b23b704932436cc9dbfe5e49a54c95e8f6576cc765052527042aa",
+    "temporal_manifest.json": "20fe3df7920ffd1f82d11cb7490bbba06154e0d9a2befb2780cb9990412e6b32",
+    "xg_features.jsonl": "7003af3f3a66f0ae6d0c6cee3992e82f8b803f2ccc1f6d9bf31759b74a74a614",
+    "xg_manifest.json": "7a7e4d41d8f6b1792dd606dd00b20a4face9ce8c44dba8518329e44b948879fe"
+  },
+  "scraper_fingerprint": {
+    "comparison": "every path, content SHA-256 and mtime_ns; only __pycache__/*.pyc/*.pyo ignored",
+    "final": {
+      "content_sha256": "54091e356da63f47c84086491b79afabe9ff64a43ed568819db7a0c6deaee8eb",
+      "files": 33,
+      "mtime_sha256": "8b0c136978d1ffaaa415fade39615f86cd3e6cb6269e08662d6e0de7e447127d"
+    },
+    "initial": {
+      "content_sha256": "54091e356da63f47c84086491b79afabe9ff64a43ed568819db7a0c6deaee8eb",
+      "files": 33,
+      "mtime_sha256": "8b0c136978d1ffaaa415fade39615f86cd3e6cb6269e08662d6e0de7e447127d"
+    },
+    "unchanged": true
+  },
+  "source_matrix": [
+    {
+      "allowed_method": "read_only_local_audit",
+      "as_of_capability": false,
+      "authorization_status": "unproven_for_automation_and_feature_reuse",
+      "blocked_reason": "No express authorization or accredited publication/revision lineage; public visibility is insufficient",
+      "capture_policy": "existing_local_inventory_only",
+      "coverage": "isolated undated TXT/HTML; no accredited structured historical stream",
+      "provenance_requirement": "provider, grant evidence, stable entity/fixture IDs, publication/revision timestamps, artifact digest, field evidence",
+      "provider": "flashscore_existing_archive",
+      "publication_timestamp": "not_accredited",
+      "rate_limit/operational_limit": "zero network calls; no recapture authorized",
+      "retention_notes": "retain artifact references/digests; no corpus copying; reuse rights unresolved",
+      "signal_family": "advanced_team_stats",
+      "stable_ids": "not_accredited",
+      "status": "review",
+      "surface_available": "not_accredited_in_local_archive"
+    },
+    {
+      "allowed_method": "none_until_grant_verified",
+      "as_of_capability": false,
+      "authorization_status": "not_evidenced",
+      "blocked_reason": "Provider, license scope, operational limits, retention and as-of coverage must be selected and independently verified",
+      "capture_policy": "requires_documented_permission",
+      "coverage": "not_acquired",
+      "provenance_requirement": "grant reference/scope, source ID/URL, stable IDs, publication/revision timestamp, evidence digest",
+      "provider": "licensed_or_official_provider_not_selected",
+      "publication_timestamp": "required",
+      "rate_limit/operational_limit": "no requests until documented provider limits and grant scope",
+      "retention_notes": "contract-specific storage/reuse/deletion terms required",
+      "signal_family": "advanced_team_stats",
+      "stable_ids": "required",
+      "status": "planned",
+      "surface_available": "unknown"
+    },
+    {
+      "allowed_method": "read_only_local_audit",
+      "as_of_capability": false,
+      "authorization_status": "unproven_for_automation_and_feature_reuse",
+      "blocked_reason": "No express authorization or accredited publication/revision lineage; public visibility is insufficient",
+      "capture_policy": "existing_local_inventory_only",
+      "coverage": "isolated undated TXT/HTML; no accredited structured historical stream",
+      "provenance_requirement": "provider, grant evidence, stable entity/fixture IDs, publication/revision timestamps, artifact digest, field evidence",
+      "provider": "flashscore_existing_archive",
+      "publication_timestamp": "not_accredited",
+      "rate_limit/operational_limit": "zero network calls; no recapture authorized",
+      "retention_notes": "retain artifact references/digests; no corpus copying; reuse rights unresolved",
+      "signal_family": "goalkeeper",
+      "stable_ids": "not_accredited",
+      "status": "review",
+      "surface_available": "not_accredited_in_local_archive"
+    },
+    {
+      "allowed_method": "none_until_grant_verified",
+      "as_of_capability": false,
+      "authorization_status": "not_evidenced",
+      "blocked_reason": "Provider, license scope, operational limits, retention and as-of coverage must be selected and independently verified",
+      "capture_policy": "requires_documented_permission",
+      "coverage": "not_acquired",
+      "provenance_requirement": "grant reference/scope, source ID/URL, stable IDs, publication/revision timestamp, evidence digest",
+      "provider": "licensed_or_official_provider_not_selected",
+      "publication_timestamp": "required",
+      "rate_limit/operational_limit": "no requests until documented provider limits and grant scope",
+      "retention_notes": "contract-specific storage/reuse/deletion terms required",
+      "signal_family": "goalkeeper",
+      "stable_ids": "required",
+      "status": "planned",
+      "surface_available": "unknown"
+    },
+    {
+      "allowed_method": "read_only_local_audit",
+      "as_of_capability": false,
+      "authorization_status": "unproven_for_automation_and_feature_reuse",
+      "blocked_reason": "No express authorization or accredited publication/revision lineage; public visibility is insufficient",
+      "capture_policy": "existing_local_inventory_only",
+      "coverage": "isolated undated TXT/HTML; no accredited structured historical stream",
+      "provenance_requirement": "provider, grant evidence, stable entity/fixture IDs, publication/revision timestamps, artifact digest, field evidence",
+      "provider": "flashscore_existing_archive",
+      "publication_timestamp": "not_accredited",
+      "rate_limit/operational_limit": "zero network calls; no recapture authorized",
+      "retention_notes": "retain artifact references/digests; no corpus copying; reuse rights unresolved",
+      "signal_family": "players",
+      "stable_ids": "not_accredited",
+      "status": "review",
+      "surface_available": "observed_local_partial"
+    },
+    {
+      "allowed_method": "none_until_grant_verified",
+      "as_of_capability": false,
+      "authorization_status": "not_evidenced",
+      "blocked_reason": "Provider, license scope, operational limits, retention and as-of coverage must be selected and independently verified",
+      "capture_policy": "requires_documented_permission",
+      "coverage": "not_acquired",
+      "provenance_requirement": "grant reference/scope, source ID/URL, stable IDs, publication/revision timestamp, evidence digest",
+      "provider": "licensed_or_official_provider_not_selected",
+      "publication_timestamp": "required",
+      "rate_limit/operational_limit": "no requests until documented provider limits and grant scope",
+      "retention_notes": "contract-specific storage/reuse/deletion terms required",
+      "signal_family": "players",
+      "stable_ids": "required",
+      "status": "planned",
+      "surface_available": "unknown"
+    },
+    {
+      "allowed_method": "read_only_local_audit",
+      "as_of_capability": false,
+      "authorization_status": "unproven_for_automation_and_feature_reuse",
+      "blocked_reason": "No express authorization or accredited publication/revision lineage; public visibility is insufficient",
+      "capture_policy": "existing_local_inventory_only",
+      "coverage": "isolated undated TXT/HTML; no accredited structured historical stream",
+      "provenance_requirement": "provider, grant evidence, stable entity/fixture IDs, publication/revision timestamps, artifact digest, field evidence",
+      "provider": "flashscore_existing_archive",
+      "publication_timestamp": "not_accredited",
+      "rate_limit/operational_limit": "zero network calls; no recapture authorized",
+      "retention_notes": "retain artifact references/digests; no corpus copying; reuse rights unresolved",
+      "signal_family": "lineups",
+      "stable_ids": "not_accredited",
+      "status": "review",
+      "surface_available": "observed_local_partial"
+    },
+    {
+      "allowed_method": "none_until_grant_verified",
+      "as_of_capability": false,
+      "authorization_status": "not_evidenced",
+      "blocked_reason": "Provider, license scope, operational limits, retention and as-of coverage must be selected and independently verified",
+      "capture_policy": "requires_documented_permission",
+      "coverage": "not_acquired",
+      "provenance_requirement": "grant reference/scope, source ID/URL, stable IDs, publication/revision timestamp, evidence digest",
+      "provider": "licensed_or_official_provider_not_selected",
+      "publication_timestamp": "required",
+      "rate_limit/operational_limit": "no requests until documented provider limits and grant scope",
+      "retention_notes": "contract-specific storage/reuse/deletion terms required",
+      "signal_family": "lineups",
+      "stable_ids": "required",
+      "status": "planned",
+      "surface_available": "unknown"
+    },
+    {
+      "allowed_method": "read_only_local_audit",
+      "as_of_capability": false,
+      "authorization_status": "unproven_for_automation_and_feature_reuse",
+      "blocked_reason": "No express authorization or accredited publication/revision lineage; public visibility is insufficient",
+      "capture_policy": "existing_local_inventory_only",
+      "coverage": "isolated undated TXT/HTML; no accredited structured historical stream",
+      "provenance_requirement": "provider, grant evidence, stable entity/fixture IDs, publication/revision timestamps, artifact digest, field evidence",
+      "provider": "flashscore_existing_archive",
+      "publication_timestamp": "not_accredited",
+      "rate_limit/operational_limit": "zero network calls; no recapture authorized",
+      "retention_notes": "retain artifact references/digests; no corpus copying; reuse rights unresolved",
+      "signal_family": "injuries",
+      "stable_ids": "not_accredited",
+      "status": "review",
+      "surface_available": "observed_local_partial"
+    },
+    {
+      "allowed_method": "none_until_grant_verified",
+      "as_of_capability": false,
+      "authorization_status": "not_evidenced",
+      "blocked_reason": "Provider, license scope, operational limits, retention and as-of coverage must be selected and independently verified",
+      "capture_policy": "requires_documented_permission",
+      "coverage": "not_acquired",
+      "provenance_requirement": "grant reference/scope, source ID/URL, stable IDs, publication/revision timestamp, evidence digest",
+      "provider": "licensed_or_official_provider_not_selected",
+      "publication_timestamp": "required",
+      "rate_limit/operational_limit": "no requests until documented provider limits and grant scope",
+      "retention_notes": "contract-specific storage/reuse/deletion terms required",
+      "signal_family": "injuries",
+      "stable_ids": "required",
+      "status": "planned",
+      "surface_available": "unknown"
+    },
+    {
+      "allowed_method": "read_only_local_audit",
+      "as_of_capability": false,
+      "authorization_status": "unproven_for_automation_and_feature_reuse",
+      "blocked_reason": "No express authorization or accredited publication/revision lineage; public visibility is insufficient",
+      "capture_policy": "existing_local_inventory_only",
+      "coverage": "isolated undated TXT/HTML; no accredited structured historical stream",
+      "provenance_requirement": "provider, grant evidence, stable entity/fixture IDs, publication/revision timestamps, artifact digest, field evidence",
+      "provider": "flashscore_existing_archive",
+      "publication_timestamp": "not_accredited",
+      "rate_limit/operational_limit": "zero network calls; no recapture authorized",
+      "retention_notes": "retain artifact references/digests; no corpus copying; reuse rights unresolved",
+      "signal_family": "suspensions",
+      "stable_ids": "not_accredited",
+      "status": "review",
+      "surface_available": "observed_local_partial"
+    },
+    {
+      "allowed_method": "none_until_grant_verified",
+      "as_of_capability": false,
+      "authorization_status": "not_evidenced",
+      "blocked_reason": "Provider, license scope, operational limits, retention and as-of coverage must be selected and independently verified",
+      "capture_policy": "requires_documented_permission",
+      "coverage": "not_acquired",
+      "provenance_requirement": "grant reference/scope, source ID/URL, stable IDs, publication/revision timestamp, evidence digest",
+      "provider": "licensed_or_official_provider_not_selected",
+      "publication_timestamp": "required",
+      "rate_limit/operational_limit": "no requests until documented provider limits and grant scope",
+      "retention_notes": "contract-specific storage/reuse/deletion terms required",
+      "signal_family": "suspensions",
+      "stable_ids": "required",
+      "status": "planned",
+      "surface_available": "unknown"
+    },
+    {
+      "allowed_method": "read_only_local_audit",
+      "as_of_capability": false,
+      "authorization_status": "unproven_for_automation_and_feature_reuse",
+      "blocked_reason": "No express authorization or accredited publication/revision lineage; public visibility is insufficient",
+      "capture_policy": "existing_local_inventory_only",
+      "coverage": "isolated undated TXT/HTML; no accredited structured historical stream",
+      "provenance_requirement": "provider, grant evidence, stable entity/fixture IDs, publication/revision timestamps, artifact digest, field evidence",
+      "provider": "flashscore_existing_archive",
+      "publication_timestamp": "not_accredited",
+      "rate_limit/operational_limit": "zero network calls; no recapture authorized",
+      "retention_notes": "retain artifact references/digests; no corpus copying; reuse rights unresolved",
+      "signal_family": "cards",
+      "stable_ids": "not_accredited",
+      "status": "review",
+      "surface_available": "not_accredited_in_local_archive"
+    },
+    {
+      "allowed_method": "none_until_grant_verified",
+      "as_of_capability": false,
+      "authorization_status": "not_evidenced",
+      "blocked_reason": "Provider, license scope, operational limits, retention and as-of coverage must be selected and independently verified",
+      "capture_policy": "requires_documented_permission",
+      "coverage": "not_acquired",
+      "provenance_requirement": "grant reference/scope, source ID/URL, stable IDs, publication/revision timestamp, evidence digest",
+      "provider": "licensed_or_official_provider_not_selected",
+      "publication_timestamp": "required",
+      "rate_limit/operational_limit": "no requests until documented provider limits and grant scope",
+      "retention_notes": "contract-specific storage/reuse/deletion terms required",
+      "signal_family": "cards",
+      "stable_ids": "required",
+      "status": "planned",
+      "surface_available": "unknown"
+    },
+    {
+      "allowed_method": "read_only_local_audit",
+      "as_of_capability": false,
+      "authorization_status": "unproven_for_automation_and_feature_reuse",
+      "blocked_reason": "No express authorization or accredited publication/revision lineage; public visibility is insufficient",
+      "capture_policy": "existing_local_inventory_only",
+      "coverage": "isolated undated TXT/HTML; no accredited structured historical stream",
+      "provenance_requirement": "provider, grant evidence, stable entity/fixture IDs, publication/revision timestamps, artifact digest, field evidence",
+      "provider": "flashscore_existing_archive",
+      "publication_timestamp": "not_accredited",
+      "rate_limit/operational_limit": "zero network calls; no recapture authorized",
+      "retention_notes": "retain artifact references/digests; no corpus copying; reuse rights unresolved",
+      "signal_family": "corners",
+      "stable_ids": "not_accredited",
+      "status": "review",
+      "surface_available": "not_accredited_in_local_archive"
+    },
+    {
+      "allowed_method": "none_until_grant_verified",
+      "as_of_capability": false,
+      "authorization_status": "not_evidenced",
+      "blocked_reason": "Provider, license scope, operational limits, retention and as-of coverage must be selected and independently verified",
+      "capture_policy": "requires_documented_permission",
+      "coverage": "not_acquired",
+      "provenance_requirement": "grant reference/scope, source ID/URL, stable IDs, publication/revision timestamp, evidence digest",
+      "provider": "licensed_or_official_provider_not_selected",
+      "publication_timestamp": "required",
+      "rate_limit/operational_limit": "no requests until documented provider limits and grant scope",
+      "retention_notes": "contract-specific storage/reuse/deletion terms required",
+      "signal_family": "corners",
+      "stable_ids": "required",
+      "status": "planned",
+      "surface_available": "unknown"
+    },
+    {
+      "allowed_method": "read_only_local_audit",
+      "as_of_capability": false,
+      "authorization_status": "unproven_for_automation_and_feature_reuse",
+      "blocked_reason": "No express authorization or accredited publication/revision lineage; public visibility is insufficient",
+      "capture_policy": "existing_local_inventory_only",
+      "coverage": "isolated undated TXT/HTML; no accredited structured historical stream",
+      "provenance_requirement": "provider, grant evidence, stable entity/fixture IDs, publication/revision timestamps, artifact digest, field evidence",
+      "provider": "flashscore_existing_archive",
+      "publication_timestamp": "not_accredited",
+      "rate_limit/operational_limit": "zero network calls; no recapture authorized",
+      "retention_notes": "retain artifact references/digests; no corpus copying; reuse rights unresolved",
+      "signal_family": "news",
+      "stable_ids": "not_accredited",
+      "status": "review",
+      "surface_available": "observed_local_partial"
+    },
+    {
+      "allowed_method": "none_until_grant_verified",
+      "as_of_capability": false,
+      "authorization_status": "not_evidenced",
+      "blocked_reason": "Provider, license scope, operational limits, retention and as-of coverage must be selected and independently verified",
+      "capture_policy": "requires_documented_permission",
+      "coverage": "not_acquired",
+      "provenance_requirement": "grant reference/scope, source ID/URL, stable IDs, publication/revision timestamp, evidence digest",
+      "provider": "licensed_or_official_provider_not_selected",
+      "publication_timestamp": "required",
+      "rate_limit/operational_limit": "no requests until documented provider limits and grant scope",
+      "retention_notes": "contract-specific storage/reuse/deletion terms required",
+      "signal_family": "news",
+      "stable_ids": "required",
+      "status": "planned",
+      "surface_available": "unknown"
+    },
+    {
+      "allowed_method": "read_only_local_audit",
+      "as_of_capability": false,
+      "authorization_status": "unproven_for_automation_and_feature_reuse",
+      "blocked_reason": "No express authorization or accredited publication/revision lineage; public visibility is insufficient",
+      "capture_policy": "existing_local_inventory_only",
+      "coverage": "isolated undated TXT/HTML; no accredited structured historical stream",
+      "provenance_requirement": "provider, grant evidence, stable entity/fixture IDs, publication/revision timestamps, artifact digest, field evidence",
+      "provider": "flashscore_existing_archive",
+      "publication_timestamp": "not_accredited",
+      "rate_limit/operational_limit": "zero network calls; no recapture authorized",
+      "retention_notes": "retain artifact references/digests; no corpus copying; reuse rights unresolved",
+      "signal_family": "context",
+      "stable_ids": "not_accredited",
+      "status": "review",
+      "surface_available": "observed_local_partial"
+    },
+    {
+      "allowed_method": "none_until_grant_verified",
+      "as_of_capability": false,
+      "authorization_status": "not_evidenced",
+      "blocked_reason": "Provider, license scope, operational limits, retention and as-of coverage must be selected and independently verified",
+      "capture_policy": "requires_documented_permission",
+      "coverage": "not_acquired",
+      "provenance_requirement": "grant reference/scope, source ID/URL, stable IDs, publication/revision timestamp, evidence digest",
+      "provider": "licensed_or_official_provider_not_selected",
+      "publication_timestamp": "required",
+      "rate_limit/operational_limit": "no requests until documented provider limits and grant scope",
+      "retention_notes": "contract-specific storage/reuse/deletion terms required",
+      "signal_family": "context",
+      "stable_ids": "required",
+      "status": "planned",
+      "surface_available": "unknown"
+    },
+    {
+      "allowed_method": "read_only_local_audit",
+      "as_of_capability": false,
+      "authorization_status": "unproven_for_automation_and_feature_reuse",
+      "blocked_reason": "No express authorization or accredited publication/revision lineage; public visibility is insufficient",
+      "capture_policy": "existing_local_inventory_only",
+      "coverage": "isolated undated TXT/HTML; no accredited structured historical stream",
+      "provenance_requirement": "provider, grant evidence, stable entity/fixture IDs, publication/revision timestamps, artifact digest, field evidence",
+      "provider": "flashscore_existing_archive",
+      "publication_timestamp": "not_accredited",
+      "rate_limit/operational_limit": "zero network calls; no recapture authorized",
+      "retention_notes": "retain artifact references/digests; no corpus copying; reuse rights unresolved",
+      "signal_family": "manager_changes",
+      "stable_ids": "not_accredited",
+      "status": "review",
+      "surface_available": "observed_local_partial"
+    },
+    {
+      "allowed_method": "none_until_grant_verified",
+      "as_of_capability": false,
+      "authorization_status": "not_evidenced",
+      "blocked_reason": "Provider, license scope, operational limits, retention and as-of coverage must be selected and independently verified",
+      "capture_policy": "requires_documented_permission",
+      "coverage": "not_acquired",
+      "provenance_requirement": "grant reference/scope, source ID/URL, stable IDs, publication/revision timestamp, evidence digest",
+      "provider": "licensed_or_official_provider_not_selected",
+      "publication_timestamp": "required",
+      "rate_limit/operational_limit": "no requests until documented provider limits and grant scope",
+      "retention_notes": "contract-specific storage/reuse/deletion terms required",
+      "signal_family": "manager_changes",
+      "stable_ids": "required",
+      "status": "planned",
+      "surface_available": "unknown"
+    },
+    {
+      "allowed_method": "read_only_local_audit",
+      "as_of_capability": false,
+      "authorization_status": "unproven_for_automation_and_feature_reuse",
+      "blocked_reason": "No express authorization or accredited publication/revision lineage; public visibility is insufficient",
+      "capture_policy": "existing_local_inventory_only",
+      "coverage": "isolated undated TXT/HTML; no accredited structured historical stream",
+      "provenance_requirement": "provider, grant evidence, stable entity/fixture IDs, publication/revision timestamps, artifact digest, field evidence",
+      "provider": "flashscore_existing_archive",
+      "publication_timestamp": "not_accredited",
+      "rate_limit/operational_limit": "zero network calls; no recapture authorized",
+      "retention_notes": "retain artifact references/digests; no corpus copying; reuse rights unresolved",
+      "signal_family": "transfers",
+      "stable_ids": "not_accredited",
+      "status": "review",
+      "surface_available": "not_accredited_in_local_archive"
+    },
+    {
+      "allowed_method": "none_until_grant_verified",
+      "as_of_capability": false,
+      "authorization_status": "not_evidenced",
+      "blocked_reason": "Provider, license scope, operational limits, retention and as-of coverage must be selected and independently verified",
+      "capture_policy": "requires_documented_permission",
+      "coverage": "not_acquired",
+      "provenance_requirement": "grant reference/scope, source ID/URL, stable IDs, publication/revision timestamp, evidence digest",
+      "provider": "licensed_or_official_provider_not_selected",
+      "publication_timestamp": "required",
+      "rate_limit/operational_limit": "no requests until documented provider limits and grant scope",
+      "retention_notes": "contract-specific storage/reuse/deletion terms required",
+      "signal_family": "transfers",
+      "stable_ids": "required",
+      "status": "planned",
+      "surface_available": "unknown"
+    }
+  ],
+  "subphases": {
+    "2.10": {
+      "checkpoint": "docs/v3/phase-2/checkpoints/2.10.md",
+      "counts": {
+        "blocked": 9
+      },
+      "decision": "Blocked para features deportivas. CARDS_FUTURE preparado por contrato, sin betting; fuente permitida y ledger completo requeridos.",
+      "issue": 23,
+      "regression_hashes": {
+        "form_features.jsonl": "779040a01b40f0099d260438199dcbefdc0d052bb8cca0fda39ec8f2ab1033b4",
+        "form_manifest.json": "3964f2062b71f6554c6370b336e5bba7b738ed387d343ac018b16364a0e70829",
+        "h2h_features.jsonl": "c0c1c1d12e9dc66d7ec6460761e1b9c0d70eed5f3b4c715e2086c523190a98f5",
+        "h2h_manifest.json": "b59cc1799021e54195313c9b0ec7b660b4cf6aa8d342f4dc9e727bfeebd878e0",
+        "temporal_features.jsonl": "22f3f0a0e83b23b704932436cc9dbfe5e49a54c95e8f6576cc765052527042aa",
+        "temporal_manifest.json": "20fe3df7920ffd1f82d11cb7490bbba06154e0d9a2befb2780cb9990412e6b32",
+        "xg_features.jsonl": "7003af3f3a66f0ae6d0c6cee3992e82f8b803f2ccc1f6d9bf31759b74a74a614",
+        "xg_manifest.json": "7a7e4d41d8f6b1792dd606dd00b20a4face9ce8c44dba8518329e44b948879fe"
+      },
+      "regressions": [],
+      "test_count": 748
+    },
+    "2.11": {
+      "checkpoint": "docs/v3/phase-2/checkpoints/2.11.md",
+      "counts": {
+        "blocked": 14
+      },
+      "decision": "Evaluada; todas las se\u00f1ales bloqueadas hasta fuentes permitidas hist\u00f3ricas. Contratos listos para futuros adapters, sin inferencias psicol\u00f3gicas.",
+      "issue": 24,
+      "regression_hashes": {
+        "form_features.jsonl": "779040a01b40f0099d260438199dcbefdc0d052bb8cca0fda39ec8f2ab1033b4",
+        "form_manifest.json": "3964f2062b71f6554c6370b336e5bba7b738ed387d343ac018b16364a0e70829",
+        "h2h_features.jsonl": "c0c1c1d12e9dc66d7ec6460761e1b9c0d70eed5f3b4c715e2086c523190a98f5",
+        "h2h_manifest.json": "b59cc1799021e54195313c9b0ec7b660b4cf6aa8d342f4dc9e727bfeebd878e0",
+        "temporal_features.jsonl": "22f3f0a0e83b23b704932436cc9dbfe5e49a54c95e8f6576cc765052527042aa",
+        "temporal_manifest.json": "20fe3df7920ffd1f82d11cb7490bbba06154e0d9a2befb2780cb9990412e6b32",
+        "xg_features.jsonl": "7003af3f3a66f0ae6d0c6cee3992e82f8b803f2ccc1f6d9bf31759b74a74a614",
+        "xg_manifest.json": "7a7e4d41d8f6b1792dd606dd00b20a4face9ce8c44dba8518329e44b948879fe"
+      },
+      "regressions": [],
+      "test_count": 763
+    },
+    "2.12": {
+      "checkpoint": "docs/v3/phase-2/checkpoints/2.12.md",
+      "counts": {
+        "blocked": 7
+      },
+      "decision": "Contrato y tests implemented; eventos deportivos blocked y adquisici\u00f3n/extractor planned. Sin scraping ni sentimiento psicol\u00f3gico productivo.",
+      "issue": 25,
+      "regression_hashes": {
+        "form_features.jsonl": "779040a01b40f0099d260438199dcbefdc0d052bb8cca0fda39ec8f2ab1033b4",
+        "form_manifest.json": "3964f2062b71f6554c6370b336e5bba7b738ed387d343ac018b16364a0e70829",
+        "h2h_features.jsonl": "c0c1c1d12e9dc66d7ec6460761e1b9c0d70eed5f3b4c715e2086c523190a98f5",
+        "h2h_manifest.json": "b59cc1799021e54195313c9b0ec7b660b4cf6aa8d342f4dc9e727bfeebd878e0",
+        "temporal_features.jsonl": "22f3f0a0e83b23b704932436cc9dbfe5e49a54c95e8f6576cc765052527042aa",
+        "temporal_manifest.json": "20fe3df7920ffd1f82d11cb7490bbba06154e0d9a2befb2780cb9990412e6b32",
+        "xg_features.jsonl": "7003af3f3a66f0ae6d0c6cee3992e82f8b803f2ccc1f6d9bf31759b74a74a614",
+        "xg_manifest.json": "7a7e4d41d8f6b1792dd606dd00b20a4face9ce8c44dba8518329e44b948879fe"
+      },
+      "regressions": [],
+      "test_count": 798
+    },
+    "2.5": {
+      "checkpoint": "docs/v3/phase-2/checkpoints/2.5.md",
+      "counts": {
+        "blocked": 14
+      },
+      "decision": "Evaluada correctamente; features blocked. No se habilita entrenamiento de fuerza del rival. Suite y regresiones deben pasar antes de continuar.",
+      "issue": 18,
+      "regression_hashes": {
+        "form_features.jsonl": "779040a01b40f0099d260438199dcbefdc0d052bb8cca0fda39ec8f2ab1033b4",
+        "form_manifest.json": "3964f2062b71f6554c6370b336e5bba7b738ed387d343ac018b16364a0e70829",
+        "temporal_features.jsonl": "22f3f0a0e83b23b704932436cc9dbfe5e49a54c95e8f6576cc765052527042aa",
+        "temporal_manifest.json": "20fe3df7920ffd1f82d11cb7490bbba06154e0d9a2befb2780cb9990412e6b32",
+        "xg_features.jsonl": "7003af3f3a66f0ae6d0c6cee3992e82f8b803f2ccc1f6d9bf31759b74a74a614",
+        "xg_manifest.json": "7a7e4d41d8f6b1792dd606dd00b20a4face9ce8c44dba8518329e44b948879fe"
+      },
+      "regressions": [],
+      "test_count": 651
+    },
+    "2.6": {
+      "checkpoint": "docs/v3/phase-2/checkpoints/2.6.md",
+      "counts": {
+        "implemented": 14
+      },
+      "decision": "Implemented como familia auxiliar, usar con sample_count y partial_sample; incorporaci\u00f3n al entrenamiento requiere evaluaci\u00f3n de valor incremental.",
+      "issue": 19,
+      "regression_hashes": {
+        "form_features.jsonl": "779040a01b40f0099d260438199dcbefdc0d052bb8cca0fda39ec8f2ab1033b4",
+        "form_manifest.json": "3964f2062b71f6554c6370b336e5bba7b738ed387d343ac018b16364a0e70829",
+        "h2h_features.jsonl": "c0c1c1d12e9dc66d7ec6460761e1b9c0d70eed5f3b4c715e2086c523190a98f5",
+        "h2h_manifest.json": "b59cc1799021e54195313c9b0ec7b660b4cf6aa8d342f4dc9e727bfeebd878e0",
+        "temporal_features.jsonl": "22f3f0a0e83b23b704932436cc9dbfe5e49a54c95e8f6576cc765052527042aa",
+        "temporal_manifest.json": "20fe3df7920ffd1f82d11cb7490bbba06154e0d9a2befb2780cb9990412e6b32",
+        "xg_features.jsonl": "7003af3f3a66f0ae6d0c6cee3992e82f8b803f2ccc1f6d9bf31759b74a74a614",
+        "xg_manifest.json": "7a7e4d41d8f6b1792dd606dd00b20a4face9ce8c44dba8518329e44b948879fe"
+      },
+      "regressions": [],
+      "test_count": 676
+    },
+    "2.7": {
+      "checkpoint": "docs/v3/phase-2/checkpoints/2.7.md",
+      "counts": {},
+      "decision": "Matriz implemented; proveedores en review/planned, sin ingesta ni captura nueva. No altera cat\u00e1logo 2.1 ni outputs previos.",
+      "issue": 20,
+      "regression_hashes": {
+        "form_features.jsonl": "779040a01b40f0099d260438199dcbefdc0d052bb8cca0fda39ec8f2ab1033b4",
+        "form_manifest.json": "3964f2062b71f6554c6370b336e5bba7b738ed387d343ac018b16364a0e70829",
+        "h2h_features.jsonl": "c0c1c1d12e9dc66d7ec6460761e1b9c0d70eed5f3b4c715e2086c523190a98f5",
+        "h2h_manifest.json": "b59cc1799021e54195313c9b0ec7b660b4cf6aa8d342f4dc9e727bfeebd878e0",
+        "temporal_features.jsonl": "22f3f0a0e83b23b704932436cc9dbfe5e49a54c95e8f6576cc765052527042aa",
+        "temporal_manifest.json": "20fe3df7920ffd1f82d11cb7490bbba06154e0d9a2befb2780cb9990412e6b32",
+        "xg_features.jsonl": "7003af3f3a66f0ae6d0c6cee3992e82f8b803f2ccc1f6d9bf31759b74a74a614",
+        "xg_manifest.json": "7a7e4d41d8f6b1792dd606dd00b20a4face9ce8c44dba8518329e44b948879fe"
+      },
+      "regressions": [],
+      "test_count": 689
+    },
+    "2.8": {
+      "checkpoint": "docs/v3/phase-2/checkpoints/2.8.md",
+      "counts": {
+        "blocked": 24
+      },
+      "decision": "Blocked para valores deportivos; contratos preparados. Corners tiene mercado CORNERS_FUTURE, sin betting ni adquisici\u00f3n nueva.",
+      "issue": 21,
+      "regression_hashes": {
+        "form_features.jsonl": "779040a01b40f0099d260438199dcbefdc0d052bb8cca0fda39ec8f2ab1033b4",
+        "form_manifest.json": "3964f2062b71f6554c6370b336e5bba7b738ed387d343ac018b16364a0e70829",
+        "h2h_features.jsonl": "c0c1c1d12e9dc66d7ec6460761e1b9c0d70eed5f3b4c715e2086c523190a98f5",
+        "h2h_manifest.json": "b59cc1799021e54195313c9b0ec7b660b4cf6aa8d342f4dc9e727bfeebd878e0",
+        "temporal_features.jsonl": "22f3f0a0e83b23b704932436cc9dbfe5e49a54c95e8f6576cc765052527042aa",
+        "temporal_manifest.json": "20fe3df7920ffd1f82d11cb7490bbba06154e0d9a2befb2780cb9990412e6b32",
+        "xg_features.jsonl": "7003af3f3a66f0ae6d0c6cee3992e82f8b803f2ccc1f6d9bf31759b74a74a614",
+        "xg_manifest.json": "7a7e4d41d8f6b1792dd606dd00b20a4face9ce8c44dba8518329e44b948879fe"
+      },
+      "regressions": [],
+      "test_count": 714
+    },
+    "2.9": {
+      "checkpoint": "docs/v3/phase-2/checkpoints/2.9.md",
+      "counts": {
+        "blocked": 23
+      },
+      "decision": "Evaluada; blocked para todas las se\u00f1ales deportivas. Requiere fuente permitida de snapshots hist\u00f3ricos de XI/disponibilidad y ledger de minutos.",
+      "issue": 22,
+      "regression_hashes": {
+        "form_features.jsonl": "779040a01b40f0099d260438199dcbefdc0d052bb8cca0fda39ec8f2ab1033b4",
+        "form_manifest.json": "3964f2062b71f6554c6370b336e5bba7b738ed387d343ac018b16364a0e70829",
+        "h2h_features.jsonl": "c0c1c1d12e9dc66d7ec6460761e1b9c0d70eed5f3b4c715e2086c523190a98f5",
+        "h2h_manifest.json": "b59cc1799021e54195313c9b0ec7b660b4cf6aa8d342f4dc9e727bfeebd878e0",
+        "temporal_features.jsonl": "22f3f0a0e83b23b704932436cc9dbfe5e49a54c95e8f6576cc765052527042aa",
+        "temporal_manifest.json": "20fe3df7920ffd1f82d11cb7490bbba06154e0d9a2befb2780cb9990412e6b32",
+        "xg_features.jsonl": "7003af3f3a66f0ae6d0c6cee3992e82f8b803f2ccc1f6d9bf31759b74a74a614",
+        "xg_manifest.json": "7a7e4d41d8f6b1792dd606dd00b20a4face9ce8c44dba8518329e44b948879fe"
+      },
+      "regressions": [],
+      "test_count": 738
+    }
+  },
+  "test_count": 798,
+  "validation_commands": [
+    "python -m compileall -q v3 tests",
+    "python -m pytest -q tests/v3",
+    "git diff --check",
+    "python -m v3.features.phase2_validation --output-dir /tmp/phase2-final-correction"
+  ]
+}

@@ -1,0 +1,411 @@
+{
+  "contracts": [
+    {
+      "blocked_reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "definition": "Provider-defined regulation big_chances per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "big_chances",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "definition": "Provider-defined regulation big_chances_missed per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "big_chances_missed",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "definition": "Provider-defined regulation blocked_shots per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "blocked_shots",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "definition": "Provider-defined regulation corners per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "CORNERS_FUTURE"
+      ],
+      "name": "corners",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "definition": "Provider-defined regulation duels per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "duels",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "definition": "Provider-defined regulation duels_won per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "duels_won",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "definition": "Provider-defined regulation fouls per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "fouls",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "definition": "Provider-defined regulation goals_prevented per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "goalkeeper",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "goals_prevented",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "definition": "Provider-defined regulation offsides per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "offsides",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "definition": "Provider-defined regulation pass_accuracy per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "pass_accuracy",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "definition": "Provider-defined regulation passes per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "passes",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "definition": "Provider-defined regulation passes_completed per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "passes_completed",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "definition": "Provider-defined regulation possession per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "possession",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "definition": "Provider-defined regulation save_percentage per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "goalkeeper",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "save_percentage",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "definition": "Provider-defined regulation saves per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "goalkeeper",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "saves",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "definition": "Provider-defined regulation shots per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "shots",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "definition": "Provider-defined regulation shots_faced per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "goalkeeper",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "shots_faced",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "definition": "Provider-defined regulation shots_off_target per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "shots_off_target",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "definition": "Provider-defined regulation shots_on_target per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "shots_on_target",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "definition": "Provider-defined regulation tackles per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "tackles",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "definition": "Provider-defined regulation touches_in_opposition_box per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "touches_in_opposition_box",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "definition": "Provider-defined regulation xa per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "xa",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "definition": "Provider-defined regulation xgot per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "advanced_team_stats",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "xgot",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted provider and no stable-identity, timestamped historical observations in local archive.",
+      "definition": "Provider-defined regulation xgot_faced per completed match; rolling mean only over 5/10 fully accredited recent fixtures; preserve units and denominator.",
+      "family": "goalkeeper",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "xgot_faced",
+      "phase": "2.8",
+      "prerequisites": "Permitted source, stable IDs, pre-cutoff publication/revision, correct home/away and keeper-team stint orientation. Percentages require documented denominators; goals_prevented requires provider definition (e.g. xGOT faced minus goals conceded), never mix xG and xGOT.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    }
+  ],
+  "version": "2.8.0"
+}
