@@ -1,0 +1,74 @@
+[
+  {
+    "markets": {
+      "1X2": {
+        "min_absolute_edge": 0.02,
+        "min_ev": 0.05,
+        "min_relative_edge": 0.05,
+        "safety_margin": 0.05
+      },
+      "BTTS": {
+        "min_absolute_edge": 0.02,
+        "min_ev": 0.05,
+        "min_relative_edge": 0.05,
+        "safety_margin": 0.05
+      },
+      "OVER_1_5": {
+        "min_absolute_edge": 0.02,
+        "min_ev": 0.05,
+        "min_relative_edge": 0.05,
+        "safety_margin": 0.05
+      },
+      "OVER_2_5": {
+        "min_absolute_edge": 0.02,
+        "min_ev": 0.05,
+        "min_relative_edge": 0.05,
+        "safety_margin": 0.05
+      },
+      "OVER_3_5": {
+        "min_absolute_edge": 0.02,
+        "min_ev": 0.05,
+        "min_relative_edge": 0.05,
+        "safety_margin": 0.05
+      }
+    },
+    "policy_id": "synthetic-conservative",
+    "policy_version": "4.2.0"
+  },
+  {
+    "markets": {
+      "1X2": {
+        "min_absolute_edge": 0.04,
+        "min_ev": 0.1,
+        "min_relative_edge": 0.1,
+        "safety_margin": 0.1
+      },
+      "BTTS": {
+        "min_absolute_edge": 0.04,
+        "min_ev": 0.1,
+        "min_relative_edge": 0.1,
+        "safety_margin": 0.1
+      },
+      "OVER_1_5": {
+        "min_absolute_edge": 0.04,
+        "min_ev": 0.1,
+        "min_relative_edge": 0.1,
+        "safety_margin": 0.1
+      },
+      "OVER_2_5": {
+        "min_absolute_edge": 0.04,
+        "min_ev": 0.1,
+        "min_relative_edge": 0.1,
+        "safety_margin": 0.1
+      },
+      "OVER_3_5": {
+        "min_absolute_edge": 0.04,
+        "min_ev": 0.1,
+        "min_relative_edge": 0.1,
+        "safety_margin": 0.1
+      }
+    },
+    "policy_id": "synthetic-strict",
+    "policy_version": "4.2.0"
+  }
+]

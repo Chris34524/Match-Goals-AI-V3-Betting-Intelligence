@@ -1,0 +1,114 @@
+[
+  {
+    "model": {
+      "cutoff": "2026-10-26T11:00:00Z",
+      "internal_match_id": "synthetic-1",
+      "line": null,
+      "market": "BTTS",
+      "model_id": "synthetic-model",
+      "model_probability": 0.6,
+      "model_version": "1",
+      "period": "full_time",
+      "provenance": {
+        "evidence": "offline fixture",
+        "origin": "synthetic_test_only"
+      },
+      "rules": "90_minutes_including_stoppage_no_extra_time",
+      "selection": "yes"
+    },
+    "observations": [
+      {
+        "cutoff": "2026-10-26T11:00:00Z",
+        "period": "full_time",
+        "record": {
+          "aggregation": "individual",
+          "bookmaker": "synthetic-book",
+          "capture_policy": "review",
+          "competition": "Synthetic",
+          "decimal_odds": 2.0,
+          "exclusion_reason": null,
+          "external_match_id": "fixture-1",
+          "internal_match_id": "synthetic-1",
+          "kickoff_at": "2026-10-26T12:00:00Z",
+          "line": null,
+          "market": "BTTS",
+          "observed_at": "2026-10-26T10:00:00Z",
+          "population": [],
+          "price_state": "active",
+          "provenance": {
+            "evidence": "offline fixture",
+            "origin": "synthetic_test_only",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "provider": "synthetic_test_only",
+          "season": "2026",
+          "selection": "yes",
+          "snapshot_type": "current",
+          "source": {
+            "artifact": "synthetic.json",
+            "id": "fixture",
+            "url": null
+          },
+          "source_published_at": null,
+          "status": "review",
+          "surface_availability": "unknown",
+          "temporal_semantics": {
+            "definition": null,
+            "evidence": null
+          },
+          "timezone": "UTC",
+          "validity": {
+            "pre_match": true
+          }
+        },
+        "rules": "90_minutes_including_stoppage_no_extra_time"
+      },
+      {
+        "cutoff": "2026-10-26T11:00:00Z",
+        "period": "full_time",
+        "record": {
+          "aggregation": "individual",
+          "bookmaker": "synthetic-book",
+          "capture_policy": "review",
+          "competition": "Synthetic",
+          "decimal_odds": 2.0,
+          "exclusion_reason": null,
+          "external_match_id": "fixture-1",
+          "internal_match_id": "synthetic-1",
+          "kickoff_at": "2026-10-26T12:00:00Z",
+          "line": null,
+          "market": "BTTS",
+          "observed_at": "2026-10-26T10:00:00Z",
+          "population": [],
+          "price_state": "active",
+          "provenance": {
+            "evidence": "offline fixture",
+            "origin": "synthetic_test_only",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "provider": "synthetic_test_only",
+          "season": "2026",
+          "selection": "no",
+          "snapshot_type": "current",
+          "source": {
+            "artifact": "synthetic.json",
+            "id": "fixture",
+            "url": null
+          },
+          "source_published_at": null,
+          "status": "review",
+          "surface_availability": "unknown",
+          "temporal_semantics": {
+            "definition": null,
+            "evidence": null
+          },
+          "timezone": "UTC",
+          "validity": {
+            "pre_match": true
+          }
+        },
+        "rules": "90_minutes_including_stoppage_no_extra_time"
+      }
+    ]
+  }
+]

@@ -1,0 +1,8 @@
+{
+  "v3_data/odds/.gitignore": "c383c1b1b82a2357e25d7eeef739d4e78f5037699b9c13c9a6f02f9f1e46a2e3",
+  "v3_data/odds/README.md": "c6ffb69d17169da449888eed9e14d8d2d4c6ad22e7bfba3902f7e64d8bd6f225",
+  "v3_data/odds/phase3-synthetic-example/.publish.lock": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "v3_data/odds/phase3-synthetic-example/f95ab56a9b4cbd2c6148629d77a052bdb499dba9a757bcff3e2bfe1c5dffe7fe/canonical.jsonl": "512b62c41cd26483e7bf170ecd45ee7ef466881b06b8df31783afbd6ac9a1e12",
+  "v3_data/odds/phase3-synthetic-example/f95ab56a9b4cbd2c6148629d77a052bdb499dba9a757bcff3e2bfe1c5dffe7fe/manifest.json": "3f8bb1c7b300ee0e48b9082d29e7a2f96f46f246dabd2cd17d09a627700c0003",
+  "v3_data/odds/phase3-synthetic-example/f95ab56a9b4cbd2c6148629d77a052bdb499dba9a757bcff3e2bfe1c5dffe7fe/raw/response.json": "14bcc23ee9d9a96808144aba45d5f67c999d6a4e5213430e3f215f95be1247e0"
+}
