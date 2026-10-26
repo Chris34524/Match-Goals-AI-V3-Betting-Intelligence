@@ -13,7 +13,7 @@ extractor productivo. No se entrenó ningún modelo ni se habilitó betting nuev
 | Subfase / Issue | Resultado | Tests del checkpoint |
 |---|---|---:|
 | [2.5](phase-2/checkpoints/2.5.md) / #18 | 14 candidatos de fuerza bloqueados; fórmulas y requisitos documentados | 651 |
-| [2.6](phase-2/checkpoints/2.6.md) / #19 | 18 columnas H2H implementadas, 14 canónicas + 4 aliases away | 676 |
+| [2.6](phase-2/checkpoints/2.6.md) / #19 | 14 columnas H2H canónicas implementadas, sin aliases | 676 |
 | [2.7](phase-2/checkpoints/2.7.md) / #20 | Matriz de 24 filas, 12 familias; 12 review y 12 planned; ningún proveedor habilitado | 689 |
 | [2.8](phase-2/checkpoints/2.8.md) / #21 | 24 señales advanced/keeper bloqueadas; contratos, incluido corners futuro | 714 |
 | [2.9](phase-2/checkpoints/2.9.md) / #22 | 23 señales player/lineup bloqueadas; XI previsto y oficial separados | 738 |
@@ -21,10 +21,10 @@ extractor productivo. No se entrenó ningún modelo ni se habilitó betting nuev
 | [2.11](phase-2/checkpoints/2.11.md) / #24 | 14 proxies objetivos bloqueados; definición y requisitos por proxy | 763 |
 | [2.12](phase-2/checkpoints/2.12.md) / #25 | Contrato/validadores P3; 7 eventos bloqueados, adquisición/extractor planned | 798 |
 
-El batch contiene **18 entradas implemented, 0 partial y 91 blocked**.
-El inventario de toda Fase 2 contiene **96 implemented, 0 partial y 113 blocked**.
-La unidad es nombre único del inventario: 118 columnas originales + 91
-extensiones/candidatos. Incluye cuatro aliases H2H. Los candidatos P1/P3 no están
+El batch contiene **14 entradas implemented, 0 partial y 91 blocked**.
+El inventario de toda Fase 2 contiene **92 implemented, 0 partial y 113 blocked**.
+La unidad es nombre único del inventario: 118 columnas originales + 87
+extensiones/candidatos; 205 entradas totales, sin aliases H2H. Los candidatos P1/P3 no están
 expandidos por lado/ventana y algunos conceptos se solapan; estos números no
 representan conceptos estadísticos independientes ni nuevas columnas entrenables.
 La matriz de fuentes y los validadores son infraestructura y no inflan implemented.
@@ -37,7 +37,7 @@ no una promoción de candidatos declarativamente `available` a entrenamiento.
 |---|---|---|
 | Forma reciente L5/L10 y venue, 72 columnas | Set recent_form completo: 3.893 (89,62%); todas las ventanas/venue: 3.016 (69,43%) | BTTS, Over 1.5/2.5/3.5; 1X2 experimental |
 | Rachas observadas capped L10, 6 columnas | Home: 4.104 (94,48%); away: 4.102 (94,43%) por métrica | BTTS, goles y 1X2 según definición; conservar cap/censura |
-| H2H auxiliar, 18 columnas | Medias/tasas: 2.948 (67,86%); contadores: 4.337 (99,84%) | BTTS y overs; sólo ablation auxiliar |
+| H2H auxiliar, 14 columnas | Medias/tasas: 2.948 (67,86%); contadores: 4.337 (99,84%) | BTTS y overs; sólo ablation auxiliar |
 | xG/xGA | Medias y disponibilidad bilateral acreditadas: 0 (0%) | Potencial goles/BTTS; bloqueado |
 | Fuerza y familias 2.8–2.12 | 0 (0%) acreditados por señal | Potencial 1X2/goles; cards/corners futuros; bloqueadas |
 
@@ -118,8 +118,8 @@ contexto y news. No convertir sus nulls o contadores diagnósticos en ceros
 sportivos. No usar labels, backtest_pool, result.json, Champion/BT0,
 confidence*.json, lambda_comparison ni targets/resultados futuros como features.
 
-No entrenar simultáneamente los aliases H2H away_GF/home_GA y away_GA/home_GF:
-son duplicados exactos. Mantener H2H fuera del core recent_form y comprobar su
+La salida H2H contiene únicamente las 14 columnas canónicas. La relación
+away_GF = home_GA y away_GA = home_GF no se materializa como columnas. Mantener H2H fuera del core recent_form y comprobar su
 valor incremental con ablation temporal. La cobertura por sí sola no demuestra
 valor predictivo; faltan splits por tiempo, calibración, controles por liga y
 análisis de missingness/selección. No se ha demostrado rentabilidad de mercados.
@@ -137,12 +137,12 @@ feature están en [phase-2-validation-report.json](phase-2-validation-report.jso
 | form_features.jsonl (2.2) | `779040a01b40f0099d260438199dcbefdc0d052bb8cca0fda39ec8f2ab1033b4` |
 | xg_features.jsonl (2.3) | `7003af3f3a66f0ae6d0c6cee3992e82f8b803f2ccc1f6d9bf31759b74a74a614` |
 | temporal_features.jsonl (2.4) | `22f3f0a0e83b23b704932436cc9dbfe5e49a54c95e8f6576cc765052527042aa` |
-| h2h_features.jsonl (2.6) | `aa961e0ac334307a7704ba0a5c86cbecf9e5f8fc7b8aa3af1585216ede6fcaf3` |
+| h2h_features.jsonl (2.6) | `c0c1c1d12e9dc66d7ec6460761e1b9c0d70eed5f3b4c715e2086c523190a98f5` |
 
 ```bash
 python -m compileall -q v3 tests
 python -m pytest -q tests/v3
-python -m v3.features.phase2_validation --output-dir /tmp/phase2-reproduce
+python -m v3.features.phase2_validation --output-dir /tmp/phase2-final-correction
 python -m v3.features.source_matrix
 python -m v3.features.intelligence_contracts
 git diff --check
@@ -157,7 +157,6 @@ intactos, excluyendo sólo cachés de Python. Los digests agregados están en el
 los inventarios completos de esta ejecución permanecen en `/tmp/phase2-batch/`.
 BT0 y J_BT_sin_temporada están incluidos en esa protección. Ninguna fuente
 prohibida se usó para features; ningún dato futuro contribuyó; ningún scraping
-nuevo se añadió. No hubo add, commit, push ni cambio de rama. Todos los cambios
-son archivos nuevos; `git diff --stat` de archivos tracked queda vacío y `git
-status` enumera los nuevos archivos sin staging. Se revisó whitespace también
-sobre esos archivos nuevos.
+nuevo se añadió. No hubo add, commit, push ni cambio de rama. La corrección H2H deja un diff real en archivos tracked, sin staging.
+
+H2H regenerado dos veces en /tmp/phase2-h2h-correction-a y /tmp/phase2-h2h-correction-b: JSONL y manifest idénticos byte a byte. Inventario y cobertura recalculados desde la salida real y el catálogo.

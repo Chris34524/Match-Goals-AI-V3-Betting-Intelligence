@@ -27,7 +27,7 @@
   },
   "batch_counts": {
     "blocked": 91,
-    "implemented": 18
+    "implemented": 14
   },
   "blocked_features": [
     {
@@ -1658,7 +1658,7 @@
     "docs/v3/phase-2/contracts/2.9.json": "8a50abef4d1e5ec5e4b03ad3d72471c87d8b6ca2736de7ec5e4bdcb29f91bb8c",
     "docs/v3/phase-2/source-matrix.json": "04d05a2578f03a59beeb745d2caa452c1a342e113c46c2b1efc11d22e0a4de15"
   },
-  "counting_policy": "Unique inventory names: 118 original sided/window columns plus 91 extensions/candidate entries (including 4 explicit H2H away-perspective aliases). Candidate entries in 2.8+ are not sided/window-expanded or independent statistical concepts. Contracts/source rows/validators are infrastructure, not implemented sporting features. Available code without accredited real sporting values remains blocked.",
+  "counting_policy": "Unique inventory names: 118 original sided/window columns plus 87 extensions/candidate entries; exactly 14 canonical H2H columns, no aliases. Candidate entries in 2.8+ are not sided/window-expanded or independent statistical concepts. Contracts/source rows/validators are infrastructure, not implemented sporting features. Available code without accredited real sporting values remains blocked.",
   "coverage": {
     "blocked_families": "0/4344 accredited targets for strength, advanced/keeper, player/lineup, discipline, objective context and news; xG numeric means/bilateral 0/4344. Non-null zero sample counts are diagnostic, not accredited xG sporting values.",
     "form": {
@@ -1683,38 +1683,6 @@
     },
     "h2h": {
       "features": {
-        "h2h_away_ga_mean_h10": {
-          "nonnull": 2948,
-          "null": 1396,
-          "reasons": {
-            "insufficient_sample": 1389,
-            "missing_or_invalid_history": 7
-          }
-        },
-        "h2h_away_ga_mean_h5": {
-          "nonnull": 2948,
-          "null": 1396,
-          "reasons": {
-            "insufficient_sample": 1389,
-            "missing_or_invalid_history": 7
-          }
-        },
-        "h2h_away_gf_mean_h10": {
-          "nonnull": 2948,
-          "null": 1396,
-          "reasons": {
-            "insufficient_sample": 1389,
-            "missing_or_invalid_history": 7
-          }
-        },
-        "h2h_away_gf_mean_h5": {
-          "nonnull": 2948,
-          "null": 1396,
-          "reasons": {
-            "insufficient_sample": 1389,
-            "missing_or_invalid_history": 7
-          }
-        },
         "h2h_btts_rate_h10": {
           "nonnull": 2948,
           "null": 1396,
@@ -2051,7 +2019,7 @@
   "feature_catalog_version": "2.1.0",
   "feature_counts": {
     "blocked": 113,
-    "implemented": 96,
+    "implemented": 92,
     "partial": 0
   },
   "files_added_or_modified": [
@@ -2089,6 +2057,35 @@
     "v3/features/strength.py"
   ],
   "git_add_commit_push_executed": false,
+  "h2h_correction": {
+    "build_directories": [
+      "/tmp/phase2-h2h-correction-a",
+      "/tmp/phase2-h2h-correction-b"
+    ],
+    "byte_identical": true,
+    "features_per_row": 14,
+    "full_reproduction": {
+      "output_dir": "/tmp/phase2-final-correction",
+      "regression_hashes": {
+        "form_features.jsonl": "779040a01b40f0099d260438199dcbefdc0d052bb8cca0fda39ec8f2ab1033b4",
+        "form_manifest.json": "3964f2062b71f6554c6370b336e5bba7b738ed387d343ac018b16364a0e70829",
+        "h2h_features.jsonl": "c0c1c1d12e9dc66d7ec6460761e1b9c0d70eed5f3b4c715e2086c523190a98f5",
+        "h2h_manifest.json": "b59cc1799021e54195313c9b0ec7b660b4cf6aa8d342f4dc9e727bfeebd878e0",
+        "temporal_features.jsonl": "22f3f0a0e83b23b704932436cc9dbfe5e49a54c95e8f6576cc765052527042aa",
+        "temporal_manifest.json": "20fe3df7920ffd1f82d11cb7490bbba06154e0d9a2befb2780cb9990412e6b32",
+        "xg_features.jsonl": "7003af3f3a66f0ae6d0c6cee3992e82f8b803f2ccc1f6d9bf31759b74a74a614",
+        "xg_manifest.json": "7a7e4d41d8f6b1792dd606dd00b20a4face9ce8c44dba8518329e44b948879fe"
+      },
+      "source_unchanged": true
+    },
+    "inventory_total": 205,
+    "regression_hashes": {
+      "h2h_features.jsonl": "c0c1c1d12e9dc66d7ec6460761e1b9c0d70eed5f3b4c715e2086c523190a98f5",
+      "h2h_manifest.json": "b59cc1799021e54195313c9b0ec7b660b4cf6aa8d342f4dc9e727bfeebd878e0"
+    },
+    "targets_inspected": 4344,
+    "test_count": 798
+  },
   "implemented_features": [
     {
       "code_implemented": true,
@@ -2574,66 +2571,6 @@
       ],
       "name": "away_venue_sample_count_l5",
       "phase": "2.2",
-      "reason": null,
-      "status": "implemented"
-    },
-    {
-      "alias_of": "h2h_home_gf_mean_h10",
-      "code_implemented": true,
-      "family": "h2h_auxiliary",
-      "markets": [
-        "BTTS",
-        "OVER_1_5",
-        "OVER_2_5",
-        "OVER_3_5"
-      ],
-      "name": "h2h_away_ga_mean_h10",
-      "phase": "2.6",
-      "reason": null,
-      "status": "implemented"
-    },
-    {
-      "alias_of": "h2h_home_gf_mean_h5",
-      "code_implemented": true,
-      "family": "h2h_auxiliary",
-      "markets": [
-        "BTTS",
-        "OVER_1_5",
-        "OVER_2_5",
-        "OVER_3_5"
-      ],
-      "name": "h2h_away_ga_mean_h5",
-      "phase": "2.6",
-      "reason": null,
-      "status": "implemented"
-    },
-    {
-      "alias_of": "h2h_home_ga_mean_h10",
-      "code_implemented": true,
-      "family": "h2h_auxiliary",
-      "markets": [
-        "BTTS",
-        "OVER_1_5",
-        "OVER_2_5",
-        "OVER_3_5"
-      ],
-      "name": "h2h_away_gf_mean_h10",
-      "phase": "2.6",
-      "reason": null,
-      "status": "implemented"
-    },
-    {
-      "alias_of": "h2h_home_ga_mean_h5",
-      "code_implemented": true,
-      "family": "h2h_auxiliary",
-      "markets": [
-        "BTTS",
-        "OVER_1_5",
-        "OVER_2_5",
-        "OVER_3_5"
-      ],
-      "name": "h2h_away_gf_mean_h5",
-      "phase": "2.6",
       "reason": null,
       "status": "implemented"
     },
@@ -3359,7 +3296,7 @@
   "recommendations_for_phase_3": [
     "Freeze allowed feature inventory and snapshot lineage; prevent blocked candidates and xG diagnostic zeros from entering training.",
     "Evaluate baseline form/streaks first with time-based splits; add H2H only in auxiliary ablation with sample/partial flags.",
-    "Exclude H2H perspective aliases from simultaneous training to avoid duplicate columns; do not promote missingness into inferred sporting zeros.",
+    "Keep the canonical H2H inventory without aliases; do not promote missingness into inferred sporting zeros.",
     "Secure a permission-backed provider with stable IDs and historical publication/revision snapshots before P1 ingestion.",
     "Accredit full fixture/event/minutes/appointment coverage and competition rules before rest/load/cards/context.",
     "Keep news P3 experimental and bounded; independently verify publication evidence and extraction quality before any model use."
@@ -3367,8 +3304,8 @@
   "regression_hashes": {
     "form_features.jsonl": "779040a01b40f0099d260438199dcbefdc0d052bb8cca0fda39ec8f2ab1033b4",
     "form_manifest.json": "3964f2062b71f6554c6370b336e5bba7b738ed387d343ac018b16364a0e70829",
-    "h2h_features.jsonl": "aa961e0ac334307a7704ba0a5c86cbecf9e5f8fc7b8aa3af1585216ede6fcaf3",
-    "h2h_manifest.json": "979a7f2cf269751c2925160c2a53e38fb064c9d6d6d2a748f3344b7eac7b221b",
+    "h2h_features.jsonl": "c0c1c1d12e9dc66d7ec6460761e1b9c0d70eed5f3b4c715e2086c523190a98f5",
+    "h2h_manifest.json": "b59cc1799021e54195313c9b0ec7b660b4cf6aa8d342f4dc9e727bfeebd878e0",
     "temporal_features.jsonl": "22f3f0a0e83b23b704932436cc9dbfe5e49a54c95e8f6576cc765052527042aa",
     "temporal_manifest.json": "20fe3df7920ffd1f82d11cb7490bbba06154e0d9a2befb2780cb9990412e6b32",
     "xg_features.jsonl": "7003af3f3a66f0ae6d0c6cee3992e82f8b803f2ccc1f6d9bf31759b74a74a614",
@@ -3809,8 +3746,8 @@
       "regression_hashes": {
         "form_features.jsonl": "779040a01b40f0099d260438199dcbefdc0d052bb8cca0fda39ec8f2ab1033b4",
         "form_manifest.json": "3964f2062b71f6554c6370b336e5bba7b738ed387d343ac018b16364a0e70829",
-        "h2h_features.jsonl": "aa961e0ac334307a7704ba0a5c86cbecf9e5f8fc7b8aa3af1585216ede6fcaf3",
-        "h2h_manifest.json": "979a7f2cf269751c2925160c2a53e38fb064c9d6d6d2a748f3344b7eac7b221b",
+        "h2h_features.jsonl": "c0c1c1d12e9dc66d7ec6460761e1b9c0d70eed5f3b4c715e2086c523190a98f5",
+        "h2h_manifest.json": "b59cc1799021e54195313c9b0ec7b660b4cf6aa8d342f4dc9e727bfeebd878e0",
         "temporal_features.jsonl": "22f3f0a0e83b23b704932436cc9dbfe5e49a54c95e8f6576cc765052527042aa",
         "temporal_manifest.json": "20fe3df7920ffd1f82d11cb7490bbba06154e0d9a2befb2780cb9990412e6b32",
         "xg_features.jsonl": "7003af3f3a66f0ae6d0c6cee3992e82f8b803f2ccc1f6d9bf31759b74a74a614",
@@ -3824,13 +3761,13 @@
       "counts": {
         "blocked": 14
       },
-      "decision": "Evaluada; todas las señales bloqueadas hasta fuentes permitidas históricas. Contratos listos para futuros adapters, sin inferencias psicológicas.",
+      "decision": "Evaluada; todas las se\u00f1ales bloqueadas hasta fuentes permitidas hist\u00f3ricas. Contratos listos para futuros adapters, sin inferencias psicol\u00f3gicas.",
       "issue": 24,
       "regression_hashes": {
         "form_features.jsonl": "779040a01b40f0099d260438199dcbefdc0d052bb8cca0fda39ec8f2ab1033b4",
         "form_manifest.json": "3964f2062b71f6554c6370b336e5bba7b738ed387d343ac018b16364a0e70829",
-        "h2h_features.jsonl": "aa961e0ac334307a7704ba0a5c86cbecf9e5f8fc7b8aa3af1585216ede6fcaf3",
-        "h2h_manifest.json": "979a7f2cf269751c2925160c2a53e38fb064c9d6d6d2a748f3344b7eac7b221b",
+        "h2h_features.jsonl": "c0c1c1d12e9dc66d7ec6460761e1b9c0d70eed5f3b4c715e2086c523190a98f5",
+        "h2h_manifest.json": "b59cc1799021e54195313c9b0ec7b660b4cf6aa8d342f4dc9e727bfeebd878e0",
         "temporal_features.jsonl": "22f3f0a0e83b23b704932436cc9dbfe5e49a54c95e8f6576cc765052527042aa",
         "temporal_manifest.json": "20fe3df7920ffd1f82d11cb7490bbba06154e0d9a2befb2780cb9990412e6b32",
         "xg_features.jsonl": "7003af3f3a66f0ae6d0c6cee3992e82f8b803f2ccc1f6d9bf31759b74a74a614",
@@ -3844,13 +3781,13 @@
       "counts": {
         "blocked": 7
       },
-      "decision": "Contrato y tests implemented; eventos deportivos blocked y adquisición/extractor planned. Sin scraping ni sentimiento psicológico productivo.",
+      "decision": "Contrato y tests implemented; eventos deportivos blocked y adquisici\u00f3n/extractor planned. Sin scraping ni sentimiento psicol\u00f3gico productivo.",
       "issue": 25,
       "regression_hashes": {
         "form_features.jsonl": "779040a01b40f0099d260438199dcbefdc0d052bb8cca0fda39ec8f2ab1033b4",
         "form_manifest.json": "3964f2062b71f6554c6370b336e5bba7b738ed387d343ac018b16364a0e70829",
-        "h2h_features.jsonl": "aa961e0ac334307a7704ba0a5c86cbecf9e5f8fc7b8aa3af1585216ede6fcaf3",
-        "h2h_manifest.json": "979a7f2cf269751c2925160c2a53e38fb064c9d6d6d2a748f3344b7eac7b221b",
+        "h2h_features.jsonl": "c0c1c1d12e9dc66d7ec6460761e1b9c0d70eed5f3b4c715e2086c523190a98f5",
+        "h2h_manifest.json": "b59cc1799021e54195313c9b0ec7b660b4cf6aa8d342f4dc9e727bfeebd878e0",
         "temporal_features.jsonl": "22f3f0a0e83b23b704932436cc9dbfe5e49a54c95e8f6576cc765052527042aa",
         "temporal_manifest.json": "20fe3df7920ffd1f82d11cb7490bbba06154e0d9a2befb2780cb9990412e6b32",
         "xg_features.jsonl": "7003af3f3a66f0ae6d0c6cee3992e82f8b803f2ccc1f6d9bf31759b74a74a614",
@@ -3880,15 +3817,15 @@
     "2.6": {
       "checkpoint": "docs/v3/phase-2/checkpoints/2.6.md",
       "counts": {
-        "implemented": 18
+        "implemented": 14
       },
-      "decision": "Implemented como familia auxiliar, usar con sample_count y partial_sample; incorporación al entrenamiento requiere evaluación de valor incremental.",
+      "decision": "Implemented como familia auxiliar, usar con sample_count y partial_sample; incorporaci\u00f3n al entrenamiento requiere evaluaci\u00f3n de valor incremental.",
       "issue": 19,
       "regression_hashes": {
         "form_features.jsonl": "779040a01b40f0099d260438199dcbefdc0d052bb8cca0fda39ec8f2ab1033b4",
         "form_manifest.json": "3964f2062b71f6554c6370b336e5bba7b738ed387d343ac018b16364a0e70829",
-        "h2h_features.jsonl": "aa961e0ac334307a7704ba0a5c86cbecf9e5f8fc7b8aa3af1585216ede6fcaf3",
-        "h2h_manifest.json": "979a7f2cf269751c2925160c2a53e38fb064c9d6d6d2a748f3344b7eac7b221b",
+        "h2h_features.jsonl": "c0c1c1d12e9dc66d7ec6460761e1b9c0d70eed5f3b4c715e2086c523190a98f5",
+        "h2h_manifest.json": "b59cc1799021e54195313c9b0ec7b660b4cf6aa8d342f4dc9e727bfeebd878e0",
         "temporal_features.jsonl": "22f3f0a0e83b23b704932436cc9dbfe5e49a54c95e8f6576cc765052527042aa",
         "temporal_manifest.json": "20fe3df7920ffd1f82d11cb7490bbba06154e0d9a2befb2780cb9990412e6b32",
         "xg_features.jsonl": "7003af3f3a66f0ae6d0c6cee3992e82f8b803f2ccc1f6d9bf31759b74a74a614",
@@ -3900,13 +3837,13 @@
     "2.7": {
       "checkpoint": "docs/v3/phase-2/checkpoints/2.7.md",
       "counts": {},
-      "decision": "Matriz implemented; proveedores en review/planned, sin ingesta ni captura nueva. No altera catálogo 2.1 ni outputs previos.",
+      "decision": "Matriz implemented; proveedores en review/planned, sin ingesta ni captura nueva. No altera cat\u00e1logo 2.1 ni outputs previos.",
       "issue": 20,
       "regression_hashes": {
         "form_features.jsonl": "779040a01b40f0099d260438199dcbefdc0d052bb8cca0fda39ec8f2ab1033b4",
         "form_manifest.json": "3964f2062b71f6554c6370b336e5bba7b738ed387d343ac018b16364a0e70829",
-        "h2h_features.jsonl": "aa961e0ac334307a7704ba0a5c86cbecf9e5f8fc7b8aa3af1585216ede6fcaf3",
-        "h2h_manifest.json": "979a7f2cf269751c2925160c2a53e38fb064c9d6d6d2a748f3344b7eac7b221b",
+        "h2h_features.jsonl": "c0c1c1d12e9dc66d7ec6460761e1b9c0d70eed5f3b4c715e2086c523190a98f5",
+        "h2h_manifest.json": "b59cc1799021e54195313c9b0ec7b660b4cf6aa8d342f4dc9e727bfeebd878e0",
         "temporal_features.jsonl": "22f3f0a0e83b23b704932436cc9dbfe5e49a54c95e8f6576cc765052527042aa",
         "temporal_manifest.json": "20fe3df7920ffd1f82d11cb7490bbba06154e0d9a2befb2780cb9990412e6b32",
         "xg_features.jsonl": "7003af3f3a66f0ae6d0c6cee3992e82f8b803f2ccc1f6d9bf31759b74a74a614",
@@ -3920,13 +3857,13 @@
       "counts": {
         "blocked": 24
       },
-      "decision": "Blocked para valores deportivos; contratos preparados. Corners tiene mercado CORNERS_FUTURE, sin betting ni adquisición nueva.",
+      "decision": "Blocked para valores deportivos; contratos preparados. Corners tiene mercado CORNERS_FUTURE, sin betting ni adquisici\u00f3n nueva.",
       "issue": 21,
       "regression_hashes": {
         "form_features.jsonl": "779040a01b40f0099d260438199dcbefdc0d052bb8cca0fda39ec8f2ab1033b4",
         "form_manifest.json": "3964f2062b71f6554c6370b336e5bba7b738ed387d343ac018b16364a0e70829",
-        "h2h_features.jsonl": "aa961e0ac334307a7704ba0a5c86cbecf9e5f8fc7b8aa3af1585216ede6fcaf3",
-        "h2h_manifest.json": "979a7f2cf269751c2925160c2a53e38fb064c9d6d6d2a748f3344b7eac7b221b",
+        "h2h_features.jsonl": "c0c1c1d12e9dc66d7ec6460761e1b9c0d70eed5f3b4c715e2086c523190a98f5",
+        "h2h_manifest.json": "b59cc1799021e54195313c9b0ec7b660b4cf6aa8d342f4dc9e727bfeebd878e0",
         "temporal_features.jsonl": "22f3f0a0e83b23b704932436cc9dbfe5e49a54c95e8f6576cc765052527042aa",
         "temporal_manifest.json": "20fe3df7920ffd1f82d11cb7490bbba06154e0d9a2befb2780cb9990412e6b32",
         "xg_features.jsonl": "7003af3f3a66f0ae6d0c6cee3992e82f8b803f2ccc1f6d9bf31759b74a74a614",
@@ -3940,13 +3877,13 @@
       "counts": {
         "blocked": 23
       },
-      "decision": "Evaluada; blocked para todas las señales deportivas. Requiere fuente permitida de snapshots históricos de XI/disponibilidad y ledger de minutos.",
+      "decision": "Evaluada; blocked para todas las se\u00f1ales deportivas. Requiere fuente permitida de snapshots hist\u00f3ricos de XI/disponibilidad y ledger de minutos.",
       "issue": 22,
       "regression_hashes": {
         "form_features.jsonl": "779040a01b40f0099d260438199dcbefdc0d052bb8cca0fda39ec8f2ab1033b4",
         "form_manifest.json": "3964f2062b71f6554c6370b336e5bba7b738ed387d343ac018b16364a0e70829",
-        "h2h_features.jsonl": "aa961e0ac334307a7704ba0a5c86cbecf9e5f8fc7b8aa3af1585216ede6fcaf3",
-        "h2h_manifest.json": "979a7f2cf269751c2925160c2a53e38fb064c9d6d6d2a748f3344b7eac7b221b",
+        "h2h_features.jsonl": "c0c1c1d12e9dc66d7ec6460761e1b9c0d70eed5f3b4c715e2086c523190a98f5",
+        "h2h_manifest.json": "b59cc1799021e54195313c9b0ec7b660b4cf6aa8d342f4dc9e727bfeebd878e0",
         "temporal_features.jsonl": "22f3f0a0e83b23b704932436cc9dbfe5e49a54c95e8f6576cc765052527042aa",
         "temporal_manifest.json": "20fe3df7920ffd1f82d11cb7490bbba06154e0d9a2befb2780cb9990412e6b32",
         "xg_features.jsonl": "7003af3f3a66f0ae6d0c6cee3992e82f8b803f2ccc1f6d9bf31759b74a74a614",
@@ -3961,6 +3898,6 @@
     "python -m compileall -q v3 tests",
     "python -m pytest -q tests/v3",
     "git diff --check",
-    "python -m v3.features.phase2_validation --output-dir /tmp/phase2-reproduce"
+    "python -m v3.features.phase2_validation --output-dir /tmp/phase2-final-correction"
   ]
 }
