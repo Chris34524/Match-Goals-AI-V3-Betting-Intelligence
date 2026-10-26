@@ -1,0 +1,458 @@
+{
+  "audit_version": "2.4.0",
+  "candidate_files": 41893,
+  "candidate_sha256": "df00e5da6410b61d755c99a40fcc8968970ddb5d7be995a32bc4a28e09e95bad",
+  "decisions": {
+    "away_days_rest": {
+      "reason": "Truncated history does not certify latest-match completeness. Require complete dated fixture ledger through cutoff, including intervening fixtures.",
+      "status": "blocked"
+    },
+    "away_matches_last_14_days": {
+      "reason": "History cap and unparsed/missing fixtures cannot certify 14-day completeness. Require complete fixture ledger for interval, including zero-match evidence.",
+      "status": "blocked"
+    },
+    "home_days_rest": {
+      "reason": "Truncated history does not certify latest-match completeness. Require complete dated fixture ledger through cutoff, including intervening fixtures.",
+      "status": "blocked"
+    },
+    "home_matches_last_14_days": {
+      "reason": "History cap and unparsed/missing fixtures cannot certify 14-day completeness. Require complete fixture ledger for interval, including zero-match evidence.",
+      "status": "blocked"
+    }
+  },
+  "groups": {
+    "date_navigation_inspect.txt": {
+      "bytes": 8103476,
+      "calendar_marker_files": 1,
+      "completeness_key_paths": {},
+      "date_max": null,
+      "date_min": null,
+      "dated_samples": 0,
+      "files": 1,
+      "invalid_json": 0,
+      "pagination_marker_files": 0,
+      "top_keys": {}
+    },
+    "day_selected.json": {
+      "bytes": 4570,
+      "completeness_key_paths": {},
+      "date_max": "2026-10-11",
+      "date_min": "2026-10-11",
+      "dated_samples": 6,
+      "files": 1,
+      "invalid_json": 0,
+      "top_keys": {
+        "generado": 1,
+        "hours": 1,
+        "limit": 1,
+        "max_per_competition": 1,
+        "partidos": 1
+      }
+    },
+    "flashscore_home.html": {
+      "bytes": 451270,
+      "calendar_marker_files": 1,
+      "completeness_key_paths": {},
+      "date_max": null,
+      "date_min": null,
+      "dated_samples": 0,
+      "files": 1,
+      "invalid_json": 0,
+      "pagination_marker_files": 1,
+      "top_keys": {}
+    },
+    "flashscore_rendered.html": {
+      "bytes": 1703671,
+      "calendar_marker_files": 1,
+      "completeness_key_paths": {},
+      "date_max": null,
+      "date_min": null,
+      "dated_samples": 0,
+      "files": 1,
+      "invalid_json": 0,
+      "pagination_marker_files": 1,
+      "top_keys": {}
+    },
+    "h2h_page.html": {
+      "bytes": 848611,
+      "calendar_marker_files": 1,
+      "completeness_key_paths": {},
+      "date_max": null,
+      "date_min": null,
+      "dated_samples": 0,
+      "files": 1,
+      "invalid_json": 0,
+      "pagination_marker_files": 1,
+      "top_keys": {}
+    },
+    "h2h_page.txt": {
+      "bytes": 5454,
+      "calendar_marker_files": 0,
+      "completeness_key_paths": {},
+      "date_max": null,
+      "date_min": null,
+      "dated_samples": 0,
+      "files": 1,
+      "invalid_json": 0,
+      "pagination_marker_files": 1,
+      "top_keys": {}
+    },
+    "history_raw.json": {
+      "bytes": 51149,
+      "completeness_key_paths": {},
+      "date_max": "2026-09-19",
+      "date_min": "2022-09-25",
+      "dated_samples": 61,
+      "files": 1,
+      "invalid_json": 0,
+      "top_keys": {
+        "match_id": 1,
+        "numero_secciones": 1,
+        "objetivo_partidos": 1,
+        "partido": 1,
+        "secciones": 1
+      }
+    },
+    "inspect_matches.txt": {
+      "bytes": 31675,
+      "calendar_marker_files": 1,
+      "completeness_key_paths": {},
+      "date_max": null,
+      "date_min": null,
+      "dated_samples": 0,
+      "files": 1,
+      "invalid_json": 0,
+      "pagination_marker_files": 0,
+      "top_keys": {}
+    },
+    "match_detail.html": {
+      "bytes": 916426,
+      "calendar_marker_files": 1,
+      "completeness_key_paths": {},
+      "date_max": null,
+      "date_min": null,
+      "dated_samples": 0,
+      "files": 1,
+      "invalid_json": 0,
+      "pagination_marker_files": 1,
+      "top_keys": {}
+    },
+    "match_detail.txt": {
+      "bytes": 10794,
+      "calendar_marker_files": 0,
+      "completeness_key_paths": {},
+      "date_max": null,
+      "date_min": null,
+      "dated_samples": 0,
+      "files": 1,
+      "invalid_json": 0,
+      "pagination_marker_files": 1,
+      "top_keys": {}
+    },
+    "matches/<id>/history.json": {
+      "bytes": 220924890,
+      "completeness_key_paths": {},
+      "date_max": "2068-12-08",
+      "date_min": "1969-01-25",
+      "dated_samples": 264647,
+      "files": 4337,
+      "invalid_json": 0,
+      "top_keys": {
+        "match_id": 4337,
+        "numero_secciones": 4337,
+        "objetivo_partidos": 4337,
+        "partido": 4337,
+        "secciones": 4337
+      }
+    },
+    "matches/<id>/standings.json": {
+      "bytes": 17885590,
+      "completeness_key_paths": {},
+      "date_max": null,
+      "date_min": null,
+      "dated_samples": 0,
+      "files": 4342,
+      "invalid_json": 0,
+      "top_keys": {
+        "clasificacion": 3848,
+        "disponible": 494,
+        "estado": 3848,
+        "local": 3848,
+        "match_id": 494,
+        "motivo": 494,
+        "omitido": 494,
+        "partido": 3848,
+        "visitante": 3848
+      }
+    },
+    "matches/<id>/xg_history.json": {
+      "bytes": 61702466,
+      "completeness_key_paths": {
+        "$/local/l10/cobertura_xg": 4230,
+        "$/local/l5/cobertura_xg": 4230,
+        "$/visitante/l10/cobertura_xg": 4230,
+        "$/visitante/l5/cobertura_xg": 4230
+      },
+      "date_max": "2026-10-24",
+      "date_min": "1988-04-03",
+      "dated_samples": 83190,
+      "files": 4230,
+      "invalid_json": 0,
+      "top_keys": {
+        "local": 4230,
+        "match_id": 4230,
+        "objetivo_por_equipo": 4230,
+        "partido": 4230,
+        "visitante": 4230
+      }
+    },
+    "matches_manana.txt": {
+      "bytes": 1944,
+      "calendar_marker_files": 0,
+      "completeness_key_paths": {},
+      "date_max": null,
+      "date_min": null,
+      "dated_samples": 0,
+      "files": 1,
+      "invalid_json": 0,
+      "pagination_marker_files": 0,
+      "top_keys": {}
+    },
+    "partidos.json": {
+      "bytes": 304729,
+      "completeness_key_paths": {},
+      "date_max": "2026-10-26",
+      "date_min": "2026-10-25",
+      "dated_samples": 564,
+      "files": 1,
+      "invalid_json": 0,
+      "top_keys": {
+        "dias_solicitados": 1,
+        "generado_desde": 1,
+        "partidos": 1,
+        "resumen": 1
+      }
+    },
+    "partidos_candidatos.json": {
+      "bytes": 72381,
+      "completeness_key_paths": {},
+      "date_max": "2026-10-12",
+      "date_min": "2026-10-12",
+      "dated_samples": 109,
+      "files": 1,
+      "invalid_json": 0,
+      "top_keys": {
+        "candidatos": 1,
+        "conteo_estado": 1,
+        "conteo_tiempo_programados": 1,
+        "descartes": 1,
+        "generado_en": 1,
+        "grace_minutes": 1,
+        "origen": 1,
+        "total_candidatos": 1,
+        "total_origen": 1
+      }
+    },
+    "partidos_hoy.json": {
+      "bytes": 45628,
+      "completeness_key_paths": {},
+      "date_max": null,
+      "date_min": null,
+      "dated_samples": 0,
+      "files": 1,
+      "invalid_json": 0,
+      "top_keys": {}
+    },
+    "partidos_manana.json": {
+      "bytes": 109158,
+      "completeness_key_paths": {},
+      "date_max": "2026-10-09",
+      "date_min": "2026-10-09",
+      "dated_samples": 216,
+      "files": 1,
+      "invalid_json": 0,
+      "top_keys": {}
+    },
+    "selected_matches_*.json": {
+      "bytes": 1571493,
+      "completeness_key_paths": {},
+      "date_max": "2026-10-26",
+      "date_min": "2026-10-12",
+      "dated_samples": 2932,
+      "files": 14,
+      "invalid_json": 0,
+      "top_keys": {
+        "fecha": 14,
+        "partidos": 14,
+        "total": 14
+      }
+    },
+    "selected_matches_*.txt": {
+      "bytes": 26262,
+      "calendar_marker_files": 0,
+      "completeness_key_paths": {},
+      "date_max": null,
+      "date_min": null,
+      "dated_samples": 0,
+      "files": 14,
+      "invalid_json": 0,
+      "pagination_marker_files": 0,
+      "top_keys": {}
+    },
+    "standings.json": {
+      "bytes": 7912,
+      "completeness_key_paths": {},
+      "date_max": null,
+      "date_min": null,
+      "dated_samples": 0,
+      "files": 1,
+      "invalid_json": 0,
+      "top_keys": {
+        "clasificacion": 1,
+        "estado": 1,
+        "local": 1,
+        "partido": 1,
+        "visitante": 1
+      }
+    },
+    "standings_page.html": {
+      "bytes": 982095,
+      "calendar_marker_files": 1,
+      "completeness_key_paths": {},
+      "date_max": null,
+      "date_min": null,
+      "dated_samples": 0,
+      "files": 1,
+      "invalid_json": 0,
+      "pagination_marker_files": 1,
+      "top_keys": {}
+    },
+    "standings_page.txt": {
+      "bytes": 8652,
+      "calendar_marker_files": 0,
+      "completeness_key_paths": {},
+      "date_max": null,
+      "date_min": null,
+      "dated_samples": 0,
+      "files": 1,
+      "invalid_json": 0,
+      "pagination_marker_files": 1,
+      "top_keys": {}
+    },
+    "standings_rows.txt": {
+      "bytes": 11507,
+      "calendar_marker_files": 0,
+      "completeness_key_paths": {},
+      "date_max": null,
+      "date_min": null,
+      "dated_samples": 0,
+      "files": 1,
+      "invalid_json": 0,
+      "pagination_marker_files": 0,
+      "top_keys": {}
+    },
+    "test_matches/<id>/history.json": {
+      "bytes": 6794,
+      "completeness_key_paths": {},
+      "date_max": null,
+      "date_min": null,
+      "dated_samples": 0,
+      "files": 2,
+      "invalid_json": 0,
+      "top_keys": {
+        "numero_secciones": 2,
+        "objetivo_partidos": 2,
+        "partido": 2,
+        "secciones": 2
+      }
+    },
+    "test_matches/<id>/standings.json": {
+      "bytes": 403,
+      "completeness_key_paths": {},
+      "date_max": null,
+      "date_min": null,
+      "dated_samples": 0,
+      "files": 2,
+      "invalid_json": 0,
+      "top_keys": {
+        "clasificacion": 2,
+        "estado": 2,
+        "local": 2,
+        "partido": 2,
+        "visitante": 2
+      }
+    },
+    "xg_cache/*.json": {
+      "bytes": 12745857,
+      "completeness_key_paths": {},
+      "date_max": "2026-10-24",
+      "date_min": "1988-04-03",
+      "dated_samples": 28933,
+      "files": 28933,
+      "invalid_json": 0,
+      "top_keys": {
+        "competicion": 28933,
+        "competicion_codigo": 28933,
+        "estado_xg": 28933,
+        "fecha": 28933,
+        "goles_local": 28933,
+        "goles_visitante": 28933,
+        "local": 28933,
+        "match_id": 28933,
+        "url": 28933,
+        "visitante": 28933,
+        "xg_disponible": 28933,
+        "xg_local": 28933,
+        "xg_visitante": 28933
+      }
+    }
+  },
+  "history_objectives": {
+    "20": 3,
+    "21": 4334
+  },
+  "history_parsing": {
+    "rows": 210100,
+    "sections_with_unparsed_rows": 48,
+    "team_sections": 8674
+  },
+  "history_section_lengths": {
+    "0": 9,
+    "1": 19,
+    "10": 8,
+    "11": 15,
+    "12": 20,
+    "13": 18,
+    "14": 11,
+    "15": 10,
+    "16": 13,
+    "17": 14,
+    "18": 7,
+    "19": 8,
+    "2": 37,
+    "20": 9,
+    "21": 11,
+    "22": 6,
+    "23": 6,
+    "24": 12,
+    "25": 8195,
+    "26": 6,
+    "27": 11,
+    "28": 11,
+    "29": 12,
+    "3": 15,
+    "4": 26,
+    "5": 22,
+    "6": 32,
+    "7": 54,
+    "8": 35,
+    "9": 22
+  },
+  "limitations": [
+    "Only raw candidate files are read; operational outputs are excluded.",
+    "Key paths and date ranges are discovery evidence, not accredited completeness.",
+    "Raw HTML/text markers do not prove pagination exhaustion or all-competition coverage.",
+    "Dates use the shared day parser, including its two-digit-year interpretation; ranges are not certified coverage.",
+    "No local completeness attestation or validated fixture-ledger adapter exists; arbitrary complete flags do not enable features."
+  ]
+}
