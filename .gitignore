@@ -45,7 +45,7 @@ flashscore_log.txt
 # Historical/runtime datasets stay LOCAL.
 # V3 schemas/manifests will be versioned separately.
 # ============================================================
-data/
+/data/
 
 # Existing backup snapshots
 analysis_backup_*/
