@@ -1,0 +1,396 @@
+{
+  "contracts": [
+    {
+      "blocked_reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "definition": "Explicit dated availability status; unknown is not available.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "availability",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Historical performance uses strictly earlier completed fixtures (target/same-day/future excluded). Target prematch official/predicted/availability snapshots require independently accredited publication/revision strictly before decision cutoff; never backfill later official XI.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "definition": "Official named substitutes in a pre-cutoff snapshot.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "bench",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Historical performance uses strictly earlier completed fixtures (target/same-day/future excluded). Target prematch official/predicted/availability snapshots require independently accredited publication/revision strictly before decision cutoff; never backfill later official XI.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "definition": "Sum bench players prior per-90 production under predeclared metric/minute threshold; no post-target rating.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "bench_strength",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Historical performance uses strictly earlier completed fixtures (target/same-day/future excluded). Target prematch official/predicted/availability snapshots require independently accredited publication/revision strictly before decision cutoff; never backfill later official XI.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "definition": "Official or predicted formation with explicit snapshot kind, never infer official from prediction.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "formation",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Historical performance uses strictly earlier completed fixtures (target/same-day/future excluded). Target prematch official/predicted/availability snapshots require independently accredited publication/revision strictly before decision cutoff; never backfill later official XI.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "definition": "Explicit confirmed illness report, distinct from injury and unknown absence.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "illness",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Historical performance uses strictly earlier completed fixtures (target/same-day/future excluded). Target prematch official/predicted/availability snapshots require independently accredited publication/revision strictly before decision cutoff; never backfill later official XI.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "definition": "Explicit confirmed injury report with player ID and effective date.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "injury",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Historical performance uses strictly earlier completed fixtures (target/same-day/future excluded). Target prematch official/predicted/availability snapshots require independently accredited publication/revision strictly before decision cutoff; never backfill later official XI.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "definition": "Status of players selected by top-3 share of prior 10 fixture minutes; complete historical minutes and as-of status required.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "key_player_availability",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Historical performance uses strictly earlier completed fixtures (target/same-day/future excluded). Target prematch official/predicted/availability snapshots require independently accredited publication/revision strictly before decision cutoff; never backfill later official XI.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "definition": "Intersection of current official XI and previous eligible official XI divided by 11.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "lineup_continuity",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Historical performance uses strictly earlier completed fixtures (target/same-day/future excluded). Target prematch official/predicted/availability snapshots require independently accredited publication/revision strictly before decision cutoff; never backfill later official XI.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "definition": "Historical regulation playing minutes with provider substitution/stoppage convention.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "minutes",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Historical performance uses strictly earlier completed fixtures (target/same-day/future excluded). Target prematch official/predicted/availability snapshots require independently accredited publication/revision strictly before decision cutoff; never backfill later official XI.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "definition": "Explicit published squad omission; no inferred cause.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "not_in_squad",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Historical performance uses strictly earlier completed fixtures (target/same-day/future excluded). Target prematch official/predicted/availability snapshots require independently accredited publication/revision strictly before decision cutoff; never backfill later official XI.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "definition": "Official announced eleven player IDs and separately versioned publication snapshot.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "official_starting_xi",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Historical performance uses strictly earlier completed fixtures (target/same-day/future excluded). Target prematch official/predicted/availability snapshots require independently accredited publication/revision strictly before decision cutoff; never backfill later official XI.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "definition": "Prior match official assists with provider definition and correction lineage.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "player_assists",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Historical performance uses strictly earlier completed fixtures (target/same-day/future excluded). Target prematch official/predicted/availability snapshots require independently accredited publication/revision strictly before decision cutoff; never backfill later official XI.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "definition": "Prior match regulation goals attributed to stable player ID with own-goal rules.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "player_goals",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Historical performance uses strictly earlier completed fixtures (target/same-day/future excluded). Target prematch official/predicted/availability snapshots require independently accredited publication/revision strictly before decision cutoff; never backfill later official XI.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "definition": "Provider match rating, definition/version and historical publication; competition average is distinct.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "player_rating",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Historical performance uses strictly earlier completed fixtures (target/same-day/future excluded). Target prematch official/predicted/availability snapshots require independently accredited publication/revision strictly before decision cutoff; never backfill later official XI.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "definition": "Prior match regulation shots attributed to stable player ID.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "player_shots",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Historical performance uses strictly earlier completed fixtures (target/same-day/future excluded). Target prematch official/predicted/availability snapshots require independently accredited publication/revision strictly before decision cutoff; never backfill later official XI.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "definition": "Provider predicted eleven IDs; never substitute official XI or merge their histories.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "predicted_xi",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Historical performance uses strictly earlier completed fixtures (target/same-day/future excluded). Target prematch official/predicted/availability snapshots require independently accredited publication/revision strictly before decision cutoff; never backfill later official XI.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "definition": "Sum accredited minutes in [cutoff-14 days, cutoff); requires complete all-competition ledger.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "recent_minutes_load",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Historical performance uses strictly earlier completed fixtures (target/same-day/future excluded). Target prematch official/predicted/availability snapshots require independently accredited publication/revision strictly before decision cutoff; never backfill later official XI.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "definition": "Confirmed return following recorded injury, not silence or retrospective appearance.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "return_from_injury",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Historical performance uses strictly earlier completed fixtures (target/same-day/future excluded). Target prematch official/predicted/availability snapshots require independently accredited publication/revision strictly before decision cutoff; never backfill later official XI.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "definition": "11 minus official XI intersection size; full official XIs required.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "rotation",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Historical performance uses strictly earlier completed fixtures (target/same-day/future excluded). Target prematch official/predicted/availability snapshots require independently accredited publication/revision strictly before decision cutoff; never backfill later official XI.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "definition": "Provider persistent player ID reconciled across team transfers; shirt number/name is insufficient.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "stable_player_ids",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Historical performance uses strictly earlier completed fixtures (target/same-day/future excluded). Target prematch official/predicted/availability snapshots require independently accredited publication/revision strictly before decision cutoff; never backfill later official XI.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "definition": "Count official starts over last 10 complete eligible appearances/fixtures; denominator explicit.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "starts",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Historical performance uses strictly earlier completed fixtures (target/same-day/future excluded). Target prematch official/predicted/availability snapshots require independently accredited publication/revision strictly before decision cutoff; never backfill later official XI.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "definition": "Count appearances from bench over last 10 eligible team fixtures; unused bench excluded.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "sub_appearances",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Historical performance uses strictly earlier completed fixtures (target/same-day/future excluded). Target prematch official/predicted/availability snapshots require independently accredited publication/revision strictly before decision cutoff; never backfill later official XI.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "Local TXT has expected XI, shirt numbers, competition-average ratings and absences, but no accredited publication timestamp, stable player IDs, official XI or historical minutes ledger.",
+      "definition": "Effective competition-specific sanction with served-match ledger and appeal updates.",
+      "family": "players_lineups",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "suspension",
+      "phase": "2.9",
+      "prerequisites": "Permitted provider; stable player/team/match IDs; historical minutes and fixture completeness where relevant; separately timestamped official versus predicted snapshots before decision cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Historical performance uses strictly earlier completed fixtures (target/same-day/future excluded). Target prematch official/predicted/availability snapshots require independently accredited publication/revision strictly before decision cutoff; never backfill later official XI.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    }
+  ],
+  "version": "2.9.0"
+}

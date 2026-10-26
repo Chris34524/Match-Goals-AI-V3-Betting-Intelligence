@@ -1,0 +1,243 @@
+{
+  "contracts": [
+    {
+      "blocked_reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "definition": "Membership of unordered stable team-ID pair in dated curated rivalry registry.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "derby_rivalry",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Published registry effective before cutoff; no sentiment or geographical guess.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Each context snapshot must be independently published/revised before decision cutoff; historical fixture operands use strictly earlier eligible dates. Target scheduled stage and prematch XI are admissible only as independently accredited prematch snapshots, never inferred from outcomes.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "definition": "Official scheduled competition stage equals final.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "final",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Official pre-cutoff fixture stage; never infer from outcome or title winner.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Each context snapshot must be independently published/revised before decision cutoff; historical fixture operands use strictly earlier eligible dates. Target scheduled stage and prematch XI are admissible only as independently accredited prematch snapshots, never inferred from outcomes.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "definition": "Vector of accredited final/knockout/title/relegation/qualification flags; no subjective scalar.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "fixture_importance",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Each constituent proxy individually accredited; missing constituents stay unknown, not false.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Each context snapshot must be independently published/revised before decision cutoff; historical fixture operands use strictly earlier eligible dates. Target scheduled stage and prematch XI are admissible only as independently accredited prematch snapshots, never inferred from outcomes.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "definition": "Confirmed unavailable member of top-3 players by prior-10-fixture minute share.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "key_player_absence",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Predeclared key-player rule, complete minutes and timestamped confirmed availability.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Each context snapshot must be independently published/revised before decision cutoff; historical fixture operands use strictly earlier eligible dates. Target scheduled stage and prematch XI are admissible only as independently accredited prematch snapshots, never inferred from outcomes.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "definition": "Confirmed return of predeclared key player after recorded absence sequence.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "key_player_return",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Stable IDs, dated availability sequence and complete minutes for key-player rule.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Each context snapshot must be independently published/revised before decision cutoff; historical fixture operands use strictly earlier eligible dates. Target scheduled stage and prematch XI are admissible only as independently accredited prematch snapshots, never inferred from outcomes.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "definition": "Scheduled match belongs to knockout stage under competition rules.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "knockout",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Official dated stage/fixture identity and season rules before cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Each context snapshot must be independently published/revised before decision cutoff; historical fixture operands use strictly earlier eligible dates. Target scheduled stage and prematch XI are admissible only as independently accredited prematch snapshots, never inferred from outcomes.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "definition": "Symmetric difference size between official XI and latest strictly earlier predicted XI.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "lineup_surprise",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Separately versioned predicted and official snapshots, both published before decision cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Each context snapshot must be independently published/revised before decision cutoff; historical fixture operands use strictly earlier eligible dates. Target scheduled stage and prematch XI are admissible only as independently accredited prematch snapshots, never inferred from outcomes.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "definition": "True iff independently confirmed appointment effective time lies in [cutoff-14 days, cutoff); false only with complete appointment coverage.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "manager_changed_14d",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Official dated appointment, stable manager/team IDs, publication before cutoff and full interval coverage.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Each context snapshot must be independently published/revised before decision cutoff; historical fixture operands use strictly earlier eligible dates. Target scheduled stage and prematch XI are admissible only as independently accredited prematch snapshots, never inferred from outcomes.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "definition": "Count complete eligible team fixtures since confirmed appointment; indicator count < N with N declared before modeling.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "manager_first_n_matches",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Appointment evidence plus complete all-competition fixture ledger through cutoff.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Each context snapshot must be independently published/revised before decision cutoff; historical fixture operands use strictly earlier eligible dates. Target scheduled stage and prematch XI are admissible only as independently accredited prematch snapshots, never inferred from outcomes.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "definition": "Qualification outcome remains mathematically affected by target result.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "qualification_stakes",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Historical pre-cutoff table, remaining fixtures, qualification places and tiebreaks.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Each context snapshot must be independently published/revised before decision cutoff; historical fixture operands use strictly earlier eligible dates. Target scheduled stage and prematch XI are admissible only as independently accredited prematch snapshots, never inferred from outcomes.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "definition": "Relegation outcome remains mathematically affected by target result.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "relegation_stakes",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Historical pre-cutoff table, remaining fixtures, deductions and competition rules.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Each context snapshot must be independently published/revised before decision cutoff; historical fixture operands use strictly earlier eligible dates. Target scheduled stage and prematch XI are admissible only as independently accredited prematch snapshots, never inferred from outcomes.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "definition": "11 minus intersection size of current and previous official starting XI.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "rotation_intensity",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Two complete official XIs with publication before respective cutoffs; never predicted as official.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Each context snapshot must be independently published/revised before decision cutoff; historical fixture operands use strictly earlier eligible dates. Target scheduled stage and prematch XI are admissible only as independently accredited prematch snapshots, never inferred from outcomes.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "definition": "Title outcome remains mathematically affected by target result under season rules.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "title_race",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Historical pre-cutoff table, remaining fixtures and tiebreaks; current standings forbidden.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Each context snapshot must be independently published/revised before decision cutoff; historical fixture operands use strictly earlier eligible dates. Target scheduled stage and prematch XI are admissible only as independently accredited prematch snapshots, never inferred from outcomes.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No accredited historical stage/rivalry/appointment/table/availability/XI snapshots with stable IDs and pre-cutoff publications for this proxy. Raw headings, current coach names or current standings do not establish historical context.",
+      "definition": "Official leg index, aggregate score from completed prior leg and current season tie rules.",
+      "family": "objective_context",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "two_leg_tie_context",
+      "phase": "2.11",
+      "prerequisites": "Permitted source; independently published/versioned evidence before decision cutoff. Tie/leg IDs, regulation scope, accredited earlier leg result and rules (including away-goals rule where applicable).",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Each context snapshot must be independently published/revised before decision cutoff; historical fixture operands use strictly earlier eligible dates. Target scheduled stage and prematch XI are admissible only as independently accredited prematch snapshots, never inferred from outcomes.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    }
+  ],
+  "version": "2.11.0"
+}

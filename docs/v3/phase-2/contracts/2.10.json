@@ -1,0 +1,165 @@
+{
+  "contracts": [
+    {
+      "blocked_reason": "No complete dated card/foul event ledger, stable player/event IDs or accredited publications. A red-card absence mention is not chronology, sanction duration or served-match evidence.",
+      "definition": "Sum disjoint card events over n complete prior matches; n and yellow/red components explicit.",
+      "family": "discipline",
+      "markets": [
+        "CARDS_FUTURE"
+      ],
+      "name": "cards_per_match",
+      "phase": "2.10",
+      "prerequisites": "Permitted source, complete event ledger and correction history; stable event/dismissal/player/team IDs; second-yellow linked without duplicate reds; competition rules when deriving sanctions.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No complete dated card/foul event ledger, stable player/event IDs or accredited publications. A red-card absence mention is not chronology, sanction duration or served-match evidence.",
+      "definition": "Consecutive eligible fixtures with at least one defined card event; cap/sample/censoring retained; complete ledger required.",
+      "family": "discipline",
+      "markets": [
+        "CARDS_FUTURE"
+      ],
+      "name": "disciplinary_streaks",
+      "phase": "2.10",
+      "prerequisites": "Permitted source, complete event ledger and correction history; stable event/dismissal/player/team IDs; second-yellow linked without duplicate reds; competition rules when deriving sanctions.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No complete dated card/foul event ledger, stable player/event IDs or accredited publications. A red-card absence mention is not chronology, sanction duration or served-match evidence.",
+      "definition": "Recorded regulation fouls with provider definition; no inference about emotional aggression.",
+      "family": "discipline",
+      "markets": [
+        "CARDS_FUTURE"
+      ],
+      "name": "discipline_fouls",
+      "phase": "2.10",
+      "prerequisites": "Permitted source, complete event ledger and correction history; stable event/dismissal/player/team IDs; second-yellow linked without duplicate reds; competition rules when deriving sanctions.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No complete dated card/foul event ledger, stable player/event IDs or accredited publications. A red-card absence mention is not chronology, sanction duration or served-match evidence.",
+      "definition": "Ordered period, elapsed minute, added time, sequence and event IDs; corrections and rescinded events retained.",
+      "family": "discipline",
+      "markets": [
+        "CARDS_FUTURE"
+      ],
+      "name": "event_chronology",
+      "phase": "2.10",
+      "prerequisites": "Permitted source, complete event ledger and correction history; stable event/dismissal/player/team IDs; second-yellow linked without duplicate reds; competition rules when deriving sanctions.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No complete dated card/foul event ledger, stable player/event IDs or accredited publications. A red-card absence mention is not chronology, sanction duration or served-match evidence.",
+      "definition": "Disjoint dated card events attributed to stable player ID, with team stint and rescissions.",
+      "family": "discipline",
+      "markets": [
+        "CARDS_FUTURE"
+      ],
+      "name": "player_cards",
+      "phase": "2.10",
+      "prerequisites": "Permitted source, complete event ledger and correction history; stable event/dismissal/player/team IDs; second-yellow linked without duplicate reds; competition rules when deriving sanctions.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No complete dated card/foul event ledger, stable player/event IDs or accredited publications. A red-card absence mention is not chronology, sanction duration or served-match evidence.",
+      "definition": "Dismissals = direct-red dismissals plus second-yellow dismissals, each dismissal ID once; market settlement may use different weights.",
+      "family": "discipline",
+      "markets": [
+        "CARDS_FUTURE"
+      ],
+      "name": "red_cards",
+      "phase": "2.10",
+      "prerequisites": "Permitted source, complete event ledger and correction history; stable event/dismissal/player/team IDs; second-yellow linked without duplicate reds; competition rules when deriving sanctions.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No complete dated card/foul event ledger, stable player/event IDs or accredited publications. A red-card absence mention is not chronology, sanction duration or served-match evidence.",
+      "definition": "One dismissal linked to its triggering second caution; provider synthetic red row is not another dismissal.",
+      "family": "discipline",
+      "markets": [
+        "CARDS_FUTURE"
+      ],
+      "name": "second_yellow_red",
+      "phase": "2.10",
+      "prerequisites": "Permitted source, complete event ledger and correction history; stable event/dismissal/player/team IDs; second-yellow linked without duplicate reds; competition rules when deriving sanctions.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No complete dated card/foul event ledger, stable player/event IDs or accredited publications. A red-card absence mention is not chronology, sanction duration or served-match evidence.",
+      "definition": "Disjoint dated card events attributed to team ID; staff/bench scope explicit.",
+      "family": "discipline",
+      "markets": [
+        "CARDS_FUTURE"
+      ],
+      "name": "team_cards",
+      "phase": "2.10",
+      "prerequisites": "Permitted source, complete event ledger and correction history; stable event/dismissal/player/team IDs; second-yellow linked without duplicate reds; competition rules when deriving sanctions.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No complete dated card/foul event ledger, stable player/event IDs or accredited publications. A red-card absence mention is not chronology, sanction duration or served-match evidence.",
+      "definition": "Observable yellow events excluding provider duplicate representations; retain whether a caution is second-yellow.",
+      "family": "discipline",
+      "markets": [
+        "CARDS_FUTURE"
+      ],
+      "name": "yellow_cards",
+      "phase": "2.10",
+      "prerequisites": "Permitted source, complete event ledger and correction history; stable event/dismissal/player/team IDs; second-yellow linked without duplicate reds; competition rules when deriving sanctions.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Strictly pre-cutoff publication/revision and pre-target completed match; exclude target, same-day, future; final scores/labels/model outputs forbidden",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    }
+  ],
+  "ledger_contract": {
+    "completeness": "Independent provider evidence of all pages/events, completed fixture scope and revision/correction history; boolean complete=true alone is insufficient.",
+    "future_market": "CARDS_FUTURE",
+    "required_identity": [
+      "event_id",
+      "dismissal_id_when_red",
+      "fixture_id",
+      "team_id",
+      "player_or_staff_id",
+      "competition_id",
+      "season_id"
+    ],
+    "required_time": [
+      "period",
+      "minute",
+      "added_time",
+      "sequence",
+      "publication_timestamp",
+      "revision_timestamp",
+      "decision_cutoff"
+    ],
+    "rules": "Versioned competition suspension/carryover/amnesty/appeal rules; market settlement rules are separate and not implemented.",
+    "second_yellow_policy": "Link triggering caution and synthetic red to one dismissal_id. Never add a second-yellow dismissal and its synthetic red as two reds. Preserve caution ledger separately.",
+    "unknown_policy": "No complete ledger => null + blocked; absence of card rows is not zero cards."
+  },
+  "version": "2.10.0"
+}

@@ -1,0 +1,124 @@
+{
+  "contracts": [
+    {
+      "blocked_reason": "No permitted news provider or independently timestamped local corpus. Existing preview snapshot lacks publication/revision accreditation; no retrospective backfill or mass acquisition.",
+      "definition": "Structured attributed competition_stakes event; no psychological sentiment or private-state inference.",
+      "family": "news_context_p3",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "news_competition_stakes",
+      "phase": "2.12",
+      "prerequisites": "Permitted ingestion source and independent publication/revision evidence; bounded source excerpt, stable entity ID, versioned extraction and confidence; schema validity alone is not permission or timestamp accreditation.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Independently accredited publication/revision strictly before decision cutoff with timezone. Same-day news needs verified publication timing; schema timestamp strings alone grant no availability. No target outcome, later revision or retrospective backfill.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted news provider or independently timestamped local corpus. Existing preview snapshot lacks publication/revision accreditation; no retrospective backfill or mass acquisition.",
+      "definition": "Structured attributed injury_confirmed event; no psychological sentiment or private-state inference.",
+      "family": "news_context_p3",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "news_injury_confirmed",
+      "phase": "2.12",
+      "prerequisites": "Permitted ingestion source and independent publication/revision evidence; bounded source excerpt, stable entity ID, versioned extraction and confidence; schema validity alone is not permission or timestamp accreditation.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Independently accredited publication/revision strictly before decision cutoff with timezone. Same-day news needs verified publication timing; schema timestamp strings alone grant no availability. No target outcome, later revision or retrospective backfill.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted news provider or independently timestamped local corpus. Existing preview snapshot lacks publication/revision accreditation; no retrospective backfill or mass acquisition.",
+      "definition": "Structured attributed lineup_statement event; no psychological sentiment or private-state inference.",
+      "family": "news_context_p3",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "news_lineup_statement",
+      "phase": "2.12",
+      "prerequisites": "Permitted ingestion source and independent publication/revision evidence; bounded source excerpt, stable entity ID, versioned extraction and confidence; schema validity alone is not permission or timestamp accreditation.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Independently accredited publication/revision strictly before decision cutoff with timezone. Same-day news needs verified publication timing; schema timestamp strings alone grant no availability. No target outcome, later revision or retrospective backfill.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted news provider or independently timestamped local corpus. Existing preview snapshot lacks publication/revision accreditation; no retrospective backfill or mass acquisition.",
+      "definition": "Structured attributed manager_change event; no psychological sentiment or private-state inference.",
+      "family": "news_context_p3",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "news_manager_change",
+      "phase": "2.12",
+      "prerequisites": "Permitted ingestion source and independent publication/revision evidence; bounded source excerpt, stable entity ID, versioned extraction and confidence; schema validity alone is not permission or timestamp accreditation.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Independently accredited publication/revision strictly before decision cutoff with timezone. Same-day news needs verified publication timing; schema timestamp strings alone grant no availability. No target outcome, later revision or retrospective backfill.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted news provider or independently timestamped local corpus. Existing preview snapshot lacks publication/revision accreditation; no retrospective backfill or mass acquisition.",
+      "definition": "Structured attributed rotation_statement event; no psychological sentiment or private-state inference.",
+      "family": "news_context_p3",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "news_rotation_statement",
+      "phase": "2.12",
+      "prerequisites": "Permitted ingestion source and independent publication/revision evidence; bounded source excerpt, stable entity ID, versioned extraction and confidence; schema validity alone is not permission or timestamp accreditation.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Independently accredited publication/revision strictly before decision cutoff with timezone. Same-day news needs verified publication timing; schema timestamp strings alone grant no availability. No target outcome, later revision or retrospective backfill.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted news provider or independently timestamped local corpus. Existing preview snapshot lacks publication/revision accreditation; no retrospective backfill or mass acquisition.",
+      "definition": "Structured attributed suspension_confirmed event; no psychological sentiment or private-state inference.",
+      "family": "news_context_p3",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "news_suspension_confirmed",
+      "phase": "2.12",
+      "prerequisites": "Permitted ingestion source and independent publication/revision evidence; bounded source excerpt, stable entity ID, versioned extraction and confidence; schema validity alone is not permission or timestamp accreditation.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Independently accredited publication/revision strictly before decision cutoff with timezone. Same-day news needs verified publication timing; schema timestamp strings alone grant no availability. No target outcome, later revision or retrospective backfill.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    },
+    {
+      "blocked_reason": "No permitted news provider or independently timestamped local corpus. Existing preview snapshot lacks publication/revision accreditation; no retrospective backfill or mass acquisition.",
+      "definition": "Structured attributed transfer_status event; no psychological sentiment or private-state inference.",
+      "family": "news_context_p3",
+      "markets": [
+        "BTTS",
+        "OVER_2_5",
+        "1X2_EXPERIMENTAL"
+      ],
+      "name": "news_transfer_status",
+      "phase": "2.12",
+      "prerequisites": "Permitted ingestion source and independent publication/revision evidence; bounded source excerpt, stable entity ID, versioned extraction and confidence; schema validity alone is not permission or timestamp accreditation.",
+      "provenance_requirement": "provider/permission evidence; entity, team, fixture and competition IDs; source artifact/URL + digest; publication/revision timestamp; decision cutoff; oriented field evidence",
+      "status": "blocked",
+      "temporal_requirement": "Independently accredited publication/revision strictly before decision cutoff with timezone. Same-day news needs verified publication timing; schema timestamp strings alone grant no availability. No target outcome, later revision or retrospective backfill.",
+      "unknown_policy": "null with explicit reason; never zero-fill or retrospective backfill"
+    }
+  ],
+  "version": "2.12.0"
+}
