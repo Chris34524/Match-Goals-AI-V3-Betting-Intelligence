@@ -1,0 +1,281 @@
+{
+  "checks": {
+    "01_phase3_odds_files_intact": true,
+    "02_odds_contract_intact": true,
+    "03_source_matrix_fail_closed": true,
+    "04_no_fabricated_authorization": true,
+    "05_fair_odds": true,
+    "06_no_nonfinite_json": true,
+    "07_complete_market_required": true,
+    "08_no_vig_normalized": true,
+    "09_edges": true,
+    "10_ev": true,
+    "11_post_cutoff_blocked": true,
+    "12_post_kickoff_blocked": true,
+    "13_closing_blocked": true,
+    "14_minimum_odds": true,
+    "15_equality_deterministic": true,
+    "16_decision_semantics": true,
+    "17_sensitivity_descriptive": true,
+    "18_no_sizing_fields": true,
+    "19_deterministic_outputs": true,
+    "20_full_v3_suite_passes": true,
+    "21_data_intact": true,
+    "22_scraper_intact": true,
+    "23_analysis_intact": true,
+    "24_main_py_intact": true,
+    "25_lineage_intact": true,
+    "26_champion_and_existing_files_intact": true,
+    "27_offline": true,
+    "28_scope_isolated": true
+  },
+  "example_hashes": {
+    "candidate_sha256": "9d3b2264507dbf0ce980bd745959420b9433fd786a5bd9467e554c437b0cae65",
+    "selector_sha256": "f36c85373d92e39fa81bf37d8f902746c70e42cf5db1615f8423a98568291b72",
+    "sensitivity_sha256": "da099100e79d4b90187d76efb3892106272661e4f72647db2869f471f50395e3"
+  },
+  "files_created": [
+    "docs/v3/phase-4-final.md",
+    "docs/v3/phase-4-validation-report.json",
+    "docs/v3/value/artifacts-manifest.json",
+    "docs/v3/value/checkpoints/4.1.md",
+    "docs/v3/value/checkpoints/4.2.md",
+    "docs/v3/value/examples/default-policy.json",
+    "docs/v3/value/examples/input.json",
+    "docs/v3/value/examples/predefined-policies.json",
+    "docs/v3/value/integrity-after.json",
+    "docs/v3/value/integrity-before.json",
+    "docs/v3/value/preexisting-untracked.json",
+    "docs/v3/value/protected-after.json",
+    "docs/v3/value/protected-before.json",
+    "tests/v3/test_value_engine.py",
+    "tests/v3/test_value_phase4_validation.py",
+    "tests/v3/test_value_selector.py",
+    "v3/value/__init__.py",
+    "v3/value/cli.py",
+    "v3/value/contract.py",
+    "v3/value/engine.py",
+    "v3/value/fixtures.py",
+    "v3/value/market.py",
+    "v3/value/phase4_validation.py",
+    "v3/value/policy.py",
+    "v3/value/probability.py",
+    "v3/value/report.py",
+    "v3/value/selector.py"
+  ],
+  "gaps": [
+    "No live source project grant",
+    "Synthetic policy defaults are not historically validated",
+    "No probability calibration assessment",
+    "J_BT_sin_temporada has no separately present local artifacts"
+  ],
+  "integrity": {
+    "BT0": {
+      "after": {
+        "content_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "files": 0,
+        "mtime_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "before": {
+        "content_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "files": 0,
+        "mtime_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "phase3_unchanged": true,
+      "unchanged": true
+    },
+    "J_BT_sin_temporada": {
+      "after": {
+        "content_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "files": 0,
+        "mtime_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "before": {
+        "content_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "files": 0,
+        "mtime_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "phase3_unchanged": true,
+      "unchanged": true
+    },
+    "analysis": {
+      "after": {
+        "content_sha256": "3ef4159d08b4f0a9f3b311d60c7caafa3137b9024ff56098a2c67e0694830c64",
+        "files": 128,
+        "mtime_sha256": "5ece3867ff9efe15160fdaccff9880759f157892daec60681f5b197450b5ee95"
+      },
+      "before": {
+        "content_sha256": "3ef4159d08b4f0a9f3b311d60c7caafa3137b9024ff56098a2c67e0694830c64",
+        "files": 128,
+        "mtime_sha256": "5ece3867ff9efe15160fdaccff9880759f157892daec60681f5b197450b5ee95"
+      },
+      "phase3_unchanged": true,
+      "unchanged": true
+    },
+    "analysis_backup_20261008_202808": {
+      "after": {
+        "content_sha256": "579664f111d03546e1f45d3cc06611ce33fd3f0f0ac2cd50957e33bf1683ea80",
+        "files": 61,
+        "mtime_sha256": "0b90c50d24c3edebe0fe138c9aa1d22a1612eac45e6f4c701ed8042134fe93be"
+      },
+      "before": {
+        "content_sha256": "579664f111d03546e1f45d3cc06611ce33fd3f0f0ac2cd50957e33bf1683ea80",
+        "files": 61,
+        "mtime_sha256": "0b90c50d24c3edebe0fe138c9aa1d22a1612eac45e6f4c701ed8042134fe93be"
+      },
+      "phase3_unchanged": true,
+      "unchanged": true
+    },
+    "data": {
+      "after": {
+        "content_sha256": "b67329ef75f0d548d1554c913a00e5dbc0d81bf003fce1b6ca3ff8e2179dbd60",
+        "files": 67219,
+        "mtime_sha256": "281724b5ba14ef6c2104db063d18ff8be41708b619a8e79959eb828fdf6899e9"
+      },
+      "before": {
+        "content_sha256": "b67329ef75f0d548d1554c913a00e5dbc0d81bf003fce1b6ca3ff8e2179dbd60",
+        "files": 67219,
+        "mtime_sha256": "281724b5ba14ef6c2104db063d18ff8be41708b619a8e79959eb828fdf6899e9"
+      },
+      "phase3_unchanged": true,
+      "unchanged": true
+    },
+    "docs/v3/odds/source-matrix.json": {
+      "after": {
+        "content_sha256": "88c0b30a1ed1158a958dd61a16b8bd799911f5d6ec3d9395bdd9753e9c9a3cd6",
+        "files": 1,
+        "mtime_sha256": "00421da53903f3564231001a5423480776253738cca97082a2d5892b282d7a43"
+      },
+      "before": {
+        "content_sha256": "88c0b30a1ed1158a958dd61a16b8bd799911f5d6ec3d9395bdd9753e9c9a3cd6",
+        "files": 1,
+        "mtime_sha256": "00421da53903f3564231001a5423480776253738cca97082a2d5892b282d7a43"
+      },
+      "phase3_unchanged": true,
+      "unchanged": true
+    },
+    "lineage:BT0": {
+      "after": {
+        "content_sha256": "182c334729a812d277d75b324a9f252ed4a4fda6a9072ad14852cace234378ad",
+        "files": 1,
+        "mtime_sha256": "f4ab2656c007fbb120686cd0e1789b3a46ef3a354ce34b0f7fae6740f8b33445"
+      },
+      "before": {
+        "content_sha256": "182c334729a812d277d75b324a9f252ed4a4fda6a9072ad14852cace234378ad",
+        "files": 1,
+        "mtime_sha256": "f4ab2656c007fbb120686cd0e1789b3a46ef3a354ce34b0f7fae6740f8b33445"
+      },
+      "phase3_unchanged": true,
+      "unchanged": true
+    },
+    "lineage:J_BT_sin_temporada": {
+      "after": {
+        "content_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "files": 0,
+        "mtime_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "before": {
+        "content_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "files": 0,
+        "mtime_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "phase3_unchanged": true,
+      "unchanged": true
+    },
+    "main.py": {
+      "after": {
+        "content_sha256": "28f91473ea44c2d9addca1eb98948e1bda5a503c86e1638fc2e0f7372fafcd8d",
+        "files": 1,
+        "mtime_sha256": "a996525699ce3a295c9705d27f6f906c1bdd022f8e8040f4c26ba5a0564f9c9c"
+      },
+      "before": {
+        "content_sha256": "28f91473ea44c2d9addca1eb98948e1bda5a503c86e1638fc2e0f7372fafcd8d",
+        "files": 1,
+        "mtime_sha256": "a996525699ce3a295c9705d27f6f906c1bdd022f8e8040f4c26ba5a0564f9c9c"
+      },
+      "phase3_unchanged": true,
+      "unchanged": true
+    },
+    "scraper": {
+      "after": {
+        "content_sha256": "2d9bc354b34ae34f96ac6f673cf4330195d111116c6c051b30011d6a97d2f742",
+        "files": 48,
+        "mtime_sha256": "68fdb19021c82b6abf2808e021dedae2947c1507078693ff5542ef40720689e4"
+      },
+      "before": {
+        "content_sha256": "2d9bc354b34ae34f96ac6f673cf4330195d111116c6c051b30011d6a97d2f742",
+        "files": 48,
+        "mtime_sha256": "68fdb19021c82b6abf2808e021dedae2947c1507078693ff5542ef40720689e4"
+      },
+      "phase3_unchanged": true,
+      "unchanged": true
+    },
+    "v3/odds/audit.py": {
+      "after": {
+        "content_sha256": "c0e15e194f6fd812bd35347def830ac8222f6c219aae31d63084058cb83397b4",
+        "files": 1,
+        "mtime_sha256": "92b9ec7f142fa149348029b850919221a7b97a8e9f72b108b7b9add7a34950cf"
+      },
+      "before": {
+        "content_sha256": "c0e15e194f6fd812bd35347def830ac8222f6c219aae31d63084058cb83397b4",
+        "files": 1,
+        "mtime_sha256": "92b9ec7f142fa149348029b850919221a7b97a8e9f72b108b7b9add7a34950cf"
+      },
+      "phase3_unchanged": true,
+      "unchanged": true
+    },
+    "v3/odds/contract.py": {
+      "after": {
+        "content_sha256": "06ab3f5aef7775ba55ceaa7165ec679ff9d790b82be4b88b22a3940abbf82597",
+        "files": 1,
+        "mtime_sha256": "0ac485cd1bda028b51a2422a3e8d71dc433c55d21b2e91233b3a7b4e23fab050"
+      },
+      "before": {
+        "content_sha256": "06ab3f5aef7775ba55ceaa7165ec679ff9d790b82be4b88b22a3940abbf82597",
+        "files": 1,
+        "mtime_sha256": "0ac485cd1bda028b51a2422a3e8d71dc433c55d21b2e91233b3a7b4e23fab050"
+      },
+      "phase3_unchanged": true,
+      "unchanged": true
+    },
+    "v3/odds/source_matrix.py": {
+      "after": {
+        "content_sha256": "fe8369b404ef9232130a62a0392c6cac0380fd270f131025a95ef0f0fda16ba7",
+        "files": 1,
+        "mtime_sha256": "b96f5553b440381b2e70aa2b14657568aeeeebbd4a90cb46808a8e91fe60d3d7"
+      },
+      "before": {
+        "content_sha256": "fe8369b404ef9232130a62a0392c6cac0380fd270f131025a95ef0f0fda16ba7",
+        "files": 1,
+        "mtime_sha256": "b96f5553b440381b2e70aa2b14657568aeeeebbd4a90cb46808a8e91fe60d3d7"
+      },
+      "phase3_unchanged": true,
+      "unchanged": true
+    }
+  },
+  "live_authorized": false,
+  "manifest_sha256": "dfb4191eb82e09f35273704875a8a181b31b632d0ad1a9d9490736769b7404f1",
+  "network": {
+    "tests": "autouse socket/DNS guard",
+    "validation_attempts": 0
+  },
+  "phase5_dependency": "Consume only revalidated eligible evidence and explicitly versioned policies; production remains blocked pending source authorization.",
+  "preexisting_untracked": {
+    "files": 6,
+    "root": "v3_data/",
+    "unchanged": true
+  },
+  "result": "passed",
+  "source_issues": [
+    32,
+    33
+  ],
+  "tests": {
+    "compile_exit_code": 0,
+    "exit_code": 0,
+    "summary": "1087 passed",
+    "total_passed": 1087
+  },
+  "tracked_files_unchanged": true,
+  "version": "4.2.0"
+}
