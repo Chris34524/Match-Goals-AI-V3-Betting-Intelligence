@@ -1,0 +1,20 @@
+[
+  {
+    "internal_match_id": "synthetic-match-1",
+    "external_event_id": "synthetic-event-1",
+    "sport_key": "soccer_synthetic",
+    "competition": "Synthetic League",
+    "season": "2026",
+    "kickoff_at": "2026-11-01T18:00:00Z",
+    "home": "Synthetic Home",
+    "away": "Synthetic Away",
+    "markets": [
+      "1X2",
+      "BTTS",
+      "OVER_1_5",
+      "OVER_2_5",
+      "OVER_3_5"
+    ],
+    "priority": "P0"
+  }
+]

@@ -1,0 +1,304 @@
+{
+  "blocked_markets": [
+    "ASIAN_HANDICAP",
+    "CORNERS",
+    "CARDS",
+    "props",
+    "unsupported totals lines"
+  ],
+  "checks": {
+    "01_contract_3_1_intact": true,
+    "02_source_matrix_fail_closed": true,
+    "03_blocked_sources_remain_blocked": true,
+    "04_live_requires_credentials_and_authorization": true,
+    "05_no_secrets_in_changes": true,
+    "06_no_historical_endpoints": true,
+    "07_snapshots_pre_match_without_leakage": true,
+    "08_closing_not_inferred": true,
+    "09_clv_blocked_without_accredited_closing": true,
+    "10_movement_only_comparable": true,
+    "11_quota_guard_active": true,
+    "12_no_network_in_validation_and_tests": true,
+    "13_deterministic_outputs": true,
+    "14_data_intact": true,
+    "15_scraper_intact": true,
+    "16_analysis_intact": true,
+    "17_lineage_BT0_intact": true,
+    "18_lineage_J_BT_sin_temporada_intact": true,
+    "19_all_protected_roots_and_mtimes_intact": true,
+    "20_changes_isolated_to_v3": true
+  },
+  "closing_status": "unavailable_without_explicit_accreditation",
+  "clv_convention": "odds_taken / odds_close - 1",
+  "clv_status": "blocked_without_accredited_closing",
+  "example_fixture_manifest": {
+    "canonical_sha256": "512b62c41cd26483e7bf170ecd45ee7ef466881b06b8df31783afbd6ac9a1e12",
+    "record_count": 11,
+    "run_id": "f95ab56a9b4cbd2c6148629d77a052bdb499dba9a757bcff3e2bfe1c5dffe7fe",
+    "source_sha256": "14bcc23ee9d9a96808144aba45d5f67c999d6a4e5213430e3f215f95be1247e0"
+  },
+  "files_touched": [
+    "docs/v3/odds/checkpoints/3.2.md",
+    "docs/v3/odds/checkpoints/3.3.md",
+    "docs/v3/odds/integrity-after.json",
+    "docs/v3/odds/integrity-before.json",
+    "docs/v3/phase-3-final.md",
+    "docs/v3/phase-3-validation-report.json",
+    "tests/v3/conftest.py",
+    "tests/v3/fixtures/odds/config.json",
+    "tests/v3/fixtures/odds/response.json",
+    "tests/v3/fixtures/odds/targets.json",
+    "tests/v3/test_odds_collector.py",
+    "tests/v3/test_odds_phase3_validation.py",
+    "tests/v3/test_odds_snapshots.py",
+    "v3/odds/cli.py",
+    "v3/odds/clv.py",
+    "v3/odds/collector.py",
+    "v3/odds/movement.py",
+    "v3/odds/phase3_validation.py",
+    "v3/odds/provider.py",
+    "v3/odds/quota.py",
+    "v3/odds/reconciliation.py",
+    "v3/odds/scheduler.py",
+    "v3/odds/snapshot_report.py",
+    "v3/odds/snapshots.py",
+    "v3/odds/snapshots_cli.py",
+    "v3/odds/storage.py",
+    "v3/odds/the_odds_api.py",
+    "v3_data/odds/.gitignore",
+    "v3_data/odds/README.md",
+    "v3_data/odds/phase3-synthetic-example/f95ab56a9b4cbd2c6148629d77a052bdb499dba9a757bcff3e2bfe1c5dffe7fe/canonical.jsonl",
+    "v3_data/odds/phase3-synthetic-example/f95ab56a9b4cbd2c6148629d77a052bdb499dba9a757bcff3e2bfe1c5dffe7fe/manifest.json",
+    "v3_data/odds/phase3-synthetic-example/f95ab56a9b4cbd2c6148629d77a052bdb499dba9a757bcff3e2bfe1c5dffe7fe/raw/response.json"
+  ],
+  "gaps": [
+    "No real provider acquisition/coverage validated",
+    "No project source grant or credentials",
+    "No accredited current-provider opening/closing; real CLV blocked",
+    "Separate roots/clients sharing a credential need an external budget coordinator"
+  ],
+  "integrity": {
+    "BT0": {
+      "after": {
+        "content_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "files": 0,
+        "mtime_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "before": {
+        "content_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "files": 0,
+        "mtime_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "unchanged": true
+    },
+    "J_BT_sin_temporada": {
+      "after": {
+        "content_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "files": 0,
+        "mtime_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "before": {
+        "content_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "files": 0,
+        "mtime_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "unchanged": true
+    },
+    "analysis": {
+      "after": {
+        "content_sha256": "3ef4159d08b4f0a9f3b311d60c7caafa3137b9024ff56098a2c67e0694830c64",
+        "files": 128,
+        "mtime_sha256": "5ece3867ff9efe15160fdaccff9880759f157892daec60681f5b197450b5ee95"
+      },
+      "before": {
+        "content_sha256": "3ef4159d08b4f0a9f3b311d60c7caafa3137b9024ff56098a2c67e0694830c64",
+        "files": 128,
+        "mtime_sha256": "5ece3867ff9efe15160fdaccff9880759f157892daec60681f5b197450b5ee95"
+      },
+      "unchanged": true
+    },
+    "analysis_backup_20261008_202808": {
+      "after": {
+        "content_sha256": "579664f111d03546e1f45d3cc06611ce33fd3f0f0ac2cd50957e33bf1683ea80",
+        "files": 61,
+        "mtime_sha256": "0b90c50d24c3edebe0fe138c9aa1d22a1612eac45e6f4c701ed8042134fe93be"
+      },
+      "before": {
+        "content_sha256": "579664f111d03546e1f45d3cc06611ce33fd3f0f0ac2cd50957e33bf1683ea80",
+        "files": 61,
+        "mtime_sha256": "0b90c50d24c3edebe0fe138c9aa1d22a1612eac45e6f4c701ed8042134fe93be"
+      },
+      "unchanged": true
+    },
+    "data": {
+      "after": {
+        "content_sha256": "b67329ef75f0d548d1554c913a00e5dbc0d81bf003fce1b6ca3ff8e2179dbd60",
+        "files": 67219,
+        "mtime_sha256": "281724b5ba14ef6c2104db063d18ff8be41708b619a8e79959eb828fdf6899e9"
+      },
+      "before": {
+        "content_sha256": "b67329ef75f0d548d1554c913a00e5dbc0d81bf003fce1b6ca3ff8e2179dbd60",
+        "files": 67219,
+        "mtime_sha256": "281724b5ba14ef6c2104db063d18ff8be41708b619a8e79959eb828fdf6899e9"
+      },
+      "unchanged": true
+    },
+    "docs/v3/odds/source-matrix.json": {
+      "after": {
+        "content_sha256": "88c0b30a1ed1158a958dd61a16b8bd799911f5d6ec3d9395bdd9753e9c9a3cd6",
+        "files": 1,
+        "mtime_sha256": "00421da53903f3564231001a5423480776253738cca97082a2d5892b282d7a43"
+      },
+      "before": {
+        "content_sha256": "88c0b30a1ed1158a958dd61a16b8bd799911f5d6ec3d9395bdd9753e9c9a3cd6",
+        "files": 1,
+        "mtime_sha256": "00421da53903f3564231001a5423480776253738cca97082a2d5892b282d7a43"
+      },
+      "unchanged": true
+    },
+    "lineage:BT0": {
+      "after": {
+        "content_sha256": "182c334729a812d277d75b324a9f252ed4a4fda6a9072ad14852cace234378ad",
+        "files": 1,
+        "mtime_sha256": "f4ab2656c007fbb120686cd0e1789b3a46ef3a354ce34b0f7fae6740f8b33445"
+      },
+      "before": {
+        "content_sha256": "182c334729a812d277d75b324a9f252ed4a4fda6a9072ad14852cace234378ad",
+        "files": 1,
+        "mtime_sha256": "f4ab2656c007fbb120686cd0e1789b3a46ef3a354ce34b0f7fae6740f8b33445"
+      },
+      "unchanged": true
+    },
+    "lineage:J_BT_sin_temporada": {
+      "after": {
+        "content_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "files": 0,
+        "mtime_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "before": {
+        "content_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "files": 0,
+        "mtime_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "unchanged": true
+    },
+    "main.py": {
+      "after": {
+        "content_sha256": "28f91473ea44c2d9addca1eb98948e1bda5a503c86e1638fc2e0f7372fafcd8d",
+        "files": 1,
+        "mtime_sha256": "a996525699ce3a295c9705d27f6f906c1bdd022f8e8040f4c26ba5a0564f9c9c"
+      },
+      "before": {
+        "content_sha256": "28f91473ea44c2d9addca1eb98948e1bda5a503c86e1638fc2e0f7372fafcd8d",
+        "files": 1,
+        "mtime_sha256": "a996525699ce3a295c9705d27f6f906c1bdd022f8e8040f4c26ba5a0564f9c9c"
+      },
+      "unchanged": true
+    },
+    "scraper": {
+      "after": {
+        "content_sha256": "2d9bc354b34ae34f96ac6f673cf4330195d111116c6c051b30011d6a97d2f742",
+        "files": 48,
+        "mtime_sha256": "68fdb19021c82b6abf2808e021dedae2947c1507078693ff5542ef40720689e4"
+      },
+      "before": {
+        "content_sha256": "2d9bc354b34ae34f96ac6f673cf4330195d111116c6c051b30011d6a97d2f742",
+        "files": 48,
+        "mtime_sha256": "68fdb19021c82b6abf2808e021dedae2947c1507078693ff5542ef40720689e4"
+      },
+      "unchanged": true
+    },
+    "v3/odds/audit.py": {
+      "after": {
+        "content_sha256": "c0e15e194f6fd812bd35347def830ac8222f6c219aae31d63084058cb83397b4",
+        "files": 1,
+        "mtime_sha256": "92b9ec7f142fa149348029b850919221a7b97a8e9f72b108b7b9add7a34950cf"
+      },
+      "before": {
+        "content_sha256": "c0e15e194f6fd812bd35347def830ac8222f6c219aae31d63084058cb83397b4",
+        "files": 1,
+        "mtime_sha256": "92b9ec7f142fa149348029b850919221a7b97a8e9f72b108b7b9add7a34950cf"
+      },
+      "unchanged": true
+    },
+    "v3/odds/contract.py": {
+      "after": {
+        "content_sha256": "06ab3f5aef7775ba55ceaa7165ec679ff9d790b82be4b88b22a3940abbf82597",
+        "files": 1,
+        "mtime_sha256": "0ac485cd1bda028b51a2422a3e8d71dc433c55d21b2e91233b3a7b4e23fab050"
+      },
+      "before": {
+        "content_sha256": "06ab3f5aef7775ba55ceaa7165ec679ff9d790b82be4b88b22a3940abbf82597",
+        "files": 1,
+        "mtime_sha256": "0ac485cd1bda028b51a2422a3e8d71dc433c55d21b2e91233b3a7b4e23fab050"
+      },
+      "unchanged": true
+    },
+    "v3/odds/source_matrix.py": {
+      "after": {
+        "content_sha256": "fe8369b404ef9232130a62a0392c6cac0380fd270f131025a95ef0f0fda16ba7",
+        "files": 1,
+        "mtime_sha256": "b96f5553b440381b2e70aa2b14657568aeeeebbd4a90cb46808a8e91fe60d3d7"
+      },
+      "before": {
+        "content_sha256": "fe8369b404ef9232130a62a0392c6cac0380fd270f131025a95ef0f0fda16ba7",
+        "files": 1,
+        "mtime_sha256": "b96f5553b440381b2e70aa2b14657568aeeeebbd4a90cb46808a8e91fe60d3d7"
+      },
+      "unchanged": true
+    }
+  },
+  "live_enabled_markets": [],
+  "live_status": "blocked_missing_credentials",
+  "movement": "same match/provider/book/market/selection/line; T24→T6/T6→T1/T24→T1",
+  "next_dependency": "Phase 4 must consume only authorized, temporally eligible observations; accredited closing is required for CLV",
+  "provider": "the_odds_api",
+  "provider_status": "adapter_implemented_not_authorized",
+  "quota": {
+    "cost": "unique provider markets × region equivalents × calls; explicit bookmakers ceil(N/10)",
+    "ledger": "locked append-only monthly conservative reservations before network; retain unknown costs",
+    "max_credits_per_run": 30,
+    "monthly_hard_limit": 500,
+    "monthly_soft_limit": 450
+  },
+  "result": "passed",
+  "roadmap": {
+    "3.1": "validated_intact",
+    "3.2": "implemented_offline_validated_live_blocked",
+    "3.3": "implemented_offline_validated_clv_ready"
+  },
+  "schema_version": "3.3.0",
+  "snapshots": {
+    "decision_enabled": false,
+    "missed": "no retrospective fill",
+    "slots": [
+      "T-24h",
+      "T-6h",
+      "T-1h"
+    ],
+    "store": "immutable exact semantic dedupe including provenance",
+    "window_seconds": 60
+  },
+  "sources": [
+    "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/29",
+    "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/30",
+    "https://the-odds-api.com/liveapi/guides/v4/",
+    "docs/v3/odds/source-matrix.json"
+  ],
+  "supported_markets": [
+    "1X2",
+    "BTTS",
+    "OVER_1_5",
+    "OVER_2_5",
+    "OVER_3_5"
+  ],
+  "tests": {
+    "commands": [
+      "python -m compileall -q v3 tests",
+      "python -m pytest -q tests/v3",
+      "python -m v3.odds.phase3_validation"
+    ],
+    "network": "socket and DNS autouse guard for entire tests/v3 suite",
+    "total_passed": 980
+  }
+}

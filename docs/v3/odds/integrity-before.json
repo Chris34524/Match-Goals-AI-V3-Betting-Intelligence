@@ -1,0 +1,71 @@
+{
+  "algorithm": "SHA256 of compact sorted JSON path\u2192file SHA256 / mtime_ns; includes every regular file",
+  "roots": {
+    "BT0": {
+      "content_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "files": 0,
+      "mtime_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    "J_BT_sin_temporada": {
+      "content_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "files": 0,
+      "mtime_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    "analysis": {
+      "content_sha256": "3ef4159d08b4f0a9f3b311d60c7caafa3137b9024ff56098a2c67e0694830c64",
+      "files": 128,
+      "mtime_sha256": "5ece3867ff9efe15160fdaccff9880759f157892daec60681f5b197450b5ee95"
+    },
+    "analysis_backup_20261008_202808": {
+      "content_sha256": "579664f111d03546e1f45d3cc06611ce33fd3f0f0ac2cd50957e33bf1683ea80",
+      "files": 61,
+      "mtime_sha256": "0b90c50d24c3edebe0fe138c9aa1d22a1612eac45e6f4c701ed8042134fe93be"
+    },
+    "data": {
+      "content_sha256": "b67329ef75f0d548d1554c913a00e5dbc0d81bf003fce1b6ca3ff8e2179dbd60",
+      "files": 67219,
+      "mtime_sha256": "281724b5ba14ef6c2104db063d18ff8be41708b619a8e79959eb828fdf6899e9"
+    },
+    "docs/v3/odds/source-matrix.json": {
+      "content_sha256": "88c0b30a1ed1158a958dd61a16b8bd799911f5d6ec3d9395bdd9753e9c9a3cd6",
+      "files": 1,
+      "mtime_sha256": "00421da53903f3564231001a5423480776253738cca97082a2d5892b282d7a43"
+    },
+    "lineage:BT0": {
+      "content_sha256": "182c334729a812d277d75b324a9f252ed4a4fda6a9072ad14852cace234378ad",
+      "files": 1,
+      "mtime_sha256": "f4ab2656c007fbb120686cd0e1789b3a46ef3a354ce34b0f7fae6740f8b33445"
+    },
+    "lineage:J_BT_sin_temporada": {
+      "content_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "files": 0,
+      "mtime_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    "main.py": {
+      "content_sha256": "28f91473ea44c2d9addca1eb98948e1bda5a503c86e1638fc2e0f7372fafcd8d",
+      "files": 1,
+      "mtime_sha256": "a996525699ce3a295c9705d27f6f906c1bdd022f8e8040f4c26ba5a0564f9c9c"
+    },
+    "scraper": {
+      "content_sha256": "2d9bc354b34ae34f96ac6f673cf4330195d111116c6c051b30011d6a97d2f742",
+      "files": 48,
+      "mtime_sha256": "68fdb19021c82b6abf2808e021dedae2947c1507078693ff5542ef40720689e4"
+    },
+    "v3/odds/audit.py": {
+      "content_sha256": "c0e15e194f6fd812bd35347def830ac8222f6c219aae31d63084058cb83397b4",
+      "files": 1,
+      "mtime_sha256": "92b9ec7f142fa149348029b850919221a7b97a8e9f72b108b7b9add7a34950cf"
+    },
+    "v3/odds/contract.py": {
+      "content_sha256": "06ab3f5aef7775ba55ceaa7165ec679ff9d790b82be4b88b22a3940abbf82597",
+      "files": 1,
+      "mtime_sha256": "0ac485cd1bda028b51a2422a3e8d71dc433c55d21b2e91233b3a7b4e23fab050"
+    },
+    "v3/odds/source_matrix.py": {
+      "content_sha256": "fe8369b404ef9232130a62a0392c6cac0380fd270f131025a95ef0f0fda16ba7",
+      "files": 1,
+      "mtime_sha256": "b96f5553b440381b2e70aa2b14657568aeeeebbd4a90cb46808a8e91fe60d3d7"
+    }
+  },
+  "schema_version": "3.3.0"
+}
