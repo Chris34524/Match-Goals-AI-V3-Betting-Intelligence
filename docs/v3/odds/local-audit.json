@@ -1,0 +1,1392 @@
+{
+  "accredited_odds_records": 0,
+  "accredited_snapshots": {
+    "closing": 0,
+    "current": 0,
+    "opening": 0
+  },
+  "audited_at": "2026-10-26",
+  "audited_root": "data",
+  "bytes_scanned": 764510006,
+  "complete_inventory_location": "/tmp/odds-local-audit.json (ephemeral; regenerate using reproduction command)",
+  "files_scanned": 67219,
+  "findings_count": 29168,
+  "limitations": [
+    "Lexical inventory detects references, not schema-valid prices. Team Odds and UI translations are false positives.",
+    "BTTS/totals references do not prove corresponding market prices.",
+    "dispersion_lambda_senales is model-signal dispersion, not bookmaker dispersion.",
+    "No opening/closing/average/maximum/consensus lexical references found.",
+    "No source observation/publication timestamps or reuse permission accredited for local prices."
+  ],
+  "locally_accredited_price_markets": [],
+  "locally_visible_price_markets": [
+    "1X2"
+  ],
+  "manifest_sha256": "1288263ae164a7a9ee79b34bed231dbe128376b1c926c86864ec68a81f9e0eb4",
+  "note": "Lexical discovery only. mtime is filesystem evidence, never publication/capture time; no automatic accreditation.",
+  "price_artifacts": [
+    {
+      "cells": [
+        {
+          "accredited": false,
+          "bookmaker_id": "631",
+          "displayed_price": "1.43",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_1",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "631",
+          "displayed_price": "4.20",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_0",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "631",
+          "displayed_price": "9.40",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_2",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "417",
+          "displayed_price": "1.41",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_1",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "417",
+          "displayed_price": "4.39",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_0",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "417",
+          "displayed_price": "9.55",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_2",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "1113",
+          "displayed_price": "1.37",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_1",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "1113",
+          "displayed_price": "4.50",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_0",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "1113",
+          "displayed_price": "10.00",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_2",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "632",
+          "displayed_price": "1.42",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_1",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "632",
+          "displayed_price": "4.05",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_0",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "632",
+          "displayed_price": "9.80",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_2",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "1041",
+          "displayed_price": "1.43",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_1",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "1041",
+          "displayed_price": "4.20",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_0",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "1041",
+          "displayed_price": "9.25",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_2",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        }
+      ],
+      "path": "h2h_page.html",
+      "sha256": "d45e5e2ca3ad87d2e7bbed568c02f70dd8b54b1d93db1795b24d4491de27761d"
+    },
+    {
+      "cells": [
+        {
+          "accredited": false,
+          "bookmaker_id": "631",
+          "displayed_price": "1.43",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_1",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "631",
+          "displayed_price": "4.20",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_0",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "631",
+          "displayed_price": "9.25",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_2",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "417",
+          "displayed_price": "1.41",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_1",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "417",
+          "displayed_price": "4.39",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_0",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "417",
+          "displayed_price": "9.55",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_2",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "1113",
+          "displayed_price": "1.37",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_1",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "1113",
+          "displayed_price": "4.50",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_0",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "1113",
+          "displayed_price": "10.00",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_2",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "632",
+          "displayed_price": "1.42",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_1",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "632",
+          "displayed_price": "4.05",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_0",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "632",
+          "displayed_price": "9.80",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_2",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "1041",
+          "displayed_price": "1.43",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_1",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "1041",
+          "displayed_price": "4.20",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_0",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "1041",
+          "displayed_price": "9.25",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_2",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        }
+      ],
+      "path": "match_detail.html",
+      "sha256": "500d4ff6ba8a0c083d2d1d06b077bfbb9864c570d4b1bfbf33524efa05848524"
+    },
+    {
+      "cells": [
+        {
+          "accredited": false,
+          "bookmaker_id": "631",
+          "displayed_price": "2.28",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_1",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "631",
+          "displayed_price": "4.20",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_0",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "631",
+          "displayed_price": "2.74",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_2",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "417",
+          "displayed_price": "2.36",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_1",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "417",
+          "displayed_price": "4.16",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_0",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "417",
+          "displayed_price": "2.73",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_2",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "1113",
+          "displayed_price": "2.30",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_1",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "1113",
+          "displayed_price": "4.00",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_0",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "1113",
+          "displayed_price": "2.66",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_2",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "632",
+          "displayed_price": "2.35",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_1",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "632",
+          "displayed_price": "4.00",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_0",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "632",
+          "displayed_price": "2.60",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_2",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "1041",
+          "displayed_price": "2.28",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_1",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "1041",
+          "displayed_price": "4.20",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_0",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        },
+        {
+          "accredited": false,
+          "bookmaker_id": "1041",
+          "displayed_price": "2.74",
+          "live_attribute": "false",
+          "market_selection_label": "odds_table-0-1x2_ft_2",
+          "observed_at": null,
+          "removed_attribute": "false",
+          "snapshot_type": "unknown",
+          "source_published_at": null
+        }
+      ],
+      "path": "standings_page.html",
+      "sha256": "09dedf7eecff4ceedf77f29be6e80bb344b225821ff694668cf5a96fa28ea078"
+    }
+  ],
+  "protected_integrity": {
+    "after_sha256": "e2e63525dfa48bb426f9e26e4d107a894fa3b6e33990a1974ecd809bfd6786dc",
+    "before_sha256": "e2e63525dfa48bb426f9e26e4d107a894fa3b6e33990a1974ecd809bfd6786dc",
+    "changed_files": [],
+    "directories": {
+      "analysis": 128,
+      "analysis_backup_20261008_202808": 61,
+      "data": 67219,
+      "scraper": 48
+    },
+    "files_verified": 67456,
+    "verification": "SHA-256, size, mtime_ns and path population identical before/after work"
+  },
+  "reproduction": "python -m v3.odds.audit data > /tmp/odds-local-audit.json",
+  "selected_reference_findings": [
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "1X2",
+        "BTTS": "BTTS",
+        "CARDS": "card",
+        "OVER_1_5": ">1.5",
+        "OVER_2_5": ">2.5",
+        "OVER_3_5": ">3.5",
+        "odds": "Odds"
+      },
+      "mtime_ns": 1792137789495126073,
+      "path": "Match_Goals_AI_Seleccion_2026-10-16.html",
+      "sha256": "0c638d040baf6732182e2eb9aff92901054726c59ce83307a233dc086fcbb6e5",
+      "signals": [
+        "1X2",
+        "BTTS",
+        "CARDS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "odds"
+      ],
+      "size": 5386615,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "1X2",
+        "BTTS": "BTTS",
+        "CARDS": "card",
+        "OVER_1_5": ">1.5",
+        "OVER_2_5": ">2.5",
+        "OVER_3_5": ">3.5",
+        "odds": "cuotas"
+      },
+      "mtime_ns": 1792563607903925029,
+      "path": "Match_Goals_AI_Seleccion_2026-10-21.html",
+      "sha256": "f2aae420b62fa19780f736d9bc4d99000defb5ad7c85be956236269f99842134",
+      "signals": [
+        "1X2",
+        "BTTS",
+        "CARDS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "odds"
+      ],
+      "size": 3936323,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "1X2",
+        "BTTS": "BTTS",
+        "CARDS": "card",
+        "OVER_1_5": ">1.5",
+        "OVER_2_5": ">2.5",
+        "OVER_3_5": ">3.5",
+        "odds": "cuotas"
+      },
+      "mtime_ns": 1792649153806969919,
+      "path": "Match_Goals_AI_Seleccion_2026-10-22.html",
+      "sha256": "ff5e07c2f76278d4c65006ea95ee87836303405abb33a33e6df8f775a72d2f3c",
+      "signals": [
+        "1X2",
+        "BTTS",
+        "CARDS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "odds"
+      ],
+      "size": 2791288,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "1X2",
+        "BTTS": "BTTS",
+        "CARDS": "card",
+        "OVER_1_5": ">1.5",
+        "OVER_2_5": ">2.5",
+        "OVER_3_5": ">3.5",
+        "odds": "cuotas"
+      },
+      "mtime_ns": 1792763200491017110,
+      "path": "Match_Goals_AI_Seleccion_2026-10-23.html",
+      "sha256": "8374fd3ab444d2b336f931af4c7eb6087a6d18350cb0a96d5062008dff014be0",
+      "signals": [
+        "1X2",
+        "BTTS",
+        "CARDS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "odds"
+      ],
+      "size": 6514406,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "1X2",
+        "BTTS": "BTTS",
+        "CARDS": "card",
+        "OVER_1_5": ">1.5",
+        "OVER_2_5": ">2.5",
+        "OVER_3_5": ">3.5",
+        "odds": "cuota"
+      },
+      "mtime_ns": 1792865767976214842,
+      "path": "Match_Goals_AI_Seleccion_2026-10-24.html",
+      "sha256": "16f6750b7538e2c9e94ddb98abbf4123d883771751b1cd66be0e19a1c3be6c8a",
+      "signals": [
+        "1X2",
+        "BTTS",
+        "CARDS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "odds"
+      ],
+      "size": 20645357,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "1X2",
+        "BTTS": "BTTS",
+        "CARDS": "card",
+        "OVER_1_5": ">1.5",
+        "OVER_2_5": ">2.5",
+        "OVER_3_5": ">3.5",
+        "odds": "cuota"
+      },
+      "mtime_ns": 1792944366476388183,
+      "path": "Match_Goals_AI_Seleccion_2026-10-25.html",
+      "sha256": "896c8c9da3d38b472a7bbd90e2166bd97de353fd88f27a696cf74231d318132b",
+      "signals": [
+        "1X2",
+        "BTTS",
+        "CARDS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "odds"
+      ],
+      "size": 16495970,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "1X2",
+        "BTTS": "BTTS",
+        "CARDS": "card",
+        "OVER_1_5": ">1.5",
+        "OVER_2_5": ">2.5",
+        "OVER_3_5": ">3.5",
+        "odds": "cuota"
+      },
+      "mtime_ns": 1792996838766488638,
+      "path": "Match_Goals_AI_Seleccion_2026-10-26.html",
+      "sha256": "7829ad2d7765a980abc8ec80d347d8d4e83e1fb4e7df85656faee5aa16c5241b",
+      "signals": [
+        "1X2",
+        "BTTS",
+        "CARDS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "odds"
+      ],
+      "size": 2910026,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "1X2",
+        "BTTS": "BTTS",
+        "CARDS": "card",
+        "OVER_1_5": ">1.5",
+        "OVER_2_5": ">2.5",
+        "OVER_3_5": ">3.5",
+        "odds": "cuota"
+      },
+      "mtime_ns": 1792996838766488638,
+      "path": "Match_Goals_AI_Seleccion_Actual.html",
+      "sha256": "7829ad2d7765a980abc8ec80d347d8d4e83e1fb4e7df85656faee5aa16c5241b",
+      "signals": [
+        "1X2",
+        "BTTS",
+        "CARDS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "odds"
+      ],
+      "size": 2910026,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "1X2",
+        "CARDS": "card",
+        "bookmaker": "bookmaker",
+        "odds": "odds"
+      },
+      "mtime_ns": 1789262105000000000,
+      "path": "date_navigation_inspect.txt",
+      "sha256": "bc5c87ac4fd0a113bc9775b6dbb015e22657a44c2156fd8ce8c967cc0b627970",
+      "signals": [
+        "1X2",
+        "CARDS",
+        "bookmaker",
+        "odds"
+      ],
+      "size": 8103476,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "1x2",
+        "BTTS": "BTTS",
+        "CARDS": "Card",
+        "odds": "cuotas"
+      },
+      "mtime_ns": 1792996838201894515,
+      "path": "evaluation/predictions_archive.jsonl",
+      "sha256": "986f6909e436b285a1c19a8215dddbc94ea96846c7939bb6c3b1499131157291",
+      "signals": [
+        "1X2",
+        "BTTS",
+        "CARDS",
+        "odds"
+      ],
+      "size": 5035819,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "1X2",
+        "BTTS": "BTTS",
+        "dispersion": "dispersion",
+        "odds": "cuotas"
+      },
+      "mtime_ns": 1792563606646810921,
+      "path": "evaluation/snapshots/2026-10-21/predicciones_20261021_002006.json",
+      "sha256": "d23a50f19a2c5aac1e22c828270b401e56960ae661ce791c9071ff3909c730c2",
+      "signals": [
+        "1X2",
+        "BTTS",
+        "dispersion",
+        "odds"
+      ],
+      "size": 842149,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "1X2",
+        "BTTS": "BTTS",
+        "dispersion": "dispersion",
+        "odds": "cuotas"
+      },
+      "mtime_ns": 1792649153037015182,
+      "path": "evaluation/snapshots/2026-10-22/predicciones_20261022_000553.json",
+      "sha256": "e577c62f17ccebc3daf8d9f27fde84e12f8891e60a37d04cea75998d614ff4f8",
+      "signals": [
+        "1X2",
+        "BTTS",
+        "dispersion",
+        "odds"
+      ],
+      "size": 552584,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "1X2",
+        "BTTS": "BTTS",
+        "CARDS": "Card",
+        "dispersion": "dispersion",
+        "odds": "cuotas"
+      },
+      "mtime_ns": 1792763199129266899,
+      "path": "evaluation/snapshots/2026-10-23/predicciones_20261023_074639.json",
+      "sha256": "d15e7e1b6cb5d43cd18909e6c8c95e5eef12549bc59873cc6381c6dcdba46be4",
+      "signals": [
+        "1X2",
+        "BTTS",
+        "CARDS",
+        "dispersion",
+        "odds"
+      ],
+      "size": 1361461,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "1X2",
+        "BTTS": "BTTS",
+        "CARDS": "Card",
+        "dispersion": "dispersion",
+        "odds": "cuotas"
+      },
+      "mtime_ns": 1792865762394279575,
+      "path": "evaluation/snapshots/2026-10-24/predicciones_20261024_121602.json",
+      "sha256": "1fc8378e63efd4f04d8a6f63dafceacf53b3968e07b6e91d00182dde22c791f6",
+      "signals": [
+        "1X2",
+        "BTTS",
+        "CARDS",
+        "dispersion",
+        "odds"
+      ],
+      "size": 5231956,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "1X2",
+        "BTTS": "BTTS",
+        "CARDS": "card",
+        "dispersion": "dispersion",
+        "odds": "cuotas"
+      },
+      "mtime_ns": 1792944362329330430,
+      "path": "evaluation/snapshots/2026-10-25/predicciones_20261025_100602.json",
+      "sha256": "05adf2634a1aa71ba0557f9bd24f8e56aa4843d6b35eb789fc54b69a03ced600",
+      "signals": [
+        "1X2",
+        "BTTS",
+        "CARDS",
+        "dispersion",
+        "odds"
+      ],
+      "size": 4206832,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "1X2",
+        "BTTS": "BTTS",
+        "dispersion": "dispersion",
+        "odds": "cuotas"
+      },
+      "mtime_ns": 1792996838226019347,
+      "path": "evaluation/snapshots/2026-10-26/predicciones_20261026_004038.json",
+      "sha256": "1b0c1efc1ae8263a42a399d328b268303b0f2aa96970925820ee8ac79b3d706e",
+      "signals": [
+        "1X2",
+        "BTTS",
+        "dispersion",
+        "odds"
+      ],
+      "size": 737242,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "h2h",
+        "ASIAN_HANDICAP": "ASIAN_HANDICAP",
+        "BTTS": "BOTH_TEAMS_TO_SCORE",
+        "CARDS": "CARD",
+        "CORNERS": "CORNER",
+        "bookmaker": "bookmaker",
+        "current": "PRE_MATCH_ODDS",
+        "odds": "Cuotas",
+        "other_price": "precio",
+        "timestamp": "Timestamp",
+        "totals": "mas de"
+      },
+      "mtime_ns": 1788982225000000000,
+      "path": "flashscore_home.html",
+      "sha256": "571353afcf9b940b3eec979aa2f28a05d0afbdd4850817991c5c320c94b59e47",
+      "signals": [
+        "1X2",
+        "ASIAN_HANDICAP",
+        "BTTS",
+        "CARDS",
+        "CORNERS",
+        "bookmaker",
+        "current",
+        "odds",
+        "other_price",
+        "timestamp",
+        "totals"
+      ],
+      "size": 451270,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "h2h",
+        "ASIAN_HANDICAP": "ASIAN_HANDICAP",
+        "BTTS": "BOTH_TEAMS_TO_SCORE",
+        "CARDS": "CARD",
+        "CORNERS": "CORNER",
+        "bookmaker": "bookmaker",
+        "current": "PRE_MATCH_ODDS",
+        "odds": "Cuotas",
+        "other_price": "precio",
+        "timestamp": "Timestamp",
+        "totals": "mas de"
+      },
+      "mtime_ns": 1788983374000000000,
+      "path": "flashscore_rendered.html",
+      "sha256": "02507280a0249be6a3c93bd2d532bd4d637f392a9ba5fd274a90c9869be4e040",
+      "signals": [
+        "1X2",
+        "ASIAN_HANDICAP",
+        "BTTS",
+        "CARDS",
+        "CORNERS",
+        "bookmaker",
+        "current",
+        "odds",
+        "other_price",
+        "timestamp",
+        "totals"
+      ],
+      "size": 1703671,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "H2H",
+        "ASIAN_HANDICAP": "ASIAN_HANDICAP",
+        "BTTS": "BOTH_TEAMS_TO_SCORE",
+        "CARDS": "CARD",
+        "CORNERS": "CORNER",
+        "bookmaker": "bookmaker",
+        "current": "PRE_MATCH_ODDS",
+        "odds": "Cuotas",
+        "other_price": "precio",
+        "timestamp": "Timestamp",
+        "totals": "OVER_UNDER"
+      },
+      "mtime_ns": 1788985693000000000,
+      "path": "h2h_page.html",
+      "sha256": "d45e5e2ca3ad87d2e7bbed568c02f70dd8b54b1d93db1795b24d4491de27761d",
+      "signals": [
+        "1X2",
+        "ASIAN_HANDICAP",
+        "BTTS",
+        "CARDS",
+        "CORNERS",
+        "bookmaker",
+        "current",
+        "odds",
+        "other_price",
+        "timestamp",
+        "totals"
+      ],
+      "size": 848611,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "bookmaker": "bookmaker"
+      },
+      "mtime_ns": 1788983697000000000,
+      "path": "inspect_matches.txt",
+      "sha256": "7907414e37955a8cfaea86b81d4e80b0436ea596fb571b83bf383cb6c20c882c",
+      "signals": [
+        "bookmaker"
+      ],
+      "size": 31675,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "H2H",
+        "ASIAN_HANDICAP": "ASIAN_HANDICAP",
+        "BTTS": "BOTH_TEAMS_TO_SCORE",
+        "CARDS": "CARD",
+        "CORNERS": "CORNER",
+        "bookmaker": "bookmaker",
+        "current": "PRE_MATCH_ODDS",
+        "odds": "Cuotas",
+        "other_price": "precio",
+        "timestamp": "Timestamp",
+        "totals": "OVER_UNDER"
+      },
+      "mtime_ns": 1788985229000000000,
+      "path": "match_detail.html",
+      "sha256": "500d4ff6ba8a0c083d2d1d06b077bfbb9864c570d4b1bfbf33524efa05848524",
+      "signals": [
+        "1X2",
+        "ASIAN_HANDICAP",
+        "BTTS",
+        "CARDS",
+        "CORNERS",
+        "bookmaker",
+        "current",
+        "odds",
+        "other_price",
+        "timestamp",
+        "totals"
+      ],
+      "size": 916426,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "h2h",
+        "odds": "Odds"
+      },
+      "mtime_ns": 1791534885897113757,
+      "path": "matches/0vGGbc94/history.json",
+      "sha256": "3f67c7fd5769fd867d0fbda422e065f59fce41e0a1df0a3ff004cad33cd83ed7",
+      "signals": [
+        "1X2",
+        "odds"
+      ],
+      "size": 44927,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "odds": "Odds"
+      },
+      "mtime_ns": 1791534955303690324,
+      "path": "matches/0vGGbc94/xg_history.json",
+      "sha256": "86b0e6594024ee0bbdba3d90bfc93eee2dae4179780dcf0b5f1082d2864146ca",
+      "signals": [
+        "odds"
+      ],
+      "size": 15063,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "h2h",
+        "odds": "Odds"
+      },
+      "mtime_ns": 1792558951532414052,
+      "path": "matches/2qIV2j3m/history.json",
+      "sha256": "45f6b9aa273d2fefb9c7a42877ba237159204a3f3ec5fe917af85479448ce2d4",
+      "signals": [
+        "1X2",
+        "odds"
+      ],
+      "size": 44178,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "h2h",
+        "odds": "Odds"
+      },
+      "mtime_ns": 1792128570869246057,
+      "path": "matches/YiEOdyvH/history.json",
+      "sha256": "df7359556c50f8190cc52132fe44370c5a38357382010735d59c96226993e5fb",
+      "signals": [
+        "1X2",
+        "odds"
+      ],
+      "size": 45812,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "odds": "Odds"
+      },
+      "mtime_ns": 1792128584877442038,
+      "path": "matches/YiEOdyvH/xg_history.json",
+      "sha256": "057d1541476f1843b68d66cbf7947b3440c7e972cdc43847077c753d6cf1e124",
+      "signals": [
+        "odds"
+      ],
+      "size": 15047,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "h2h",
+        "odds": "Odds"
+      },
+      "mtime_ns": 1791868490832687708,
+      "path": "matches/bBewKlwn/history.json",
+      "sha256": "18a24c02a90577591883cfb6567eaba93560efb7e7c46e1a0d94e24b135e0cbd",
+      "signals": [
+        "1X2",
+        "odds"
+      ],
+      "size": 44514,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "h2h",
+        "odds": "Odds"
+      },
+      "mtime_ns": 1792042088361061950,
+      "path": "matches/fsD80Jvh/history.json",
+      "sha256": "de1d19f96184b247282539904787c97322915eac653202d532258d81012d41ad",
+      "signals": [
+        "1X2",
+        "odds"
+      ],
+      "size": 46890,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "1X2",
+        "BTTS": "BTTS",
+        "CARDS": "card",
+        "OVER_1_5": ">1.5",
+        "OVER_2_5": ">2.5",
+        "OVER_3_5": ">3.5",
+        "odds": "cuota"
+      },
+      "mtime_ns": 1792996838766488638,
+      "path": "report_window_pro.html",
+      "sha256": "7829ad2d7765a980abc8ec80d347d8d4e83e1fb4e7df85656faee5aa16c5241b",
+      "signals": [
+        "1X2",
+        "BTTS",
+        "CARDS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "odds"
+      ],
+      "size": 2910026,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "H2H",
+        "BTTS": "BTTS",
+        "CARDS": "card",
+        "OVER_1_5": ">1.5",
+        "OVER_2_5": ">2.5",
+        "OVER_3_5": ">3.5",
+        "odds": "Odds"
+      },
+      "mtime_ns": 1791557086367120816,
+      "path": "reporte_todo_analizado.html",
+      "sha256": "46736794d7d4f7168f8620260f6aad7bf010efbb9bc7c5fcfcfb1ce8e5e51d16",
+      "signals": [
+        "1X2",
+        "BTTS",
+        "CARDS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "odds"
+      ],
+      "size": 5989502,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "1X2",
+        "BTTS": "BTTS",
+        "dispersion": "dispersion",
+        "odds": "cuotas"
+      },
+      "mtime_ns": 1792996838214393229,
+      "path": "selected_predictions_v2.json",
+      "sha256": "1b0c1efc1ae8263a42a399d328b268303b0f2aa96970925820ee8ac79b3d706e",
+      "signals": [
+        "1X2",
+        "BTTS",
+        "dispersion",
+        "odds"
+      ],
+      "size": 737242,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "H2H",
+        "ASIAN_HANDICAP": "ASIAN_HANDICAP",
+        "BTTS": "BOTH_TEAMS_TO_SCORE",
+        "CARDS": "CARD",
+        "CORNERS": "CORNER",
+        "bookmaker": "bookmaker",
+        "current": "PRE_MATCH_ODDS",
+        "odds": "Cuotas",
+        "other_price": "precio",
+        "timestamp": "Timestamp",
+        "totals": "OVER_UNDER"
+      },
+      "mtime_ns": 1788987237000000000,
+      "path": "standings_page.html",
+      "sha256": "09dedf7eecff4ceedf77f29be6e80bb344b225821ff694668cf5a96fa28ea078",
+      "signals": [
+        "1X2",
+        "ASIAN_HANDICAP",
+        "BTTS",
+        "CARDS",
+        "CORNERS",
+        "bookmaker",
+        "current",
+        "odds",
+        "other_price",
+        "timestamp",
+        "totals"
+      ],
+      "size": 982095,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "1X2": "H2H",
+        "BTTS": "BTTS",
+        "odds": "Odds"
+      },
+      "mtime_ns": 1791534955391624543,
+      "path": "tomorrow_logs/0vGGbc94.log",
+      "sha256": "7f8858f191aa65abf6e25356216f519dd3dc5ef1a455409f31177f725e9ff586",
+      "signals": [
+        "1X2",
+        "BTTS",
+        "odds"
+      ],
+      "size": 12530,
+      "snapshot_type": "unknown"
+    },
+    {
+      "accredited": false,
+      "classification": "unaccredited_reference",
+      "examples": {
+        "odds": "Odds"
+      },
+      "mtime_ns": 1791534918751516391,
+      "path": "xg_cache/URMpWqsf.json",
+      "sha256": "0a02d8b76851384ddeeda86aad73985b23c4d45010d01f51f6f722278612a785",
+      "signals": [
+        "odds"
+      ],
+      "size": 454,
+      "snapshot_type": "unknown"
+    }
+  ],
+  "signal_file_counts": {
+    "1X2": 25429,
+    "ASIAN_HANDICAP": 8,
+    "BTTS": 20256,
+    "CARDS": 551,
+    "CORNERS": 5,
+    "OVER_1_5": 4257,
+    "OVER_2_5": 4259,
+    "OVER_3_5": 4257,
+    "bookmaker": 7,
+    "current": 5,
+    "dispersion": 6464,
+    "odds": 33,
+    "other_price": 32,
+    "timestamp": 2533,
+    "totals": 11
+  },
+  "skipped": [],
+  "snapshot_classification": "unknown for all 45 displayed cells; no file-order or analytics-clock inference",
+  "total_displayed_cells": 45,
+  "validation": {
+    "branch": "feature/3.1-odds-surface-audit",
+    "commit_or_push": false,
+    "compileall": "passed: python -m compileall -q v3 tests",
+    "phase_3_1_tests": 106,
+    "pytest": "passed: python -m pytest -q tests/v3",
+    "staged": false,
+    "v3_tests": 904
+  },
+  "version": "3.1.0"
+}
