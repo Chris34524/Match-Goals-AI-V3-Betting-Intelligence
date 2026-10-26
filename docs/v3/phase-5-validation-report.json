@@ -1,0 +1,297 @@
+{
+  "checkpoints": [
+    {
+      "checkpoint": "5.1",
+      "decision": "PROTOCOL_VALIDATED",
+      "experiment_status": "BLOCKED",
+      "implementation_status": "PASS",
+      "reason": "missing_kickoff"
+    },
+    {
+      "checkpoint": "5.2",
+      "decision": "CHAMPION_COMPARISON_BLOCKED",
+      "experiment_status": "BLOCKED",
+      "implementation_status": "PASS",
+      "reason": "no_eligible_temporal_model_rows"
+    },
+    {
+      "checkpoint": "5.3",
+      "decision": "COMPARISON_BLOCKED",
+      "experiment_status": "BLOCKED",
+      "implementation_status": "PASS",
+      "reason": "no_eligible_temporal_model_rows"
+    },
+    {
+      "checkpoint": "5.4",
+      "decision": "COMPARISON_BLOCKED",
+      "experiment_status": "BLOCKED",
+      "implementation_status": "PASS",
+      "reason": "no_eligible_temporal_model_rows"
+    },
+    {
+      "checkpoint": "5.5",
+      "decision": "COMPARISON_BLOCKED",
+      "experiment_status": "BLOCKED",
+      "implementation_status": "PASS",
+      "reason": "no_eligible_temporal_model_rows"
+    },
+    {
+      "checkpoint": "5.6",
+      "decision": "COMPARISON_BLOCKED",
+      "experiment_status": "BLOCKED",
+      "implementation_status": "PASS",
+      "reason": "no_eligible_temporal_model_rows"
+    }
+  ],
+  "checks": [
+    {
+      "id": "01",
+      "name": "Phase1\u20134 artifacts intact",
+      "status": "PASS"
+    },
+    {
+      "id": "02",
+      "name": "data intact",
+      "status": "PASS"
+    },
+    {
+      "id": "03",
+      "name": "scraper intact",
+      "status": "PASS"
+    },
+    {
+      "id": "04",
+      "name": "analysis and backups intact",
+      "status": "PASS"
+    },
+    {
+      "id": "05",
+      "name": "main.py intact",
+      "status": "PASS"
+    },
+    {
+      "id": "06",
+      "name": "Champion lineage intact",
+      "status": "PASS"
+    },
+    {
+      "id": "07",
+      "name": "Phase3 odds intact",
+      "status": "PASS"
+    },
+    {
+      "id": "08",
+      "name": "Phase4 value intact",
+      "status": "PASS"
+    },
+    {
+      "id": "09",
+      "name": "only available catalog features",
+      "status": "PASS"
+    },
+    {
+      "id": "10",
+      "name": "blocked features excluded",
+      "status": "PASS"
+    },
+    {
+      "id": "11",
+      "name": "no odds/value features",
+      "status": "PASS"
+    },
+    {
+      "id": "12",
+      "name": "no label features",
+      "status": "PASS"
+    },
+    {
+      "id": "13",
+      "name": "deterministic temporal split",
+      "status": "PASS"
+    },
+    {
+      "id": "14",
+      "name": "disjoint partitions",
+      "status": "PASS"
+    },
+    {
+      "id": "15",
+      "name": "dates never cross partitions",
+      "status": "PASS"
+    },
+    {
+      "id": "16",
+      "name": "preprocessing fit TRAIN only",
+      "status": "PASS"
+    },
+    {
+      "id": "17",
+      "name": "no held-out preprocessing statistics",
+      "status": "PASS"
+    },
+    {
+      "id": "18",
+      "name": "TEST not used for selection",
+      "status": "PASS"
+    },
+    {
+      "id": "19",
+      "name": "predefined configuration commitment",
+      "status": "PASS"
+    },
+    {
+      "id": "20",
+      "name": "no random split/shuffle",
+      "status": "PASS"
+    },
+    {
+      "id": "21",
+      "name": "valid binary probabilities",
+      "status": "PASS"
+    },
+    {
+      "id": "22",
+      "name": "valid multiclass probabilities",
+      "status": "PASS"
+    },
+    {
+      "id": "23",
+      "name": "correct Brier",
+      "status": "PASS"
+    },
+    {
+      "id": "24",
+      "name": "correct LogLoss",
+      "status": "PASS"
+    },
+    {
+      "id": "25",
+      "name": "correct multiclass metrics",
+      "status": "PASS"
+    },
+    {
+      "id": "26",
+      "name": "TRAIN-only base-rate",
+      "status": "PASS"
+    },
+    {
+      "id": "27",
+      "name": "deterministic dataset hash",
+      "status": "PASS"
+    },
+    {
+      "id": "28",
+      "name": "deterministic split hash",
+      "status": "PASS"
+    },
+    {
+      "id": "29",
+      "name": "deterministic model hash",
+      "status": "PASS"
+    },
+    {
+      "id": "30",
+      "name": "deterministic prediction hash",
+      "status": "PASS"
+    },
+    {
+      "id": "31",
+      "name": "exact-row Champion or explicit BLOCKED",
+      "status": "PASS"
+    },
+    {
+      "id": "32",
+      "name": "no fabricated Champion probabilities",
+      "status": "PASS"
+    },
+    {
+      "id": "33",
+      "name": "BTTS decision recorded",
+      "status": "PASS"
+    },
+    {
+      "id": "34",
+      "name": "O1.5 decision recorded",
+      "status": "PASS"
+    },
+    {
+      "id": "35",
+      "name": "O2.5 decision recorded",
+      "status": "PASS"
+    },
+    {
+      "id": "36",
+      "name": "O3.5 divergence gate",
+      "status": "PASS"
+    },
+    {
+      "id": "37",
+      "name": "1X2 experimental decision",
+      "status": "PASS"
+    },
+    {
+      "id": "38",
+      "name": "no calibration fitting",
+      "status": "PASS"
+    },
+    {
+      "id": "39",
+      "name": "no Champion promotion",
+      "status": "PASS"
+    },
+    {
+      "id": "40",
+      "name": "no ROI/profit selection",
+      "status": "PASS"
+    },
+    {
+      "id": "41",
+      "name": "no stake/Kelly",
+      "status": "PASS"
+    },
+    {
+      "id": "42",
+      "name": "no betting execution",
+      "status": "PASS"
+    },
+    {
+      "id": "43",
+      "name": "no network",
+      "status": "PASS"
+    },
+    {
+      "id": "44",
+      "name": "Phase5 change scope",
+      "status": "PASS"
+    }
+  ],
+  "failed": 0,
+  "hashes": {
+    "datasets": {
+      "1X2": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "BTTS": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "OVER_1_5": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "OVER_2_5": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "OVER_3_5": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "features": {
+      "1X2": "517ce534272348b4fe4c0d590a825ddd19130463240f14e9a462907ad8871d88",
+      "BTTS": "01d3a588ef463c55f82ebeafcce9fdfb53faf8a79601c652a75074e7c3768c30",
+      "OVER_1_5": "ddc60c70f0b6f88ff60ee64e25755d404bf69c276c842db735cb30a63038cdfc",
+      "OVER_2_5": "e5b567c8bef60ed87f1d747dd4323e365dc361f8198b9f82acb0187675abae49",
+      "OVER_3_5": "8601ccec2e93a005a031bdc25a1248105bac08f6ac120ccf88b9a7e3592d5dd5"
+    },
+    "implementation_hash": "922d4a32841ecf5807ca45feaf667584f2871c65d767e054d131da6768500f30",
+    "policy_hash": "20fb6e34417ba7790a47e9732c6362977af42638d2c242e4b6fee151a61b948e",
+    "source_hash": "9a06dd968da4a60e040c25b3096cece6fc16c68bf49cffeb74f518e61751706f"
+  },
+  "limitations": [
+    "Implementation checks use explicit synthetic fixtures where real experiments are blocked.",
+    "PASS does not mean challenger beats base-rate or Champion.",
+    "Integrity baseline captured locally before edits; not an independent signed attestation."
+  ],
+  "passed": 44,
+  "performance_status": "BLOCKED",
+  "protocol_version": "5.1.0",
+  "status": "PASS"
+}

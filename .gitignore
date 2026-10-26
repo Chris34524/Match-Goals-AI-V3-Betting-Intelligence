@@ -62,3 +62,6 @@ dist/
 
 # Jupyter
 .ipynb_checkpoints/
+
+# Isolated Phase 5 runtime models
+/v3_data/models/

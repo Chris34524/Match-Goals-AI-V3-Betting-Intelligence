@@ -1,0 +1,52 @@
+{
+  "analysis": {
+    "content_hash": "8a3e1503fd2d8638fec0a1b6826b84e9e9ae2ec722e1d5a1c5bf0e1ebfe8bb73",
+    "files": 85,
+    "mtime_hash": "a8509d6de0b48c6f36a911a39a29f9e18cefe2ca55cfcbf23cbdf89082eeff38"
+  },
+  "analysis_backup_20261008_202808": {
+    "content_hash": "091d9eb810581f29c078430c9159e5f751482aad78af7e515ed075254a273664",
+    "files": 41,
+    "mtime_hash": "a0d95d0c300c6e043963ec76880ff2fe8a9fa48900a37bd00b6adfa0be63885b"
+  },
+  "data": {
+    "content_hash": "b67329ef75f0d548d1554c913a00e5dbc0d81bf003fce1b6ca3ff8e2179dbd60",
+    "files": 67219,
+    "mtime_hash": "281724b5ba14ef6c2104db063d18ff8be41708b619a8e79959eb828fdf6899e9"
+  },
+  "docs/v3": {
+    "content_hash": "dbe5dde6886db20e7afca7702d4b63723d77b0f182931cd22d50919e670d92ea",
+    "files": 52,
+    "mtime_hash": "17b630401be24401f4919a1082a093f00bdbec821db803a18ed2aa7bea536a8e"
+  },
+  "main.py": {
+    "content_hash": "28f91473ea44c2d9addca1eb98948e1bda5a503c86e1638fc2e0f7372fafcd8d",
+    "files": 1,
+    "mtime_hash": "a996525699ce3a295c9705d27f6f906c1bdd022f8e8040f4c26ba5a0564f9c9c"
+  },
+  "scraper": {
+    "content_hash": "a72c8a02e03a79511dbbfc4335938a9c1a14dd7cb161ee83400cd7a7ddb3e3bf",
+    "files": 33,
+    "mtime_hash": "07c86cee195a6248e1a1084b0d293762463d00c8902750a0401cd3662abe69db"
+  },
+  "v3/data": {
+    "content_hash": "84c141bc5f2a6ed71925aa9587c18aabd3a9acd470c0a0fd788c3047620cefc7",
+    "files": 7,
+    "mtime_hash": "0b5171bc787475a8b598d6c33a371d374f96bdc81a1315c1ff945d327dbd9740"
+  },
+  "v3/features": {
+    "content_hash": "9d5ae73351ae9156e551ad134652c05c0948387a2169ed9f1aa79e5688bd4c92",
+    "files": 18,
+    "mtime_hash": "059d4f6a01b5f858055914123d25c33cf697fb6fa22858fd482bdc21c4964e47"
+  },
+  "v3/odds": {
+    "content_hash": "0e3685dd7bd403b33969dbb4952fce0fb14807efe99c9d4d2f5d778fc9796308",
+    "files": 19,
+    "mtime_hash": "8be60c412db705fce8e287181153546d62a317f2b7346a212d4b328d34c4b9f3"
+  },
+  "v3/value": {
+    "content_hash": "f9dd2014924785a3f9e91b5a421cce1728c94bd2130cc19b0a6eff2a37123be2",
+    "files": 11,
+    "mtime_hash": "202a472d001b480697e12745c04321070ee7e1b3c8553b651197b18d8a2d5436"
+  }
+}
