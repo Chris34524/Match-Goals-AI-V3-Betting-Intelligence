@@ -1,0 +1,213 @@
+{
+  "sources": [
+    {
+      "acquisition_method": "none; public documentation review only",
+      "authorization_status": "not_verified_for_project",
+      "automatable": false,
+      "bookmaker_coverage": "Partner bookmakers; varies by region/event.",
+      "capture_policy": "requires_authorization",
+      "evidence": [
+        "https://www.flashscore.com/terms-of-use/",
+        "https://www.flashscore.com/faq/odds/",
+        "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/27"
+      ],
+      "future_markets": [
+        "ASIAN_HANDICAP",
+        "CORNERS",
+        "CARDS"
+      ],
+      "leagues_countries": "International; event/region-dependent, no exhaustive odds coverage accredited.",
+      "leakage_risk": "High: live/current display, delayed or crossed-out rates; no historical as-of evidence.",
+      "markets": [
+        "1X2",
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5"
+      ],
+      "permission_licence_status": "Personal use; scraping/aggregation requires express consent (ToU 2.10); no project grant.",
+      "priority": "P2",
+      "provider": "flashscore",
+      "rate_limits": "No authorized automated request budget.",
+      "retention": "No project retention/reuse grant verified.",
+      "reviewed_at": "2026-10-26",
+      "snapshots": {
+        "closing": "unverified",
+        "current": "documented",
+        "opening": "unverified"
+      },
+      "stable_ids": "Public fixture IDs need reconciliation; market/bookmaker stability unverified.",
+      "status": "blocked",
+      "surface_availability": "public_visible",
+      "temporal_semantics": "Unknown remains unknown; do not infer opening/closing from file order or first/last sampled price.",
+      "timestamp_semantics": "Display may lag minutes (Issue #27); no accredited publication/capture clock.",
+      "unblock_requirement": "Written grant covering automated acquisition, storage and model reuse; documented timestamps and IDs."
+    },
+    {
+      "acquisition_method": "Published CSV/Excel downloads and fixture files; no download executed.",
+      "authorization_status": "not_verified_for_project",
+      "automatable": false,
+      "bookmaker_coverage": "Up to 10 individual books; average/max populations vary. Pinnacle stale warning since 2025-07-23.",
+      "capture_policy": "requires_authorization",
+      "evidence": [
+        "https://www.football-data.co.uk/data.php",
+        "https://www.football-data.co.uk/notes.txt (HTTP 429; not retried)",
+        "https://www.football-data.co.uk/fixtures.php (unavailable in documentation browser)"
+      ],
+      "future_markets": [
+        "ASIAN_HANDICAP",
+        "CORNERS",
+        "CARDS"
+      ],
+      "leagues_countries": "22 European divisions; 16 additional worldwide top divisions, season-dependent.",
+      "leakage_risk": "High: historical files include results and later closing; pre-closing is not opening; stale Pinnacle; aggregates lack constituent lineage.",
+      "markets": [
+        "1X2",
+        "OVER_2_5",
+        "ASIAN_HANDICAP"
+      ],
+      "permission_licence_status": "Free private use; data page excludes commercial/data-training products using bots/scrapers/AI. V3 authorization unresolved.",
+      "priority": "P1",
+      "provider": "football_data",
+      "rate_limits": "No project automation allowance; do not infer rights from public downloads.",
+      "retention": "Project/model reuse and retention require explicit grant.",
+      "reviewed_at": "2026-10-26",
+      "snapshots": {
+        "closing": "documented",
+        "current": "documented",
+        "opening": "unverified"
+      },
+      "stable_ids": "No stable match IDs accredited; league/season/teams/kickoff reconciliation required.",
+      "status": "review",
+      "surface_availability": "public_visible",
+      "temporal_semantics": "Unknown remains unknown; do not infer opening/closing from file order or first/last sampled price.",
+      "timestamp_semantics": "CSV/Excel pre-closing is collected after opening, not true opening. C columns designate closing since 2019/20; Pinnacle 1X2 since 2012/13. No row-level observation time accredited.",
+      "unblock_requirement": "Written V3 acquisition/training/storage permission; row timestamp evidence and reproducible bookmaker population."
+    },
+    {
+      "acquisition_method": "official_api",
+      "authorization_status": "not_verified_for_project",
+      "automatable": false,
+      "bookmaker_coverage": "Region/bookmaker keys; availability varies; BTTS/additional totals require event/market coverage checks.",
+      "capture_policy": "licensed_api",
+      "evidence": [
+        "https://the-odds-api.com/",
+        "https://the-odds-api.com/liveapi/guides/v4/",
+        "https://the-odds-api.com/terms-and-conditions.html"
+      ],
+      "future_markets": [
+        "ASIAN_HANDICAP",
+        "CORNERS",
+        "CARDS"
+      ],
+      "leagues_countries": "Soccer sport keys; current competition and market coverage must be checked per event.",
+      "leakage_risk": "Medium/high: current may be live, grid misses actual open/close, last_update differs from archive/capture clock.",
+      "markets": [
+        "1X2",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5",
+        "BTTS"
+      ],
+      "permission_licence_status": "Freemium current, paid history. Terms explicitly permit retention and ML; prohibit raw-data resale. No account or project integration.",
+      "priority": "P0",
+      "provider": "the_odds_api",
+      "rate_limits": "Quota headers x-requests-*; history 10 credits/region/market; 429 burst limits, exact project allowance unset.",
+      "retention": "Terms allow indefinite storage; raw-feed redistribution prohibited.",
+      "reviewed_at": "2026-10-26",
+      "snapshots": {
+        "closing": "unverified",
+        "current": "documented",
+        "opening": "unverified"
+      },
+      "stable_ids": "Event ID, sport key, bookmaker key, market key; internal mapping and kickoff revisions still required.",
+      "status": "planned",
+      "surface_availability": "documented_api",
+      "temporal_semantics": "Unknown remains unknown; do not infer opening/closing from file order or first/last sampled price.",
+      "timestamp_semantics": "UTC last_update and historical snapshot timestamp are distinct from local observed_at. Historical nearest earlier snapshot, 10-minute grid from June 2020, 5-minute from September 2022. No true opening/closing guarantee.",
+      "unblock_requirement": "Future approved provider selection and access; verify applicable grant/plan, exact leagues/lines, limits and as-of adapter. No paid service or credentials requested in 3.1."
+    },
+    {
+      "acquisition_method": "official_api",
+      "authorization_status": "not_verified_for_project",
+      "automatable": false,
+      "bookmaker_coverage": "Bookmaker/bet IDs documented; line and book completeness require validation.",
+      "capture_policy": "review",
+      "evidence": [
+        "https://www.api-football.com/documentation-v3",
+        "https://www.api-football.com/terms",
+        "https://www.api-football.com/pricing"
+      ],
+      "future_markets": [
+        "ASIAN_HANDICAP",
+        "CORNERS",
+        "CARDS"
+      ],
+      "leagues_countries": "Coverage by competition/season/fixture; exact requested odds markets remain unaccredited.",
+      "leakage_risk": "High until historical availability and update clocks are accredited; never substitute live for pre-match.",
+      "markets": [
+        "1X2",
+        "BTTS",
+        "OVER_1_5",
+        "OVER_2_5",
+        "OVER_3_5"
+      ],
+      "permission_licence_status": "Freemium API; application projects permitted, direct data resale prohibited. Model training/retention scope requires review.",
+      "priority": "P1",
+      "provider": "api_football",
+      "rate_limits": "Free 100 requests/day; per-minute and plan-specific limits must be verified.",
+      "retention": "Unverified for V3; obtain documented storage/training rights and odds history window.",
+      "reviewed_at": "2026-10-26",
+      "snapshots": {
+        "closing": "unverified",
+        "current": "documented",
+        "opening": "unverified"
+      },
+      "stable_ids": "Fixture, league, bookmaker, bet IDs; internal mapping required.",
+      "status": "review",
+      "surface_availability": "documented_api",
+      "temporal_semantics": "Unknown remains unknown; do not infer opening/closing from file order or first/last sampled price.",
+      "timestamp_semantics": "Pre-match and live feeds distinct; publication/update and retention window not accredited in this audit (dynamic documentation unavailable).",
+      "unblock_requirement": "Confirm odds line coverage, update/history semantics, training/retention rights and future access. No integration."
+    },
+    {
+      "acquisition_method": "read_only_local_audit",
+      "authorization_status": "not_verified_for_project",
+      "automatable": false,
+      "bookmaker_coverage": "Stored DOM cells with bookmaker IDs 631, 417, 1113, 632, 1041; capture/publication times unverified.",
+      "capture_policy": "read_only_local",
+      "evidence": [
+        "docs/v3/odds/local-audit.json",
+        "v3/odds/audit.py"
+      ],
+      "future_markets": [
+        "ASIAN_HANDICAP",
+        "CORNERS",
+        "CARDS"
+      ],
+      "leagues_countries": "All data/ inventoried; see local-audit.json; sporting coverage is not odds coverage.",
+      "leakage_risk": "High: model-derived fair odds, predictions, result reports and labels cannot supply market odds.",
+      "markets": [
+        "1X2"
+      ],
+      "permission_licence_status": "Local inspection only; possession grants no automation or model reuse permission.",
+      "priority": "P0",
+      "provider": "local_inventory",
+      "rate_limits": "Zero network calls.",
+      "retention": "Retain references/digests for review; do not duplicate sporting corpus.",
+      "reviewed_at": "2026-10-26",
+      "snapshots": {
+        "closing": "unverified",
+        "current": "unverified",
+        "opening": "unverified"
+      },
+      "stable_ids": "Artifact relative path and SHA-256; no accredited odds match/market/bookmaker IDs.",
+      "status": "review",
+      "surface_availability": "public_visible",
+      "temporal_semantics": "Unknown remains unknown; do not infer opening/closing from file order or first/last sampled price.",
+      "timestamp_semantics": "Local HTML contains displayed 1X2 prices, but no accredited observed_at/source_published_at. Filesystem mtime, filename dates and opaque analytics IDs are not capture clocks.",
+      "unblock_requirement": "Specific price artifact, bookmaker, match reconciliation, explicit capture/publication time and provenance/rights. Only then add an existing_local source."
+    }
+  ],
+  "version": "3.1.0"
+}
