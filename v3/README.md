@@ -172,3 +172,56 @@ estado/elegibilidad/motivos. Inputs y metadata reconstruidos coinciden con el
 dataset original en todas las filas. No se compara distribución deportiva entre
 subgrupos etiquetados y no etiquetados: se compara cada identidad consigo misma.
 Ningún archivo histórico ni salida de `data/` se modifica para esta validación.
+
+## Snapshots reproducibles 1.4
+
+```bash
+python -m v3.data.snapshot create \
+  --dataset data/derived/dataset_v3.jsonl \
+  --manifest data/derived/dataset_v3_manifest.json \
+  --output-root data/snapshots
+python -m v3.data.snapshot verify data/snapshots/<snapshot_id>
+```
+
+La creación copia los bytes originales de dataset y manifest, genera
+`quality_report.json` desde las copias y publica sólo tras validar los quality
+gates. `snapshot_manifest.json` registra versiones, conteos, hashes SHA-256 y
+`created_at` UTC. Los nombres de archivos son relativos. El ID `v3-<sha256>`
+abarca la versión del formato snapshot y los hashes completos de los tres
+archivos congelados. Por ello, otro manifest fuente (incluso su `built_at`)
+produce otra identidad aunque el dataset sea idéntico. Los experimentos pueden
+referenciar `snapshot_id` y `dataset_sha256`.
+
+La publicación usa un temporal hermano y `renameat2(RENAME_NOREPLACE)` de Linux;
+no reemplaza destinos existentes, ni siquiera vacíos. Ante fallo se elimina el
+temporal. Dos creadores concurrentes convergen al mismo snapshot. Un destino
+existente se verifica y sólo se reutiliza si sus tres archivos coinciden byte
+por byte. Conserva su `created_at` original; éste es metadata de auditoría
+explícitamente fuera de la identidad. Creaciones independientes sólo pueden
+diferir en este campo. No hay dependencia de rutas personales ni timestamps
+para calcular el ID.
+
+`verify` exige los cuatro archivos exactos, vuelve a calcular hashes e identidad,
+comprueba versiones, conteos y directorio, y regenera el quality report para
+compararlo completo. Rechaza enlaces simbólicos en las rutas y archivos con
+hardlinks; las copias son archivos independientes. La salida no puede solaparse
+con los directorios fuente. Inmutabilidad significa rechazo de conflictos y
+detección de cambios; no sustituye permisos del sistema ni una firma de autoría.
+La utilidad requiere un directorio local controlado por el usuario, sin procesos
+hostiles cambiando sus ancestros durante la operación. Una interrupción abrupta
+puede dejar un temporal oculto, nunca un snapshot publicado parcialmente.
+
+Las fuentes se abren sólo para lectura y no se cambia su contenido ni mtime.
+Los snapshots permanecen bajo `data/`, ignorados por Git. La suite cubre los
+13 escenarios de la Issue #7, seguridad de enlaces, concurrencia y consistencia
+del reporte aunque se reescriba su hash.
+
+Validación real 1.4: 112 tests V3 pasan y `compileall` correcto. Snapshot:
+`v3-dfd2ee642ffed047e7a2b62298ca9be10fa214f5b1538d3e593dd14db148a7cc`.
+Dataset SHA-256:
+`fa732fdb2a7be786c99495bebbafa03956d52407e4a64d84aeb1293529a43e06`.
+4256 filas, 2896 elegibles, 1360 no elegibles y 500 con labels. Quality gates
+sin duplicados, inconsistencias ni diferencias con manifest. Creación repetida
+conservó ID, hashes, contenido y mtime de los cuatro archivos congelados, sin
+conflictos ni duplicación. Se compararon hashes y mtime de 66310 archivos fuente
+bajo `data/` (excluyendo `snapshots/`): ninguno cambió.
