@@ -235,3 +235,16 @@ reglas de ausencia y requisitos de linaje. API declarativa e inmutable en
 `catalog_json()`. No calcula features ni cambia el dataset o Champion.
 `python -m v3.features.audit` inspecciona fuentes reales en modo sólo lectura
 y emite cobertura y digest deterministas en stdout.
+
+## Superficie de señales 2.1A
+
+Catálogo ampliado y auditoría read-only aislados del pipeline operativo:
+[mapa completo y política de adquisición](../docs/v3/signal-surface.md).
+
+```bash
+python -m v3.features.surface_catalog > /tmp/signal-surface.json
+python -m v3.features.surface_audit --source-root data/matches > /tmp/matches-surface-audit.json
+```
+
+`surface_availability` y `capture_policy` son independientes. Esta fase no
+implementa captura nueva ni habilita automatización de Flashscore.
