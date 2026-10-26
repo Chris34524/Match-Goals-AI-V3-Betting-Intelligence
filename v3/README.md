@@ -225,3 +225,13 @@ sin duplicados, inconsistencias ni diferencias con manifest. Creación repetida
 conservó ID, hashes, contenido y mtime de los cuatro archivos congelados, sin
 conflictos ni duplicación. Se compararon hashes y mtime de 66310 archivos fuente
 bajo `data/` (excluyendo `snapshots/`): ninguno cambió.
+
+## Catálogo de features 2.1
+
+El [catálogo y auditoría de fuentes](../docs/v3/features.md) documenta 118
+candidatos (86 available, 6 planned y 26 blocked), con mercados, ventanas,
+reglas de ausencia y requisitos de linaje. API declarativa e inmutable en
+`v3.features`: `get_catalog(market=..., group=..., status=...)` y
+`catalog_json()`. No calcula features ni cambia el dataset o Champion.
+`python -m v3.features.audit` inspecciona fuentes reales en modo sólo lectura
+y emite cobertura y digest deterministas en stdout.
