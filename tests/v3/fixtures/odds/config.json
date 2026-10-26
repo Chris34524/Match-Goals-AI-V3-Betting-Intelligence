@@ -1,0 +1,26 @@
+{
+  "provider": {
+    "sports": [
+      "soccer_synthetic"
+    ],
+    "regions": [
+      "eu"
+    ],
+    "bookmakers": [
+      "synthetic_book"
+    ],
+    "markets": [
+      "1X2",
+      "BTTS",
+      "OVER_1_5",
+      "OVER_2_5",
+      "OVER_3_5"
+    ]
+  },
+  "reconciliation": {
+    "competition_mapping": {
+      "soccer_synthetic": "Synthetic League"
+    },
+    "mapping_version": "synthetic-1"
+  }
+}
