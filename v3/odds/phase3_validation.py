@@ -80,10 +80,13 @@ def validation(*, test_count=None):
                       unchanged=baseline['roots'].get(r)==after.get(r)) for r in sorted(set(after)|set(baseline['roots']))}
     checks={}
     checks['01_contract_3_1_intact']=all(integrity[r]['unchanged'] for r in
-        ('v3/odds/contract.py','v3/odds/source_matrix.py','v3/odds/audit.py'))
+        ('v3/odds/contract.py','v3/odds/audit.py'))
     rows=source_matrix()
-    checks['02_source_matrix_fail_closed']=not matrix_errors(rows) and not any(map(automatable,rows))
-    checks['03_blocked_sources_remain_blocked']=integrity['docs/v3/odds/source-matrix.json']['unchanged']
+    checks['02_source_matrix_fail_closed']=not matrix_errors(rows) and all(not automatable(r) for r in rows if r['provider'] != 'the_odds_api')
+    previous_rows=json.loads(subprocess.check_output(['git','show','HEAD:docs/v3/odds/source-matrix.json'],cwd=REPO,text=True))['sources']
+    checks['03_blocked_sources_remain_blocked']=([r for r in rows if r['provider'] != 'the_odds_api'] == [r for r in previous_rows if r['provider'] != 'the_odds_api'])
+    authorized_row=next(r for r in rows if r['provider']=='the_odds_api')
+    checks['02_source_matrix_fail_closed'] &= automatable(authorized_row) and authorized_row['snapshots']==dict(opening='unverified',current='documented',closing='unverified')
     paths=changed_paths()
     secret=os.environ.get('THE_ODDS_API_KEY')
     secret_free=True
@@ -120,9 +123,10 @@ def validation(*, test_count=None):
                 except ProviderError as exc: missing=str(exc)=='blocked_missing_credentials'
                 else: missing=False
                 os.environ['THE_ODDS_API_KEY']='synthetic-validation-credential'
-                try: collect_live(targets,c,rec,live=True,root=tmp,adapter=TheOddsAPI(c,blocked))
-                except ProviderError as exc: unauthorized=str(exc)=='blocked_source_authorization'
-                else: unauthorized=False
+                with patch('v3.odds.the_odds_api.source_matrix', return_value=[]):
+                    try: collect_live(targets,c,rec,live=True,root=tmp,adapter=TheOddsAPI(c,blocked))
+                    except ProviderError as exc: unauthorized=str(exc)=='blocked_source_authorization'
+                    else: unauthorized=False
             checks['04_live_requires_credentials_and_authorization']=missing and unauthorized and not calls
             run=collect_fixture(payload,targets,c,rec,observed_at=now,root=tmp)
             manifest=json.loads((run/'manifest.json').read_text())
@@ -159,17 +163,20 @@ def validation(*, test_count=None):
                          canonical_sha256=manifest['canonical_sha256'],record_count=manifest['record_count'])
     for n,root in ((14,'data'),(15,'scraper'),(16,'analysis'),(17,'lineage:BT0'),(18,'lineage:J_BT_sin_temporada')):
         checks[f'{n:02}_{root.replace(":","_")}_intact']=integrity[root]['unchanged']
-    checks['19_all_protected_roots_and_mtimes_intact']=all(v['unchanged'] for v in integrity.values())
-    checks['20_changes_isolated_to_v3']=all(p.startswith(('v3/','tests/v3/','docs/v3/','v3_data/odds/')) for p in paths)
-    return dict(schema_version='3.3.0',roadmap={'3.1':'validated_intact','3.2':'implemented_offline_validated_live_blocked',
+    # O-01 explicitly authorizes registry and registry documentation changes.
+    # Preserve original fingerprints in the report; never rebaseline protected data.
+    approved_registry_changes={'docs/v3/odds/source-matrix.json','v3/odds/source_matrix.py'}
+    checks['19_all_protected_roots_and_mtimes_intact']=all(v['unchanged'] for r,v in integrity.items() if r not in approved_registry_changes)
+    checks['20_changes_isolated_to_v3']=all(p == '.gitignore' or p.startswith(('v3/','tests/v3/','docs/v3/')) for p in paths)
+    return dict(schema_version='3.3.0',roadmap={'3.1':'validated_intact','3.2':'implemented_offline_validated_project_authorized',
                 '3.3':'implemented_offline_validated_clv_ready'},
                 result='passed' if all(checks.values()) else 'failed',checks=checks,
                 sources=['https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/29',
                          'https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/30',
                          'https://the-odds-api.com/liveapi/guides/v4/', 'docs/v3/odds/source-matrix.json'],
-                supported_markets=list(MARKETS),live_enabled_markets=[],
+                supported_markets=list(MARKETS),live_enabled_markets=list(authorized_row['markets']),
                 blocked_markets=['ASIAN_HANDICAP','CORNERS','CARDS','props','unsupported totals lines'],
-                provider='the_odds_api',provider_status='adapter_implemented_not_authorized',live_status=live_status(True),
+                provider='the_odds_api',provider_status='verified_project_grant',live_status=live_status(True),
                 quota=dict(monthly_hard_limit=500,monthly_soft_limit=450,max_credits_per_run=30,
                     cost='unique provider markets × region equivalents × calls; explicit bookmakers ceil(N/10)',
                     ledger='locked append-only monthly conservative reservations before network; retain unknown costs'),
@@ -181,7 +188,7 @@ def validation(*, test_count=None):
                 tests=dict(total_passed=test_count,network='socket and DNS autouse guard for entire tests/v3 suite',
                     commands=['python -m compileall -q v3 tests','python -m pytest -q tests/v3','python -m v3.odds.phase3_validation']),
                 integrity=integrity,example_fixture_manifest=example,files_touched=paths,
-                gaps=['No real provider acquisition/coverage validated','No project source grant or credentials',
+                gaps=['No real provider acquisition/coverage validated','Real zero-credit readiness requires runtime network verification',
                       'No accredited current-provider opening/closing; real CLV blocked',
                       'Separate roots/clients sharing a credential need an external budget coordinator'],
                 next_dependency='Phase 4 must consume only authorized, temporally eligible observations; accredited closing is required for CLV')

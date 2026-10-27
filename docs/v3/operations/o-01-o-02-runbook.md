@@ -55,13 +55,13 @@ print(live_status(live=True))
 PY
 ```
 
-With a key configured but before the source matrix is promoted, expected state:
+With a key configured and the reviewed O-01 registry grant recorded, expected state:
 
 ```text
-blocked_source_authorization
+live_enabled
 ```
 
-That is intentional. Key possession alone does not mutate project authorization.
+This checks credential presence and project authorization; real key validity requires zero-credit discovery. Key possession alone does not mutate project authorization.
 
 ## 5. Source-matrix promotion
 
@@ -114,9 +114,9 @@ python -m v3.odds.snapshots_cli plan \
 
 Default slots are T-24h, T-6h and T-1h. Missed windows are terminal `MISSED`; they must not be retrospectively backfilled.
 
-## 9. First controlled live capture
+## 9. Future controlled live capture — prohibited in this batch
 
-Run only after O-01 is unblocked and the dry-run cost is acceptable:
+The commands below are reference for a separately authorized future batch. Do not execute collect-live, live-tick or any odds endpoint in the current batch. Run only after unique future reconciliation and an accepted quota plan:
 
 ```bash
 python -m v3.odds.cli collect-live \
@@ -161,3 +161,13 @@ Expected early operational state remains fail-closed for real release until down
 - No Champion mutation.
 - `observed_at` remains independent from provider timestamps.
 - Closing is never inferred from the last pre-kickoff price.
+
+## Current batch evidence and safe discovery
+
+See [O-01 validation](o-01-validation.md) and [O-02 readiness](o-02-readiness.md). Registry authorization is verified; opening/closing remain unverified. Real discovery is BLOCKED_NETWORK; no reconciled future pilot target exists.
+
+Use `python -m v3.odds.discovery_cli sports` for a single sports discovery. `validate-key` also calls sports, so it must share the same one-call budget: choose one command. Only after an explicit competition mapping is supported by that response, use `python -m v3.odds.discovery_cli events --sport soccer_epl` (replace with the one approved pilot key). No league loops or retries. Both endpoints cost zero credits according to official documentation.
+
+Inspect internal fixtures read-only. Require an independently verified timezone-aware future kickoff, explicit season, exact normalized team identity and unique pair. Do not infer timezone, season or event ID. If blocked, record the reason and leave targets absent.
+
+Runtime configuration and targets belong under ignored `v3_data/ops/`. Pilot: one sport, region eu, market 1X2, hard 500, soft 450, max 1 credit/run. Run the offline plan only after reconciliation. Never stage runtime data.

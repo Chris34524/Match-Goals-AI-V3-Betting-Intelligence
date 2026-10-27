@@ -86,14 +86,16 @@
     },
     {
       "acquisition_method": "official_api",
-      "authorization_status": "not_verified_for_project",
-      "automatable": false,
+      "authorization_status": "verified_project_grant",
+      "automatable": true,
       "bookmaker_coverage": "Region/bookmaker keys; availability varies; BTTS/additional totals require event/market coverage checks.",
       "capture_policy": "licensed_api",
       "evidence": [
         "https://the-odds-api.com/",
         "https://the-odds-api.com/liveapi/guides/v4/",
-        "https://the-odds-api.com/terms-and-conditions.html"
+        "https://the-odds-api.com/terms-and-conditions.html",
+        "docs/v3/operations/provider-authorization-the-odds-api.md",
+        "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/54"
       ],
       "future_markets": [
         "ASIAN_HANDICAP",
@@ -109,10 +111,10 @@
         "OVER_3_5",
         "BTTS"
       ],
-      "permission_licence_status": "Freemium current, paid history. Terms explicitly permit retention and ML; prohibit raw-data resale. No account or project integration.",
+      "permission_licence_status": "Project grant verified by owner attestation and reviewed terms: analytical dashboards, derived values and statistical/ML models permitted; raw-feed resale prohibited.",
       "priority": "P0",
       "provider": "the_odds_api",
-      "rate_limits": "Quota headers x-requests-*; history 10 credits/region/market; 429 burst limits, exact project allowance unset.",
+      "rate_limits": "500 monthly hard / 450 soft; pilot max 1 credit per run. Sports/events discovery: 0 credits. No retries or polling; quota headers x-requests-*.",
       "retention": "Terms allow indefinite storage; raw-feed redistribution prohibited.",
       "reviewed_at": "2026-10-26",
       "snapshots": {
@@ -121,11 +123,11 @@
         "opening": "unverified"
       },
       "stable_ids": "Event ID, sport key, bookmaker key, market key; internal mapping and kickoff revisions still required.",
-      "status": "planned",
+      "status": "available",
       "surface_availability": "documented_api",
       "temporal_semantics": "Unknown remains unknown; do not infer opening/closing from file order or first/last sampled price.",
       "timestamp_semantics": "UTC last_update and historical snapshot timestamp are distinct from local observed_at. Historical nearest earlier snapshot, 10-minute grid from June 2020, 5-minute from September 2022. No true opening/closing guarantee.",
-      "unblock_requirement": "Future approved provider selection and access; verify applicable grant/plan, exact leagues/lines, limits and as-of adapter. No paid service or credentials requested in 3.1."
+      "unblock_requirement": "Authorization verified; environment credentials and explicit live flag still required. Reconcile event and pass quota/temporal guards before any separately authorized capture."
     },
     {
       "acquisition_method": "official_api",

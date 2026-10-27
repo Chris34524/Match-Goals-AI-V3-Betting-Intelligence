@@ -1,7 +1,7 @@
 """Versioned evidence registry. Visibility, permission and time are independent.
 
-No candidate is enabled for acquisition in 3.1; licensed capability is not an
-active project grant, credential, budget or accredited adapter.
+Project authorization is explicit; credentials, budget and temporal accreditation
+remain independent runtime controls.
 """
 from pathlib import Path
 from .contract import canonical_json, SURFACES, POLICIES, STATUSES, member
