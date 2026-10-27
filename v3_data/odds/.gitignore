@@ -1,2 +1,0 @@
-# Runtime coordination locks are not immutable evidence artifacts.
-*.lock
