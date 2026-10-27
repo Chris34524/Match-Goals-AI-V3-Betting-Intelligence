@@ -1,7 +1,6 @@
 {
   "automated_real_betting": false,
   "calibration_status": "BLOCKED",
-  "commit": "008e1af517b3f8a6b99784e46e4a27ee408fb015",
   "component_versions": {
     "calibration": "6.1.0",
     "operation": "operation-v1",
@@ -56,7 +55,10 @@
       "version": "no-bet-v1"
     }
   },
-  "hash": "375179d3680ce300861a0cf90488d44e4a5d63d67171d226855871244f6befb5",
+  "generation_head": "c02b45ce7d0e6b57d8b8c041ad0a0612bf82e4a4",
+  "generation_head_meaning": "Existing Git HEAD at evidence generation; not the final containing commit.",
+  "generation_worktree_state": "DIRTY_PRECOMMIT",
+  "hash": "724f573deeaad2b9c55f882cb9d2bd6c5329fc12dd57c00bbb2ad58e35525bff",
   "human_confirmation_required": true,
   "integrity_hashes": {
     "analysis": {
@@ -206,6 +208,7 @@
     "minimum_real_oos_not_met"
   ],
   "release_status": "BLOCKED",
+  "source_digest": "0489e42f941df0fa5940ae8ca31250107cf6446f07afb36adfcc3d933326e079",
   "source_hashes": {
     "v3/calibration/__init__.py": "e296d3c737bb54c869086b8a459df530c49996448962bc10ab03e77e38282ba3",
     "v3/calibration/contract.py": "f8dcae6c6390d82e781652469ded14692675cacbfe11eccb8ed3e1340452f933",
@@ -216,7 +219,7 @@
     "v3/operation/__init__.py": "8ff64f6dba47eb8e483ae9226dc3ed6fdd660159163f968fb1d041e45721557a",
     "v3/operation/cli.py": "546e77e3f53315495036fcce13a5caf86ad21cedc04977474f80702bf1f1e866",
     "v3/operation/handoff.py": "ecb2c66209bb71ad238d7cc2fae8bc142718d31695766308dd570065202626bd",
-    "v3/operation/manifest.py": "bbf2440c8bb9f96188179939319e73613b13a3b660a1b78a1dac7fb26574f1e8",
+    "v3/operation/manifest.py": "dea885134e56b2332bdc22833e572de7ad2e2f63ba8b224cb56e7c47c9007644",
     "v3/operation/pipeline.py": "f1a85ede5ee4afef0ad071a69e589c4dea698412bc7e4234d384f935c32bf202",
     "v3/operation/release_gate.py": "b54ff06d715ce3dc9be0843f26555b8db76c93bbeff49159852592c30e41dc41",
     "v3/paper/__init__.py": "66c5bd8c1f21c62d0ca65590f06d96f5e080ccae00e579918d2ff61533f6b1ea",
@@ -235,6 +238,6 @@
     "v3/validation/promotion.py": "fb9b45d71f77be2ac3fdffca99f23734eda84ba0ad184918aa5d125c32603cb8",
     "v3/validation/walkforward.py": "f2661d36590b6abcb7f26d8f9985339dd6cc5f2f3c8275c0ef1a316d24fc8a96"
   },
-  "version": "v3-final-architecture-v1",
-  "working_tree_uncommitted": true
+  "source_identity": "source_digest is the canonical digest of source_hashes for the validated final modules.",
+  "version": "v3-final-architecture-v2"
 }

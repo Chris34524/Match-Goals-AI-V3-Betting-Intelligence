@@ -1,0 +1,103 @@
+[
+  {
+    "away_team": "Synthetic Away",
+    "bookmakers": [
+      {
+        "key": "synthetic_book",
+        "last_update": "2026-11-01T16:58:00Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "outcomes": [
+              {
+                "name": "Synthetic Away",
+                "price": 3.2
+              },
+              {
+                "name": "Draw",
+                "price": 3.4
+              },
+              {
+                "name": "Synthetic Home",
+                "price": 2.2
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-11-01T16:59:00Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "point": 1.5,
+                "price": 1.9
+              },
+              {
+                "name": "Under",
+                "point": 1.5,
+                "price": 1.9
+              },
+              {
+                "name": "Over",
+                "point": 2.5,
+                "price": 1.9
+              },
+              {
+                "name": "Under",
+                "point": 2.5,
+                "price": 1.9
+              },
+              {
+                "name": "Over",
+                "point": 3.5,
+                "price": 1.9
+              },
+              {
+                "name": "Under",
+                "point": 3.5,
+                "price": 1.9
+              },
+              {
+                "name": "Over",
+                "point": 4.5,
+                "price": 1.9
+              },
+              {
+                "name": "Under",
+                "point": 4.5,
+                "price": 1.9
+              }
+            ]
+          },
+          {
+            "key": "btts",
+            "outcomes": [
+              {
+                "name": "Yes",
+                "price": 1.8
+              },
+              {
+                "name": "No",
+                "price": 2.1
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "outcomes": [
+              {
+                "name": "Synthetic Home",
+                "point": -1.5,
+                "price": 1.9
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "commence_time": "2026-11-01T18:00:00Z",
+    "home_team": "Synthetic Home",
+    "id": "synthetic-event-1",
+    "sport_key": "soccer_synthetic"
+  }
+]

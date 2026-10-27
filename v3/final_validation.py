@@ -7,6 +7,7 @@ No check substitutes synthetic performance for real evidence.
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import subprocess
 import sys
@@ -89,6 +90,33 @@ def test_mapping_passed(results,names):
     return True
 
 
+def traceability_checks(release):
+    from v3.operation.manifest import source_hashes, GENERATION_HEAD_MEANING, SOURCE_IDENTITY
+    from v3.operation.pipeline import current_report
+    from v3.calibration.contract import verify
+    current=source_hashes()
+    head=release.get('generation_head')
+    valid_head=isinstance(head,str) and re.fullmatch(r'[0-9a-fA-F]{40}',head) is not None
+    if valid_head:
+        valid_head=subprocess.run(['git','cat-file','-t',head],capture_output=True,text=True).stdout.strip()=='commit'
+    try:
+        verify(release)
+        sealed=True
+    except (ValueError,TypeError):
+        sealed=False
+    state=current_report()
+    checks={
+        '61':('manifest source identity matches current sources',release.get('source_hashes')==current and release.get('source_digest')==digest(current)),
+        '62':('generation HEAD is an existing Git commit',valid_head),
+        '63':('generation worktree state has explicit snapshot vocabulary',release.get('generation_worktree_state') in ('CLEAN','DIRTY_PRECOMMIT')),
+        '64':('no self-referential final commit claim',not any(k in release for k in ('commit','final_commit','release_commit','working_tree_uncommitted')) and release.get('generation_head_meaning')==GENERATION_HEAD_MEANING and release.get('source_identity')==SOURCE_IDENTITY),
+        '65':('release remains blocked with missing real evidence',release.get('release_status')==state['release']['release_status']=='BLOCKED' and release.get('oos_count')==state['oos_gate']['real_oos_count']==0 and state['oos_gate']['required_oos_count']==200 and state['real_state']['real_status']=='BLOCKED' and 'phase5_no_accredited_temporal_predictions' in state['real_state']['reason_codes'] and all(release.get(k)=='BLOCKED' for k in ('model_status','calibration_status','odds_status','promotion_status')) and 'odds_evidence_missing_or_invalid' in state['release']['reason_codes']),
+        '66':('manifest seal and human-only controls',sealed and release.get('human_confirmation_required') is True and release.get('automated_real_betting') is False),
+        '68':('Champion identity remains frozen',all(json.loads(Path(f'docs/v3/models/checkpoint-5.{i}.json').read_text())['champion']['operational_champion']=='BT0 / J_BT_sin_temporada' for i in range(1,7))),
+    }
+    return {i:dict(id=i,name=name,status='PASS' if ok else 'FAIL') for i,(name,ok) in checks.items()}
+
+
 def main():
     RUNTIME.mkdir(parents=True,exist_ok=True)
     baseline_summary=json.loads((DOCS/'integrity-before.json').read_text())
@@ -132,9 +160,11 @@ def main():
     new_files=[p for p in new_files if p not in preexisting]
     tracked=subprocess.check_output(['git','diff','--name-only'],text=True).splitlines()
     checkpoints=[json.loads(p.read_text()) for p in sorted((DOCS/'checkpoints').glob('*.json'))]
+    release=json.loads((DOCS/'release-manifest.json').read_text())
+    checks.update(traceability_checks(release))
+    checks['69']=dict(id='69',name='unaccredited closing remains blocked',status='PASS' if test_mapping_passed(results,('test_final_clv_contract',)) else 'FAIL')
+    checks['67']=dict(id='67',name='traceability regression tests executed',status='PASS' if test_mapping_passed(results,('test_manifest_digest_deterministic','test_manifest_digest_source_change','test_manifest_generation_head','test_manifest_worktree_state','test_manifest_no_final_commit','test_manifest_release_blocked','test_traceability_rejects_regressions')) else 'FAIL')
     passed=sum(c['status']=='PASS' for c in checks.values());failed=len(checks)-passed
-    from v3.operation.manifest import manifest
-    release=manifest()
     report=dict(implementation_status='PASS' if not failed else 'FAIL',passed=passed,failed=failed,checks=[checks[k] for k in sorted(checks)],
                 tests_total=len(results),tests_new=sum(1 for c in xml.iter('testcase') if c.attrib.get('classname','').endswith('_final')),
                 compile_status='PASS' if compile_result.returncode==0 else 'FAIL',
@@ -150,7 +180,6 @@ def main():
                 limitations=['Local fingerprints are not independent signed attestations.','Synthetic tests are software evidence only.','Real source adapters and prospective accreditation remain required.'])
     (DOCS/'integrity-after.json').write_text(json.dumps(dict(protected_integrity=report['protected_integrity'],file_count=len(after),
                 before_files_hash=digest(before),after_files_hash=digest(after),groups=baseline_summary['groups'] if before==after else None),sort_keys=True,indent=2)+'\n')
-    (DOCS/'release-manifest.json').write_text(json.dumps(release,sort_keys=True,indent=2)+'\n')
     Path('docs/v3/final-validation-report.json').write_text(json.dumps(report,sort_keys=True,indent=2)+'\n')
     print(f'Final validation: {passed} PASS, {failed} FAIL. Real release: BLOCKED; OOS: 0/200.')
     return int(failed>0)

@@ -7,4 +7,4 @@ Arquitectura/software IMPLEMENTED; evidencia real y operación BLOCKED.
 
 Pruebas offline y hashes: [reporte final](final-validation-report.json).
 No métricas/predicciones reales fabricadas; los fixtures sólo prueban software.
-Champion BT0 / J_BT_sin_temporada intacto. No add/commit/push.
+Champion BT0 / J_BT_sin_temporada intacto. Este artefacto fue generado durante la validación pre-commit.

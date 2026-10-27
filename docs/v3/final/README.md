@@ -36,6 +36,12 @@ No claves ni llamadas externas; pytest bloquea sockets/DNS. Los archivos protegi
 incluyen cachés preexistentes: compile/test usan PYTHONPYCACHEPREFIX en /tmp para
 no cambiar bytes ni mtimes en árboles read-only. El validador aplica esto internamente.
 
-[Release manifest](release-manifest.json) incluye commit base y marca cambios no
-commiteados; configs versionadas/hashes y estados explícitos. No representa release
-publicado. [Roadmap](../roadmap-final.md) enumera exactamente los blockers restantes.
+[Release manifest](release-manifest.json) usa `generation_head` como snapshot del
+HEAD existente al generar la evidencia, sin identificar el commit final que contiene
+el archivo. `generation_worktree_state` se calcula con `git status --porcelain`:
+CLEAN o DIRTY_PRECOMMIT. `source_digest`, digest canónico de `source_hashes` de
+calibration, validation, selection, paper, performance y operation, es la identidad
+reproducible principal del código validado. El validador comprueba el manifest
+estático y falla si sus fuentes quedan obsoletas; regenerarlo requiere ejecutar
+`python -c 'import json; from pathlib import Path; from v3.operation.manifest import manifest; Path("docs/v3/final/release-manifest.json").write_text(json.dumps(manifest(), sort_keys=True, indent=2)+"\n")'`.
+No representa release publicado. [Roadmap](../roadmap-final.md) enumera los blockers.

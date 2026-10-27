@@ -368,7 +368,7 @@
     {
       "id": "05",
       "name": "Phase5 intact",
-      "status": "PASS"
+      "status": "FAIL"
     },
     {
       "id": "06",
@@ -761,7 +761,7 @@
     {
       "id": "55",
       "name": "all protected fingerprints/counts/mtimes unchanged",
-      "status": "PASS"
+      "status": "FAIL"
     },
     {
       "id": "56",
@@ -787,107 +787,87 @@
       "id": "60",
       "name": "preexisting untracked odds artifacts intact",
       "status": "PASS"
+    },
+    {
+      "id": "61",
+      "name": "manifest source identity matches current sources",
+      "status": "PASS"
+    },
+    {
+      "id": "62",
+      "name": "generation HEAD is an existing Git commit",
+      "status": "PASS"
+    },
+    {
+      "id": "63",
+      "name": "generation worktree state has explicit snapshot vocabulary",
+      "status": "PASS"
+    },
+    {
+      "id": "64",
+      "name": "no self-referential final commit claim",
+      "status": "PASS"
+    },
+    {
+      "id": "65",
+      "name": "release remains blocked with missing real evidence",
+      "status": "PASS"
+    },
+    {
+      "id": "66",
+      "name": "manifest seal and human-only controls",
+      "status": "PASS"
+    },
+    {
+      "id": "67",
+      "name": "traceability regression tests executed",
+      "status": "PASS"
+    },
+    {
+      "id": "68",
+      "name": "Champion identity remains frozen",
+      "status": "PASS"
+    },
+    {
+      "id": "69",
+      "name": "unaccredited closing remains blocked",
+      "status": "PASS"
     }
   ],
   "closing_status": "BLOCKED",
   "clv_status": "BLOCKED",
   "compile_status": "PASS",
   "current_champion": "BT0 / J_BT_sin_temporada",
-  "failed": 0,
-  "files_created": [
+  "failed": 2,
+  "files_created": [],
+  "files_modified": [
     "docs/v3/final-validation-report.json",
     "docs/v3/final/README.md",
-    "docs/v3/final/checkpoints/6.1.json",
-    "docs/v3/final/checkpoints/6.1.md",
-    "docs/v3/final/checkpoints/6.2.json",
-    "docs/v3/final/checkpoints/6.2.md",
-    "docs/v3/final/checkpoints/6.3.json",
-    "docs/v3/final/checkpoints/6.3.md",
-    "docs/v3/final/checkpoints/7.1.json",
-    "docs/v3/final/checkpoints/7.1.md",
-    "docs/v3/final/checkpoints/7.2.json",
-    "docs/v3/final/checkpoints/7.2.md",
-    "docs/v3/final/checkpoints/7.3.json",
-    "docs/v3/final/checkpoints/7.3.md",
-    "docs/v3/final/checkpoints/8.1.json",
-    "docs/v3/final/checkpoints/8.1.md",
-    "docs/v3/final/checkpoints/8.2.json",
-    "docs/v3/final/checkpoints/8.2.md",
-    "docs/v3/final/checkpoints/8.3.json",
-    "docs/v3/final/checkpoints/8.3.md",
-    "docs/v3/final/checkpoints/9.1.json",
-    "docs/v3/final/checkpoints/9.1.md",
-    "docs/v3/final/checkpoints/9.2.json",
-    "docs/v3/final/checkpoints/9.2.md",
-    "docs/v3/final/integrity-after.json",
-    "docs/v3/final/integrity-before.json",
     "docs/v3/final/release-manifest.json",
-    "docs/v3/final/source-issues.json",
     "docs/v3/phase-6-final.md",
     "docs/v3/phase-7-final.md",
     "docs/v3/phase-8-final.md",
     "docs/v3/phase-9-final.md",
-    "docs/v3/roadmap-final.md",
-    "tests/v3/test_calibration_final.py",
     "tests/v3/test_final_validation_final.py",
-    "tests/v3/test_operation_final.py",
-    "tests/v3/test_operation_human_final.py",
-    "tests/v3/test_paper_final.py",
-    "tests/v3/test_performance_final.py",
-    "tests/v3/test_performance_oos_final.py",
-    "tests/v3/test_promotion_final.py",
-    "tests/v3/test_selection_daily_final.py",
-    "tests/v3/test_selection_pickscore_final.py",
-    "tests/v3/test_selection_policy_final.py",
-    "tests/v3/test_walkforward_final.py",
-    "v3/calibration/__init__.py",
-    "v3/calibration/contract.py",
-    "v3/calibration/engine.py",
-    "v3/calibration/isotonic.py",
-    "v3/calibration/platt.py",
-    "v3/calibration/reliability.py",
     "v3/final_validation.py",
-    "v3/operation/__init__.py",
-    "v3/operation/cli.py",
-    "v3/operation/handoff.py",
-    "v3/operation/manifest.py",
-    "v3/operation/pipeline.py",
-    "v3/operation/release_gate.py",
-    "v3/paper/__init__.py",
-    "v3/paper/ledger.py",
-    "v3/performance/__init__.py",
-    "v3/performance/analyzer.py",
-    "v3/performance/drawdown.py",
-    "v3/performance/oos_gate.py",
-    "v3/selection/__init__.py",
-    "v3/selection/cli.py",
-    "v3/selection/daily.py",
-    "v3/selection/pickscore.py",
-    "v3/selection/policy.py",
-    "v3/validation/__init__.py",
-    "v3/validation/economics.py",
-    "v3/validation/promotion.py",
-    "v3/validation/walkforward.py"
-  ],
-  "files_modified": [
-    ".gitignore"
+    "v3/operation/manifest.py"
   ],
   "gate_status": "NOT_MET",
   "hashes": {
-    "final_source": "ef8925f3e9430440946ae99a50daa0bc6330f8fac90ace36d99c7a84406cf368",
+    "final_source": "0489e42f941df0fa5940ae8ca31250107cf6446f07afb36adfcc3d933326e079",
     "issues_sha256": "d6a51ca072291a8cb0b6e2f3c7558b52ddde60201b05352dacb9c39d556ef72b",
     "protected_inventory": "dd842159f980f4db0bebbf6e3760394598eabf790483ea6689056c76f667ae59",
-    "release_manifest": "375179d3680ce300861a0cf90488d44e4a5d63d67171d226855871244f6befb5",
-    "tests_sha256": "a372726c5c2f2652296a572e01b08d41123715cbfd6430660beb7d4c4d88ad78",
-    "validator_sha256": "0fdb22d0193486df33fd375efb383e1d515ffc00f4e517d629446009cd3b45a9"
+    "release_manifest": "724f573deeaad2b9c55f882cb9d2bd6c5329fc12dd57c00bbb2ad58e35525bff",
+    "tests_sha256": "93045fc824a3994dd2fe0667835b48edf08457c52cf633b5558f20c29dea35e2",
+    "validator_sha256": "b90f0e1fb4f86fb44a7df74d10b8afdabf30d61bc1fd37dacf64dd65e3ac14d2"
   },
-  "implementation_status": "PASS",
+  "implementation_status": "FAIL",
   "limitations": [
     "Local fingerprints are not independent signed attestations.",
     "Synthetic tests are software evidence only.",
     "Real source adapters and prospective accreditation remain required."
   ],
-  "passed": 60,
+  "passed": 67,
   "preexisting_untracked_preserved": [
     "v3_data/odds/.gitignore",
     "v3_data/odds/README.md",
@@ -897,12 +877,12 @@
     "v3_data/odds/phase3-synthetic-example/f95ab56a9b4cbd2c6148629d77a052bdb499dba9a757bcff3e2bfe1c5dffe7fe/raw/response.json"
   ],
   "protected_file_count": 67662,
-  "protected_integrity": "PASS",
+  "protected_integrity": "FAIL",
   "real_daily_picks_status": "BLOCKED",
   "real_oos_count": 0,
   "real_status": "BLOCKED",
   "release_status": "BLOCKED",
   "required_oos_count": 200,
-  "tests_new": 115,
-  "tests_total": 1229
+  "tests_new": 133,
+  "tests_total": 1247
 }

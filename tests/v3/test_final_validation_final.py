@@ -77,3 +77,74 @@ def test_final_validator_detects_regressions_and_missing_tests():
     assert not mapping_passed([('test_x[a]',True),('test_x[b]',False)],('test_x',))
     assert mapping_passed([('test_x[a]',True)],('test_x',))
     assert len(TEST_REQUIREMENTS)>=40
+
+
+def test_manifest_digest_deterministic():
+    from v3.operation.manifest import source_hashes, manifest
+    from v3.calibration.contract import digest
+    hashes=source_hashes()
+    assert digest(hashes)==digest(dict(reversed(list(hashes.items()))))
+    assert manifest()['source_digest']==manifest()['source_digest']==digest(hashes)
+
+
+def test_manifest_digest_source_change(tmp_path):
+    from v3.operation.manifest import source_hashes, COMPONENTS
+    from v3.calibration.contract import digest
+    for area in COMPONENTS:
+        folder=tmp_path/area;folder.mkdir();(folder/'module.py').write_text('value = 1\n')
+    before=digest(source_hashes(tmp_path))
+    (tmp_path/'operation/module.py').write_text('value = 2\n')
+    assert digest(source_hashes(tmp_path))!=before
+
+
+def test_manifest_generation_head():
+    import subprocess
+    from v3.operation.manifest import manifest
+    head=manifest()['generation_head']
+    assert len(head)==40 and int(head,16)>=0
+    assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==head
+    assert subprocess.check_output(['git','cat-file','-t',head],text=True).strip()=='commit'
+
+
+@pytest.mark.parametrize('porcelain,expected',[('','CLEAN'),(' M v3/operation/manifest.py\n','DIRTY_PRECOMMIT'),('?? evidence.json\n','DIRTY_PRECOMMIT')])
+def test_manifest_worktree_state(monkeypatch,porcelain,expected):
+    import importlib
+    module=importlib.import_module('v3.operation.manifest')
+    def output(command,**kwargs):
+        assert command==['git','status','--porcelain']
+        return porcelain
+    monkeypatch.setattr(module.subprocess,'check_output',output)
+    assert module.generation_worktree_state()==expected
+
+
+def test_manifest_no_final_commit():
+    from v3.operation.manifest import manifest, GENERATION_HEAD_MEANING
+    m=manifest()
+    assert not {'commit','final_commit','release_commit','working_tree_uncommitted'} & m.keys()
+    assert m['generation_head_meaning']==GENERATION_HEAD_MEANING
+    assert 'not the final containing commit' in m['generation_head_meaning']
+
+
+def test_manifest_release_blocked():
+    from v3.operation.manifest import manifest
+    m=manifest()
+    assert m['release_status']=='BLOCKED' and m['oos_count']==0
+    assert m['human_confirmation_required'] is True and m['automated_real_betting'] is False
+    assert all(m[k]=='BLOCKED' for k in ('model_status','calibration_status','odds_status','promotion_status'))
+
+
+@pytest.mark.parametrize('key,value,check',[
+    ('source_digest','stale','61'),('source_hashes',{},'61'),
+    ('generation_head',None,'62'),('generation_head','0'*40,'62'),
+    ('generation_head','HEAD','62'),('generation_worktree_state',True,'63'),
+    ('commit','claimed-final','64'),('generation_head_meaning','final commit','64'),
+    ('release_status','READY','65'),('human_confirmation_required',False,'66')])
+def test_traceability_rejects_regressions(key,value,check):
+    from v3.operation.manifest import manifest
+    from v3.final_validation import traceability_checks
+    from v3.calibration.contract import sealed
+    m=manifest()
+    assert traceability_checks(m)[check]['status']=='PASS'
+    m[key]=value
+    m=sealed({k:v for k,v in m.items() if k!='hash'})
+    assert traceability_checks(m)[check]['status']=='FAIL'
