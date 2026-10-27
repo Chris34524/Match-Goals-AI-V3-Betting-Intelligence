@@ -1,0 +1,243 @@
+{
+  "automated_real_betting": false,
+  "calibration_status": "BLOCKED",
+  "component_versions": {
+    "calibration": "6.1.0",
+    "operation": "operation-v1",
+    "paper": "paper-fixed-1u-v1",
+    "performance": "performance-v1",
+    "selection": "daily-v1",
+    "validation": "expanding-distinct-utc-dates-v1"
+  },
+  "config_hashes": {
+    "oos": "60c50694e670d73efa3d2ba10d9627ae0136c00d675d0696b276d668fc6aac77",
+    "pickscore": "61b17dfb5708e6bf800ee064785d3bc0fb73c34a860d9fdd1ac1e64c517933fc",
+    "promotion": "b9db5572901f7c76e5ccb2298d167d384bc3c8e74598286a1834ad28e9693548",
+    "selection": "14da7b10f6bca229ee89fdcc826750b07eca5ea8ae523dc5b135e7b6e313815e"
+  },
+  "configs": {
+    "oos": {
+      "auto_promote": false,
+      "count_unit": "unique_internal_match_id",
+      "threshold": 200,
+      "version": "real-unique-settled-oos-v1"
+    },
+    "pickscore": {
+      "ece_limit": 0.1,
+      "ev_saturation": 0.2,
+      "optimized": false,
+      "origin": "conservative_hand_defined",
+      "sample_saturation": 100,
+      "stability_limit": 0.05,
+      "version": "pickscore-v1",
+      "weights": {
+        "calibration": 0.25,
+        "probability": 0.15,
+        "sample": 0.25,
+        "stability": 0.2,
+        "value": 0.15
+      }
+    },
+    "promotion": {
+      "automated_promotion": false,
+      "maximum_ece": 0.05,
+      "maximum_window_loss_deterioration": 0.01,
+      "minimum_oos": 200,
+      "minimum_windows": 2,
+      "tie_rule": "both_losses_not_worse",
+      "version": "promotion-v1"
+    },
+    "selection": {
+      "human_confirmation_required": true,
+      "minimum_pickscore": 65,
+      "minimum_stability_component": 60,
+      "value_policy": "phase4_default_unoptimized",
+      "version": "no-bet-v1"
+    }
+  },
+  "generation_head": "c02b45ce7d0e6b57d8b8c041ad0a0612bf82e4a4",
+  "generation_head_meaning": "Existing Git HEAD at evidence generation; not the final containing commit.",
+  "generation_worktree_state": "DIRTY_PRECOMMIT",
+  "hash": "724f573deeaad2b9c55f882cb9d2bd6c5329fc12dd57c00bbb2ad58e35525bff",
+  "human_confirmation_required": true,
+  "integrity_hashes": {
+    "analysis": {
+      "content_hash": "a4bc54649d9f11f2a58e8682f4c9bae3bf61ff2ca24eef5b56e3445e54d4c8e9",
+      "file_count": 128
+    },
+    "analysis_backup_20261008_202808": {
+      "content_hash": "42041faf6f55443c695bd61ff1e6dc0b59d950071a3bea4777625fef3f263419",
+      "file_count": 61
+    },
+    "data": {
+      "content_hash": "d17a54db2e3c60f685c96aa6c8a4c297745fb932ab49fcb49fa46a73a9d9fd6c",
+      "file_count": 67219
+    },
+    "docs/v3/data-contract.md": {
+      "content_hash": "45cece70b481827c3b586db781487d093834e2f15eec52040aabe9cc5ce8a2c1",
+      "file_count": 1
+    },
+    "docs/v3/features.md": {
+      "content_hash": "103b3b1baea9ffa94b111e795108dbf88a6760b39f13d80b7b06ecb8944f53bc",
+      "file_count": 1
+    },
+    "docs/v3/form-engine.md": {
+      "content_hash": "c4ed414393236e09a348046b144ee3104d51d4e4ef945357706959e28a31e3fd",
+      "file_count": 1
+    },
+    "docs/v3/models": {
+      "content_hash": "8b20cb9059bed078d7e48b2d3eb0ec7b4917e7dc698a845ff0e46668a350a0ea",
+      "file_count": 15
+    },
+    "docs/v3/odds": {
+      "content_hash": "3b0b3a0b7047d43d1e94fc4efd58fc85844d5134bf93fd4bf1f8b7ea8e93649a",
+      "file_count": 7
+    },
+    "docs/v3/phase-2": {
+      "content_hash": "aed77c68d153443cc2aaa7a4b962eb3d670092018a2d2e72eddf4e166e4309d0",
+      "file_count": 18
+    },
+    "docs/v3/phase-2-final.md": {
+      "content_hash": "b5a25aff4d6006a7812de6d1856fafb87f120719e019bba6a50c7bb330023dc7",
+      "file_count": 1
+    },
+    "docs/v3/phase-2-validation-report.json": {
+      "content_hash": "142de897c77025f18625861c3291a8f150995c4daee2546f2be88a188017ecc6",
+      "file_count": 1
+    },
+    "docs/v3/phase-3-final.md": {
+      "content_hash": "d5784134a529babf2ed753913881b58a63ce4430856e679802a1dfbdebe15f99",
+      "file_count": 1
+    },
+    "docs/v3/phase-3-validation-report.json": {
+      "content_hash": "2a5be8172bea3bf02beafa1d64b2e70e5c1472da7ed7a1aa8f542ef3b646fb5f",
+      "file_count": 1
+    },
+    "docs/v3/phase-4-final.md": {
+      "content_hash": "859ea59ef53aaafbbdc1047b69254220af270ff2fa8476d4e737e73ca4793da0",
+      "file_count": 1
+    },
+    "docs/v3/phase-4-validation-report.json": {
+      "content_hash": "20948ca7c4787a02f0c7b89328a064ab0a7a00d31e028489d6b4798e2967380e",
+      "file_count": 1
+    },
+    "docs/v3/phase-5-final.md": {
+      "content_hash": "0996a3812824d9973fa00d0ba5201dfb097399fb900febd8690b743337772cce",
+      "file_count": 1
+    },
+    "docs/v3/phase-5-validation-report.json": {
+      "content_hash": "9d7008230d3d46ac7e8095fc89d092796d51d4ebebc62342f835085983f684fb",
+      "file_count": 1
+    },
+    "docs/v3/signal-surface.md": {
+      "content_hash": "d29aacfeba63eb59566809cce9a7d1142a8ad878ed9fa9faf29386ede2dd3e76",
+      "file_count": 1
+    },
+    "docs/v3/surface-audit.json": {
+      "content_hash": "b3d2df721db2e27eb50595890b0695079e3be34e85f13ff84109699b1a02d5c9",
+      "file_count": 1
+    },
+    "docs/v3/surface-summary.json": {
+      "content_hash": "6ed0d7877e884652cdac55582a96df364a585c84b6a83d37765831bcfdec5174",
+      "file_count": 1
+    },
+    "docs/v3/surface-temporal-audit.json": {
+      "content_hash": "c2e220ffd6aa53c4d5f9752ffd57f4d290b14878ac2e107953e1a93ebbfbccdf",
+      "file_count": 1
+    },
+    "docs/v3/temporal-context.md": {
+      "content_hash": "3c154635c0f01e7028da04fea13b3366a6f164596358c6b7a86c242366210ddc",
+      "file_count": 1
+    },
+    "docs/v3/temporal-ledger-audit.json": {
+      "content_hash": "6395817460a79f811756bc92c00c187bcf90af58f1022f6aa1d623cc6f28e1d3",
+      "file_count": 1
+    },
+    "docs/v3/value": {
+      "content_hash": "7a7a0e9674edfc7d8784e6adbacbc1e569bf2be300a670aa4c5a3bcf17b998cc",
+      "file_count": 11
+    },
+    "docs/v3/xg-quality.md": {
+      "content_hash": "7dcd48c28c1edeea209cdecba294b1224a461ed8e5258175f1f1bcb4d9b87101",
+      "file_count": 1
+    },
+    "main.py": {
+      "content_hash": "c280108958aa05afc683e5d116ba7fc680fe83140460ed714dcfc1c5019441e4",
+      "file_count": 1
+    },
+    "scraper": {
+      "content_hash": "730ca8d65b6e7f518972b26f4b893841f27f81114a4b77dfd4e53ee5070ee536",
+      "file_count": 48
+    },
+    "v3/data": {
+      "content_hash": "09d89a2a792cd007a5f781964dc038776902361266caf86b9e0fed22ac34484f",
+      "file_count": 14
+    },
+    "v3/features": {
+      "content_hash": "ee5a623b3077d1fc63ba766f74f53726332e6d6c7bbcbb66f9e0ec67a8f27f09",
+      "file_count": 36
+    },
+    "v3/models": {
+      "content_hash": "05139f223355bf91ba38bcc01d93e102a34e5578855dde1c21bed64a1664c31e",
+      "file_count": 26
+    },
+    "v3/odds": {
+      "content_hash": "fd73b031fc309d02f517e11a3718d2bf47a3afa81c456a8bc9527f53f0d0ad09",
+      "file_count": 38
+    },
+    "v3/value": {
+      "content_hash": "8ab46389eaa2a0fab83d165c4bf42d7b96ec682446f590590d5e8e53f5580e55",
+      "file_count": 22
+    }
+  },
+  "model_status": "BLOCKED",
+  "odds_status": "BLOCKED",
+  "oos_count": 0,
+  "promotion_status": "BLOCKED",
+  "reasons": [
+    "model_evidence_missing_or_invalid",
+    "calibration_evidence_missing_or_invalid",
+    "walkforward_evidence_missing_or_invalid",
+    "promotion_evidence_missing_or_invalid",
+    "odds_evidence_missing_or_invalid",
+    "value_evidence_missing_or_invalid",
+    "pickscore_evidence_missing_or_invalid",
+    "paper_evidence_missing_or_invalid",
+    "performance_evidence_missing_or_invalid",
+    "integrity_evidence_missing_or_invalid",
+    "minimum_real_oos_not_met"
+  ],
+  "release_status": "BLOCKED",
+  "source_digest": "0489e42f941df0fa5940ae8ca31250107cf6446f07afb36adfcc3d933326e079",
+  "source_hashes": {
+    "v3/calibration/__init__.py": "e296d3c737bb54c869086b8a459df530c49996448962bc10ab03e77e38282ba3",
+    "v3/calibration/contract.py": "f8dcae6c6390d82e781652469ded14692675cacbfe11eccb8ed3e1340452f933",
+    "v3/calibration/engine.py": "d81cefd88cb02eef27c26b597c13e7e12802c62f14ade1ab11fb165a65bbca6d",
+    "v3/calibration/isotonic.py": "31b94413ad93d733361ced0cedb6ed592476f332959178ea26b1d9f89ba07486",
+    "v3/calibration/platt.py": "47ef77010e47fee5bdf871c89383f089f0f147b626b2cc2276a22acadb46f47b",
+    "v3/calibration/reliability.py": "6b6ba97002fb108b4df57eddce91b9c13f61e415b11cf484ffd41cca8356f78f",
+    "v3/operation/__init__.py": "8ff64f6dba47eb8e483ae9226dc3ed6fdd660159163f968fb1d041e45721557a",
+    "v3/operation/cli.py": "546e77e3f53315495036fcce13a5caf86ad21cedc04977474f80702bf1f1e866",
+    "v3/operation/handoff.py": "ecb2c66209bb71ad238d7cc2fae8bc142718d31695766308dd570065202626bd",
+    "v3/operation/manifest.py": "dea885134e56b2332bdc22833e572de7ad2e2f63ba8b224cb56e7c47c9007644",
+    "v3/operation/pipeline.py": "f1a85ede5ee4afef0ad071a69e589c4dea698412bc7e4234d384f935c32bf202",
+    "v3/operation/release_gate.py": "b54ff06d715ce3dc9be0843f26555b8db76c93bbeff49159852592c30e41dc41",
+    "v3/paper/__init__.py": "66c5bd8c1f21c62d0ca65590f06d96f5e080ccae00e579918d2ff61533f6b1ea",
+    "v3/paper/ledger.py": "7173a788e9532b07303013941c4f16f164b718de3088fe3a4357402e50d124b4",
+    "v3/performance/__init__.py": "0c2a5ea641cd951c811a079562825ea27a89994b363927025c3f39b7680e2346",
+    "v3/performance/analyzer.py": "a834d2581b8acf32d3e078f626183c0761370e90fde95c4bc911c361c9330709",
+    "v3/performance/drawdown.py": "6ff252c58a29c6c59ce8e084ecb6d587a9a1c6c73ab9975abd5613426ff9a816",
+    "v3/performance/oos_gate.py": "73331ac2e94498dbd4e0615e0975e7ee84171227db6a58ae3a75561b083cc9e0",
+    "v3/selection/__init__.py": "4365de21e78db33d6b1039935cbef707ba739a936712a9af19eb32d1a20f3c5c",
+    "v3/selection/cli.py": "04808248f917e8919b63462e883e79bbe85492fe1f9d70ff92bda39dd0820f20",
+    "v3/selection/daily.py": "1cfe749cb02d060ec791ae138b0535cb6da6c535408ede8adb1ca7ba42266859",
+    "v3/selection/pickscore.py": "1b8c176d43690646be78c4f7530535d0b016c3ee66f454e0ad0555301094e9a6",
+    "v3/selection/policy.py": "b727cfe5d72dbd9c71974813c7f4e2597d7d9e5a303e04dcb5fd3a5fbb637c96",
+    "v3/validation/__init__.py": "71481686d97a6e21c3881c243497a0b05fe4b0d0e6a6013812eb3f3bf385de50",
+    "v3/validation/economics.py": "c4f73ab2ce89ebf2185878a208f4c02605624bee6616c4391ed8627295f313b3",
+    "v3/validation/promotion.py": "fb9b45d71f77be2ac3fdffca99f23734eda84ba0ad184918aa5d125c32603cb8",
+    "v3/validation/walkforward.py": "f2661d36590b6abcb7f26d8f9985339dd6cc5f2f3c8275c0ef1a316d24fc8a96"
+  },
+  "source_identity": "source_digest is the canonical digest of source_hashes for the validated final modules.",
+  "version": "v3-final-architecture-v2"
+}

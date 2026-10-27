@@ -1,0 +1,34 @@
+{
+  "checkpoint": "9.1",
+  "checkpoint_source_hashes": {
+    "v3/operation/__init__.py": "8ff64f6dba47eb8e483ae9226dc3ed6fdd660159163f968fb1d041e45721557a",
+    "v3/operation/cli.py": "546e77e3f53315495036fcce13a5caf86ad21cedc04977474f80702bf1f1e866",
+    "v3/operation/manifest.py": "4c8089ddcc9545633175409ca740ccc03a564dadc5e72fe58ee5725178399864",
+    "v3/operation/pipeline.py": "de6f02d16af6d737d9a4326e27902e5693a61116141c39bccd602e2de43b7cdb",
+    "v3/operation/release_gate.py": "b54ff06d715ce3dc9be0843f26555b8db76c93bbeff49159852592c30e41dc41"
+  },
+  "hashes": {
+    "v3/operation/__init__.py": "8ff64f6dba47eb8e483ae9226dc3ed6fdd660159163f968fb1d041e45721557a",
+    "v3/operation/cli.py": "546e77e3f53315495036fcce13a5caf86ad21cedc04977474f80702bf1f1e866",
+    "v3/operation/handoff.py": "ecb2c66209bb71ad238d7cc2fae8bc142718d31695766308dd570065202626bd",
+    "v3/operation/manifest.py": "bbf2440c8bb9f96188179939319e73613b13a3b660a1b78a1dac7fb26574f1e8",
+    "v3/operation/pipeline.py": "f1a85ede5ee4afef0ad071a69e589c4dea698412bc7e4234d384f935c32bf202",
+    "v3/operation/release_gate.py": "b54ff06d715ce3dc9be0843f26555b8db76c93bbeff49159852592c30e41dc41"
+  },
+  "implementation_status": "PASS",
+  "issue": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/51",
+  "limitations": [
+    "Synthetic fixtures validate software only; no real OOS or promotion evidence."
+  ],
+  "operational_status": "BLOCKED",
+  "real_status": "BLOCKED",
+  "reason_codes": [
+    "phase5_no_accredited_temporal_predictions"
+  ],
+  "release_status": "BLOCKED",
+  "synthetic_e2e_status": "PASS",
+  "test_files": [
+    "tests/v3/test_operation_final.py"
+  ],
+  "tests": "3"
+}

@@ -1,0 +1,79 @@
+[
+  {
+    "number": 42,
+    "title": "[V3][6.1] Implementar Calibration Engine OOS fail-closed",
+    "body": "## Roadmap\n**ID:** 6.1 — Calibration Engine\n\n## Objetivo\nImplementar calibración probabilística reproducible con reliability buckets y Platt/Isotonic, evaluada fuera de muestra y sin leakage.\n\n## Contexto\nFase 5 quedó implementada pero los experimentos reales están BLOCKED por ausencia de kickoff/cutoff acreditado. Por tanto 6.1 debe implementar el motor y tests sintéticos, pero la calibración real debe quedar BLOCKED mientras no existan predictions OOS reales elegibles.\n\n## Reglas\n- fit de calibrador sólo con partición permitida; nunca TEST final;\n- evaluar Brier/LogLoss y reliability antes/después;\n- no seleccionar calibrador con TEST;\n- no degradar probabilidades multiclass ni suma=1;\n- si no hay evidencia OOS real: `implementation_status=PASS`, `real_status=BLOCKED`;\n- no modificar Champion ni Phase 1–5.\n\n## Criterio\nMotor, contratos, tests y checkpoint completos; cualquier claim real queda bloqueado sin evidencia suficiente.\n\n## Git\n`feature/final-batch-6.1-9.2`",
+    "url": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/42",
+    "updated_at": "2026-10-26T22:38:21Z"
+  },
+  {
+    "number": 43,
+    "title": "[V3][6.2] Implementar walk-forward backtest sin leakage",
+    "body": "## Roadmap\n**ID:** 6.2 — Walk-forward backtest\n\n## Objetivo\nImplementar evaluación walk-forward con múltiples cortes temporales, Brier/LogLoss y métricas económicas sólo cuando exista precio pre-match acreditado.\n\n## Reglas\n- ventanas cronológicas, sin shuffle;\n- train/calibration/validation sólo con pasado respecto del fold evaluado;\n- no tuning con fold OOS;\n- ROI/Yield sólo si odds y settlement tienen lineage temporal válida; si no, BLOCKED;\n- CLV sólo con closing acreditado;\n- Phase 5 actualmente no tiene filas reales elegibles: motor puede PASS y backtest real quedar BLOCKED.\n\n## Criterio\nMotor walk-forward, contratos, tests sintéticos y reporte reproducible sin leakage.\n\n## Git\n`feature/final-batch-6.1-9.2`",
+    "url": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/43",
+    "updated_at": "2026-10-26T22:38:32Z"
+  },
+  {
+    "number": 44,
+    "title": "[V3][6.3] Formalizar gate de promoción Champion / Challenger",
+    "body": "## Roadmap\n**ID:** 6.3 — Gate de promoción\n\n## Objetivo\nFormalizar criterios mínimos auditables para que un challenger pueda sustituir al Champion.\n\n## Reglas\n- promoción sólo con evidencia real OOS acreditada;\n- exigir comparabilidad exacta, calibración, estabilidad walk-forward y tamaño mínimo;\n- resultados BLOCKED/NOT_MET nunca promueven;\n- no promover por ROI aislado;\n- promoción automática desactivada;\n- con el estado actual de Fase 5 el gate real debe permanecer BLOCKED y BT0 sigue Champion.\n\n## Entregable\nPolicy/version, reason codes, tests y checkpoint de decisión sin modificar el Champion.\n\n## Git\n`feature/final-batch-6.1-9.2`",
+    "url": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/44",
+    "updated_at": "2026-10-26T22:38:42Z"
+  },
+  {
+    "number": 45,
+    "title": "[V3][7.1] Implementar PickScore 0–100 reproducible",
+    "body": "## Roadmap\n**ID:** 7.1 — PickScore 0–100\n\n## Objetivo\nImplementar un score reproducible y explicable que integre probabilidad, calidad de evidencia, calibración, value y estabilidad.\n\n## Reglas\n- score sólo si componentes requeridos son elegibles/acreditados;\n- weights/config versionados y documentados, no optimizados con TEST/ROI;\n- breakdown por componente y reason codes;\n- no score numérico fabricado cuando dependencias están BLOCKED;\n- no ejecución de apuestas.\n\n## Criterio\nMotor 0–100 determinista con tests y salida explicable; real_status BLOCKED cuando falten calibración/model/value acreditados.\n\n## Git\n`feature/final-batch-6.1-9.2`",
+    "url": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/45",
+    "updated_at": "2026-10-26T22:38:50Z"
+  },
+  {
+    "number": 46,
+    "title": "[V3][7.2] Implementar filtro NO BET auditable",
+    "body": "## Roadmap\n**ID:** 7.2 — Filtro NO BET\n\n## Objetivo\nPermitir que V3 descarte explícitamente candidatos, mercados o jornadas sin ventaja suficiente o con evidencia incompleta.\n\n## Reglas\n- estados PASS/NO_BET/BLOCKED separados;\n- reason codes deterministas;\n- BLOCKED para inputs no acreditados/incompletos;\n- NO_BET para candidato válido que no supera gates;\n- nunca convertir ausencia de datos en PASS;\n- respetar Value Engine, PickScore y gates temporales existentes.\n\n## Criterio\nReglas de descarte explícitas, versionadas, testeadas y auditables.\n\n## Git\n`feature/final-batch-6.1-9.2`",
+    "url": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/46",
+    "updated_at": "2026-10-26T22:39:00Z"
+  },
+  {
+    "number": 47,
+    "title": "[V3][7.3] Implementar Daily Picks V3 para decisión humana",
+    "body": "## Roadmap\n**ID:** 7.3 — Daily Picks V3\n\n## Objetivo\nCrear ranking diario reproducible para decisión humana con probabilidad calibrada, fair/min odds, EV, PickScore y motivos.\n\n## Reglas\n- consumir sólo candidatos elegibles de capas anteriores;\n- ranking determinista y market-aware;\n- incluir NO_BET/BLOCKED cuando corresponda;\n- si modelos/calibración/odds reales no están acreditados, salida productiva queda BLOCKED y sólo fixtures sintéticos pueden demostrar E2E;\n- sin auto-betting ni stake real.\n\n## Criterio\nContrato/CLI/reporte diario completos y testeados, con separación clara entre demostración sintética y disponibilidad real.\n\n## Git\n`feature/final-batch-6.1-9.2`",
+    "url": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/47",
+    "updated_at": "2026-10-26T22:39:10Z"
+  },
+  {
+    "number": 48,
+    "title": "[V3][8.1] Implementar Paper Bet Ledger append-only",
+    "body": "## Roadmap\n**ID:** 8.1 — Paper Bet Ledger\n\n## Objetivo\nRegistrar paper bets de forma inmutable antes de cualquier uso de dinero real.\n\n## Reglas\n- append-only, timestamps y provenance;\n- stake simulado V1 fijo 1u, sin Kelly;\n- pick debe existir antes del kickoff y settlement después del resultado;\n- no backdating ni overwrite;\n- deduplicación/identidad explícita;\n- synthetic/offline permitido para tests; no presentar fixtures como historial real.\n\n## Criterio\nLedger y settlement contract reproducibles, auditables y fail-closed.\n\n## Git\n`feature/final-batch-6.1-9.2`",
+    "url": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/48",
+    "updated_at": "2026-10-26T22:39:22Z"
+  },
+  {
+    "number": 49,
+    "title": "[V3][8.2] Implementar Performance Analyzer V3",
+    "body": "## Roadmap\n**ID:** 8.2 — Performance Analyzer V3\n\n## Objetivo\nMedir calidad predictiva y económica sobre evidencia OOS/paper betting válida.\n\n## Métricas\n- Brier / LogLoss;\n- Hit Rate descriptivo;\n- ROI y Yield con stake simulado acreditado;\n- drawdown sobre secuencia temporal;\n- CLV sólo con closing acreditado.\n\n## Reglas\n- no mezclar fixtures sintéticos con historial real;\n- métricas económicas BLOCKED si faltan odds/settlement válidos;\n- CLV BLOCKED sin closing acreditado;\n- no usar estas métricas para retroajustar TEST.\n\n## Criterio\nAnalyzer determinista, market-aware, tests y reportes con estados computable/blocked/not_applicable.\n\n## Git\n`feature/final-batch-6.1-9.2`",
+    "url": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/49",
+    "updated_at": "2026-10-26T22:39:29Z"
+  },
+  {
+    "number": 50,
+    "title": "[V3][8.3] Implementar gate mínimo de 200 OOS",
+    "body": "## Roadmap\n**ID:** 8.3 — Gate ≥200 OOS\n\n## Objetivo\nEvitar cualquier cambio productivo antes de acumular evidencia fuera de muestra suficiente.\n\n## Reglas\n- contar sólo picks/partidos OOS reales, únicos, elegibles y settled;\n- fixtures sintéticos jamás cuentan;\n- mínimo 200 antes de modificar pesos/Champion/productivo;\n- estados `MET | NOT_MET | BLOCKED` con conteos y razones;\n- gate no puede auto-promover.\n\n## Estado esperado actual\nCon el historial real disponible el gate debe quedar NOT_MET/BLOCKED, no simular 200 observaciones.\n\n## Git\n`feature/final-batch-6.1-9.2`",
+    "url": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/50",
+    "updated_at": "2026-10-26T22:39:38Z"
+  },
+  {
+    "number": 51,
+    "title": "[V3][9.1] Consolidar pipeline V3 estable con release gate",
+    "body": "## Roadmap\n**ID:** 9.1 — Release V3 estable\n\n## Objetivo\nConsolidar un pipeline V3 reproducible de jornada → selección → paper ledger → settlement → métricas, sin tocar el flujo operativo estable.\n\n## Reglas\n- orquestador aislado V3; no modificar main.py/scraper/analysis;\n- E2E sintético/offline debe pasar;\n- release productivo sólo READY si gates reales previos están MET;\n- si calibración/modelos/odds/200 OOS siguen bloqueados, `implementation_status=PASS` pero `release_status=BLOCKED`;\n- no promover Champion ni habilitar auto-betting.\n\n## Criterio\nPipeline E2E reproducible, dry-run, manifests/hashes y release gate explícito.\n\n## Git\n`feature/final-batch-6.1-9.2`",
+    "url": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/51",
+    "updated_at": "2026-10-26T22:39:52Z"
+  },
+  {
+    "number": 52,
+    "title": "[V3][9.2] Implementar uso real sólo con confirmación humana",
+    "body": "## Roadmap\n**ID:** 9.2 — Uso real con confirmación humana\n\n## Objetivo\nFormalizar que V3 recomienda y presenta evidencia, pero toda colocación real requiere decisión humana explícita.\n\n## Reglas\n- `human_confirmation_required=true` por contrato;\n- auto-betting permanentemente deshabilitado en este alcance;\n- no sportsbook order API, no bet placement, no credentials;\n- una confirmación humana puede registrar intención/acknowledgement, nunca ejecutar apuesta;\n- release real permanece BLOCKED mientras 9.1/gates previos no estén READY.\n\n## Criterio\nContrato/CLI/UI-neutral recommendation handoff auditable, con ejecución real ausente por diseño.\n\n## Git\n`feature/final-batch-6.1-9.2`",
+    "url": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/52",
+    "updated_at": "2026-10-26T22:40:02Z"
+  }
+]

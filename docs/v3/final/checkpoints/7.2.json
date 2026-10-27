@@ -1,0 +1,29 @@
+{
+  "checkpoint": "7.2",
+  "checkpoint_source_hashes": {
+    "v3/selection/__init__.py": "4365de21e78db33d6b1039935cbef707ba739a936712a9af19eb32d1a20f3c5c",
+    "v3/selection/pickscore.py": "1b8c176d43690646be78c4f7530535d0b016c3ee66f454e0ad0555301094e9a6",
+    "v3/selection/policy.py": "d939380607c0b0e22b7fc194cb91ec86b56936141e9be89cdf83299125c75821"
+  },
+  "hashes": {
+    "v3/selection/__init__.py": "4365de21e78db33d6b1039935cbef707ba739a936712a9af19eb32d1a20f3c5c",
+    "v3/selection/cli.py": "04808248f917e8919b63462e883e79bbe85492fe1f9d70ff92bda39dd0820f20",
+    "v3/selection/daily.py": "1cfe749cb02d060ec791ae138b0535cb6da6c535408ede8adb1ca7ba42266859",
+    "v3/selection/pickscore.py": "1b8c176d43690646be78c4f7530535d0b016c3ee66f454e0ad0555301094e9a6",
+    "v3/selection/policy.py": "b727cfe5d72dbd9c71974813c7f4e2597d7d9e5a303e04dcb5fd3a5fbb637c96"
+  },
+  "implementation_status": "PASS",
+  "issue": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/46",
+  "limitations": [
+    "Synthetic fixtures validate software only; no real OOS or promotion evidence."
+  ],
+  "operational_status": "BLOCKED",
+  "real_status": "BLOCKED",
+  "reason_codes": [
+    "phase5_no_accredited_temporal_predictions"
+  ],
+  "test_files": [
+    "tests/v3/test_selection_policy_final.py"
+  ],
+  "tests": "35"
+}

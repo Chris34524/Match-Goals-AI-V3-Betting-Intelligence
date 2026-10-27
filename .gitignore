@@ -65,3 +65,11 @@ dist/
 
 # Isolated Phase 5 runtime models
 /v3_data/models/
+
+# Isolated Phases 6–9 runtime evidence and paper-only journals
+/v3_data/calibration/
+/v3_data/validation/
+/v3_data/selection/
+/v3_data/paper/
+/v3_data/performance/
+/v3_data/operation/
