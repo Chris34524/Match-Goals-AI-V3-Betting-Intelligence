@@ -1,0 +1,14 @@
+[
+  {
+    "internal_match_id": "REPLACE_INTERNAL_MATCH_ID",
+    "sport_key": "soccer_replace_me",
+    "competition": "REPLACE_ME",
+    "season": "2026",
+    "kickoff_at": "2099-01-01T18:00:00+00:00",
+    "home": "REPLACE_HOME",
+    "away": "REPLACE_AWAY",
+    "markets": ["1X2", "BTTS", "OVER_1_5", "OVER_2_5", "OVER_3_5"],
+    "priority": "P0",
+    "external_event_id": "REPLACE_EXTERNAL_EVENT_ID"
+  }
+]
