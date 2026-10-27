@@ -1,0 +1,25 @@
+{
+  "checkpoint": "8.1",
+  "checkpoint_source_hashes": {
+    "v3/paper/__init__.py": "66c5bd8c1f21c62d0ca65590f06d96f5e080ccae00e579918d2ff61533f6b1ea",
+    "v3/paper/ledger.py": "cec08fcfdbf0b387f3fc3abe100aa7c1b20e9ac2aac91414baa2986b55c2460e"
+  },
+  "hashes": {
+    "v3/paper/__init__.py": "66c5bd8c1f21c62d0ca65590f06d96f5e080ccae00e579918d2ff61533f6b1ea",
+    "v3/paper/ledger.py": "7173a788e9532b07303013941c4f16f164b718de3088fe3a4357402e50d124b4"
+  },
+  "implementation_status": "PASS",
+  "issue": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/48",
+  "limitations": [
+    "Synthetic fixtures validate software only; no real OOS or promotion evidence."
+  ],
+  "operational_status": "BLOCKED",
+  "real_status": "BLOCKED",
+  "reason_codes": [
+    "phase5_no_accredited_temporal_predictions"
+  ],
+  "test_files": [
+    "tests/v3/test_paper_final.py"
+  ],
+  "tests": "7"
+}

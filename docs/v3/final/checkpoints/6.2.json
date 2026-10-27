@@ -1,0 +1,28 @@
+{
+  "checkpoint": "6.2",
+  "checkpoint_source_hashes": {
+    "v3/validation/__init__.py": "71481686d97a6e21c3881c243497a0b05fe4b0d0e6a6013812eb3f3bf385de50",
+    "v3/validation/economics.py": "c4f73ab2ce89ebf2185878a208f4c02605624bee6616c4391ed8627295f313b3",
+    "v3/validation/walkforward.py": "f2661d36590b6abcb7f26d8f9985339dd6cc5f2f3c8275c0ef1a316d24fc8a96"
+  },
+  "hashes": {
+    "v3/validation/__init__.py": "71481686d97a6e21c3881c243497a0b05fe4b0d0e6a6013812eb3f3bf385de50",
+    "v3/validation/economics.py": "c4f73ab2ce89ebf2185878a208f4c02605624bee6616c4391ed8627295f313b3",
+    "v3/validation/promotion.py": "fb9b45d71f77be2ac3fdffca99f23734eda84ba0ad184918aa5d125c32603cb8",
+    "v3/validation/walkforward.py": "f2661d36590b6abcb7f26d8f9985339dd6cc5f2f3c8275c0ef1a316d24fc8a96"
+  },
+  "implementation_status": "PASS",
+  "issue": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/43",
+  "limitations": [
+    "Synthetic fixtures validate software only; no real OOS or promotion evidence."
+  ],
+  "operational_status": "BLOCKED",
+  "real_status": "BLOCKED",
+  "reason_codes": [
+    "phase5_no_accredited_temporal_predictions"
+  ],
+  "test_files": [
+    "tests/v3/test_walkforward_final.py"
+  ],
+  "tests": "19"
+}

@@ -1,0 +1,33 @@
+{
+  "checkpoint": "6.1",
+  "checkpoint_source_hashes": {
+    "v3/calibration/__init__.py": "e296d3c737bb54c869086b8a459df530c49996448962bc10ab03e77e38282ba3",
+    "v3/calibration/contract.py": "f8dcae6c6390d82e781652469ded14692675cacbfe11eccb8ed3e1340452f933",
+    "v3/calibration/engine.py": "7245410313c0400f1045ddc9fff3c39911b8d086b327d3bfb6defc311f618d23",
+    "v3/calibration/isotonic.py": "78dba8f7d244b77d8838a541b91303ebd3e32bbfb35dcf1d4b55a7316e011af0",
+    "v3/calibration/platt.py": "65dd64161662761c040ee8f9bf5f126f829becea98d99738358c9b1dc2b8b0d7",
+    "v3/calibration/reliability.py": "6b6ba97002fb108b4df57eddce91b9c13f61e415b11cf484ffd41cca8356f78f"
+  },
+  "hashes": {
+    "v3/calibration/__init__.py": "e296d3c737bb54c869086b8a459df530c49996448962bc10ab03e77e38282ba3",
+    "v3/calibration/contract.py": "f8dcae6c6390d82e781652469ded14692675cacbfe11eccb8ed3e1340452f933",
+    "v3/calibration/engine.py": "d81cefd88cb02eef27c26b597c13e7e12802c62f14ade1ab11fb165a65bbca6d",
+    "v3/calibration/isotonic.py": "31b94413ad93d733361ced0cedb6ed592476f332959178ea26b1d9f89ba07486",
+    "v3/calibration/platt.py": "47ef77010e47fee5bdf871c89383f089f0f147b626b2cc2276a22acadb46f47b",
+    "v3/calibration/reliability.py": "6b6ba97002fb108b4df57eddce91b9c13f61e415b11cf484ffd41cca8356f78f"
+  },
+  "implementation_status": "PASS",
+  "issue": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/42",
+  "limitations": [
+    "Synthetic fixtures validate software only; no real OOS or promotion evidence."
+  ],
+  "operational_status": "BLOCKED",
+  "real_status": "BLOCKED",
+  "reason_codes": [
+    "phase5_no_accredited_temporal_predictions"
+  ],
+  "test_files": [
+    "tests/v3/test_calibration_final.py"
+  ],
+  "tests": "12"
+}
