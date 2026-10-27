@@ -1,0 +1,360 @@
+{
+  "O02": {
+    "canonical_record_count": 0,
+    "capture_status": "BLOCKED_NO_FRESH_INTERNAL_TARGET",
+    "credits": {
+      "credits_reported_used": null,
+      "credits_reserved": 0,
+      "events_calls_attempted": 0,
+      "metadata_calls_attempted": 1,
+      "metadata_calls_succeeded": 1,
+      "odds_calls_attempted": 0,
+      "odds_calls_succeeded": 0,
+      "provider_remaining_credits": null,
+      "sports_calls_attempted": 1
+    },
+    "discovery_status": "PASS",
+    "external_event_id_present": false,
+    "implementation_status": "PASS",
+    "internal_inventory": {
+      "candidates": [
+        "soccer_epl",
+        "soccer_germany_bundesliga",
+        "soccer_spain_la_liga"
+      ],
+      "evidence": [
+        {
+          "path": "data/partidos.json",
+          "rows": 562,
+          "sha256": "dd488f2f53633b00812bf1a8bea5f1ab81bb9208e9404aa19de33b13ce93e3cb"
+        },
+        {
+          "path": "data/partidos_candidatos.json",
+          "rows": 109,
+          "sha256": "b1f33aa585d6513d6906c9370b48875d6f139e10f0b475b23b884b338bf816fe"
+        },
+        {
+          "path": "data/partidos_hoy.json",
+          "rows": 164,
+          "sha256": "08fe918c347ca7bd9eb913185db239b0fe6d6c02533d89319ca67191a92ee0d0"
+        },
+        {
+          "path": "data/partidos_manana.json",
+          "rows": 216,
+          "sha256": "273482f052e7ba27595a63a8dcff0cb32afeeaf03157d47789def373e18aa715"
+        }
+      ],
+      "exclusions": {
+        "internal_kickoff_not_accredited": 1051
+      },
+      "internal_target_status": "BLOCKED_NO_FRESH_INTERNAL_TARGET",
+      "targets": []
+    },
+    "internal_target_status": "BLOCKED_NO_FRESH_INTERNAL_TARGET",
+    "kickoff": null,
+    "pilot_target_status": "BLOCKED",
+    "plan": null,
+    "plan_estimated_cost": null,
+    "plan_rejection": "NOT_EVALUATED",
+    "real_status": "BLOCKED_NO_FRESH_INTERNAL_TARGET",
+    "reason_codes": [
+      "no_independent_accredited_future_timezone_aware_internal_target"
+    ],
+    "snapshot_status": "NOT_CAPTURED"
+  },
+  "O03": {
+    "candidate_present": false,
+    "candidate_status": "BLOCKED",
+    "eligible_model_prediction": false,
+    "implementation_status": "PASS",
+    "model_search": [
+      "docs/v3/models/checkpoint-5.1.json",
+      "v3_data/ops/candidate.json"
+    ],
+    "paper_entry_created": false,
+    "paper_status": "BLOCKED_NO_ELIGIBLE_MODEL_PREDICTION",
+    "prediction_audit": {
+      "champion_sources": [
+        {
+          "path": "data/all_predictions.json",
+          "rows": 193,
+          "sha256": "0c3c98d8bdf9b3cf9e8b108fbfabe767aa1efa1a6789201c8d7b359ecd6590d6",
+          "timestamp_and_lineage_candidates": 0
+        },
+        {
+          "path": "data/day_predictions_v2.json",
+          "rows": 6,
+          "sha256": "3b8ea9ed25a571904e1371da4eed4eaafb5b9da3158f9c27c23f23f3f7a265f7",
+          "timestamp_and_lineage_candidates": 0
+        }
+      ],
+      "identity_matching_uses_predictions": false,
+      "v3_sources": [
+        {
+          "path": "docs/v3/models/checkpoint-5.1.json",
+          "predictions_hash": null,
+          "sha256": "4dc5fa8ee32384483b2e506fc6725ea63c1786e1b027ec6dbcb50cbc7aae8313"
+        },
+        {
+          "path": "docs/v3/models/checkpoint-5.2.json",
+          "predictions_hash": null,
+          "sha256": "235c959aaeb0fa19307aae48287c9018f3aea064f89a31dea2dac02e4f1874e1"
+        },
+        {
+          "path": "docs/v3/models/checkpoint-5.3.json",
+          "predictions_hash": null,
+          "sha256": "ecbc367de73572487dec7283f3f89f27227005282aa70f413e3590b7ad582610"
+        },
+        {
+          "path": "docs/v3/models/checkpoint-5.4.json",
+          "predictions_hash": null,
+          "sha256": "c2b1f2a8ff21cde101a036b36d56ae51c85875c464ef1992f91f0d090516e4dc"
+        },
+        {
+          "path": "docs/v3/models/checkpoint-5.5.json",
+          "predictions_hash": null,
+          "sha256": "bf24e2504b73aad03c4ca6756024278172638bb73eb991c4a0e4d68aa4fcc98e"
+        },
+        {
+          "path": "docs/v3/models/checkpoint-5.6.json",
+          "predictions_hash": null,
+          "sha256": "15278c8ac4398a3e67d38438841d7346a8eaf73821b59f7e5edbdcb3e65926a1"
+        }
+      ]
+    },
+    "real_oos_contribution": 0,
+    "real_status": "BLOCKED_NO_ELIGIBLE_MODEL_PREDICTION",
+    "reason_codes": [
+      "no_accredited_prospective_prediction"
+    ],
+    "runtime_artifacts": [
+      "v3_data/paper/ledger.jsonl"
+    ],
+    "settlement": "UNSETTLED",
+    "stake_units": 1.0
+  },
+  "O04": {
+    "additional_odds_calls": 0,
+    "closing_accredited": false,
+    "closing_capability": "unverified",
+    "clv_status": "BLOCKED_PROVIDER_CLOSING_SEMANTICS",
+    "clv_value": null,
+    "evidence": {
+      "clv_price": null,
+      "clv_status": "not_applicable",
+      "reason": "no_decision_observation"
+    },
+    "implementation_status": "PASS",
+    "real_status": "BLOCKED_PROVIDER_CLOSING_SEMANTICS",
+    "reason_codes": [
+      "no_explicit_accredited_comparable_closing"
+    ]
+  },
+  "O05": {
+    "blocked_picks": 0,
+    "by_market": {},
+    "checkpoint_status": "COLLECTING",
+    "duplicates_excluded": 0,
+    "eligible_picks": 0,
+    "gate": {
+      "eligible_match_ids": [],
+      "eligible_paper_count": 0,
+      "excluded_count": 0,
+      "gate_status": "NOT_MET",
+      "hash": "8faa21e65222c683e7cd60105dcdfb33e1b5f8169c2231d307807d76455baee6",
+      "policy": {
+        "auto_promote": false,
+        "count_unit": "unique_internal_match_id",
+        "threshold": 200,
+        "version": "real-unique-settled-oos-v1"
+      },
+      "real_oos_count": 0,
+      "reason_codes": [
+        "minimum_real_oos_not_met"
+      ],
+      "required_oos_count": 200
+    },
+    "implementation_status": "PASS",
+    "metrics_available": false,
+    "metrics_blocked": [
+      "no_eligible_settled_real_paper"
+    ],
+    "no_bet": 0,
+    "oos_gate_status": "NOT_MET",
+    "progress_fraction": 0.0,
+    "progress_percent": 0.0,
+    "quality": "PASS",
+    "real_oos_count": 0,
+    "real_status": "NOT_MET",
+    "reason_codes": [
+      "minimum_real_oos_not_met"
+    ],
+    "required_oos_count": 200,
+    "settled_picks": 0,
+    "synthetic_excluded": 0,
+    "unique_matches": 0,
+    "unsettled_picks": 0
+  },
+  "O06": {
+    "auto_promotion": false,
+    "challengers_evaluable": false,
+    "champion": "BT0 / J_BT_sin_temporada",
+    "champion_changed": false,
+    "gate_prerequisite_status": "BLOCKED",
+    "human_confirmation_required": true,
+    "implementation_status": "PASS",
+    "policy_evaluation": {
+      "champion": "BT0 / J_BT_sin_temporada",
+      "champion_changed": false,
+      "evidence": {},
+      "gate_status": "BLOCKED",
+      "hash": "c8c54314a24d7a39545c098fe0c9bf66ce7195415e7adda056818ac94c05b1a9",
+      "human_review_required": true,
+      "policy": {
+        "automated_promotion": false,
+        "maximum_ece": 0.05,
+        "maximum_window_loss_deterioration": 0.01,
+        "minimum_oos": 200,
+        "minimum_windows": 2,
+        "tie_rule": "both_losses_not_worse",
+        "version": "promotion-v1"
+      },
+      "reason_codes": [
+        "real_oos_accredited_missing_or_unaccredited",
+        "champion_accredited_missing_or_unaccredited",
+        "same_rows_missing_or_unaccredited",
+        "same_label_definition_missing_or_unaccredited",
+        "same_temporal_cutoff_missing_or_unaccredited",
+        "integrity_pass_missing_or_unaccredited",
+        "temporal_lineage_accredited_missing_or_unaccredited",
+        "real_evidence_required",
+        "metrics_missing_or_invalid",
+        "windows_missing",
+        "oos_count_invalid",
+        "divergence_unknown",
+        "exact_comparator_blocked:missing_or_duplicate_oos_rows"
+      ]
+    },
+    "promotion_status": "BLOCKED",
+    "real_status": "BLOCKED",
+    "reason_codes": [
+      "calibration_comparable_missing",
+      "challenger_real_predictions_missing",
+      "champion_accredited_missing_or_unaccredited",
+      "divergence_unknown",
+      "exact_comparator_blocked:missing_or_duplicate_oos_rows",
+      "integrity_pass_missing_or_unaccredited",
+      "metrics_missing_or_invalid",
+      "minimum_real_oos_not_met",
+      "oos_count_invalid",
+      "oos_population_count_mismatch",
+      "paper_economics_comparable_missing",
+      "real_evidence_required",
+      "real_oos_accredited_missing_or_unaccredited",
+      "same_label_definition_missing_or_unaccredited",
+      "same_market_missing",
+      "same_population_missing",
+      "same_rows_missing_or_unaccredited",
+      "same_temporal_cutoff_missing_or_unaccredited",
+      "temporal_lineage_accredited_missing_or_unaccredited",
+      "walk_forward_valid_missing",
+      "windows_missing"
+    ]
+  },
+  "automated_real_betting": false,
+  "credits": {
+    "credits_reported_used": null,
+    "odds_credits_consumed": 0,
+    "odds_credits_reserved": 0,
+    "provider_remaining_credits": null
+  },
+  "files_created": [
+    "docs/v3/operations/batch-integrity-baseline.json",
+    "docs/v3/operations/final-validation-report.json",
+    "docs/v3/operations/integrity-after.json",
+    "docs/v3/operations/o-02-final.md",
+    "docs/v3/operations/o-03-final.md",
+    "docs/v3/operations/o-04-final.md",
+    "docs/v3/operations/o-05-final.md",
+    "docs/v3/operations/o-06-final.md",
+    "docs/v3/operations/operational-cycle-final.md",
+    "tests/v3/test_ops_cycle.py",
+    "v3/ops/__init__.py",
+    "v3/ops/cli.py",
+    "v3/ops/closing.py",
+    "v3/ops/oos.py",
+    "v3/ops/paper_cycle.py",
+    "v3/ops/promotion.py",
+    "v3/ops/prospective.py",
+    "v3/ops/report.py",
+    "v3/ops/runtime.py",
+    "v3/ops/target_discovery.py",
+    "v3/ops/validation.py",
+    "docs/v3/operations/operational-cycle-report.json"
+  ],
+  "files_modified": [
+    "v3/final_validation.py"
+  ],
+  "human_confirmation_required": true,
+  "implementation_scope": "Operational orchestration and existing gates; not accreditation of new real model adapters.",
+  "limitations": [
+    "No prospective evidence is inferred from synthetic or historical artifacts.",
+    "Real paper recording requires an accredited model adapter; original ledger remains fail-closed.",
+    "Current API has no accredited closing semantics."
+  ],
+  "network": {
+    "credits_reported_used": null,
+    "credits_reserved": 0,
+    "events_calls_attempted": 0,
+    "metadata_calls_attempted": 1,
+    "metadata_calls_succeeded": 1,
+    "odds_calls_attempted": 0,
+    "odds_calls_succeeded": 0,
+    "provider_remaining_credits": null,
+    "sports_calls_attempted": 1
+  },
+  "next_command": "PYTHONPYCACHEPREFIX=/tmp/match-goals-ops-bytecode python -m v3.ops.cli cycle --live",
+  "next_command_prerequisites": [
+    "A fresh independently accredited internal target is required before any odds capture.",
+    "An accredited real model adapter and prediction are required before real paper admission."
+  ],
+  "operational_day": "2026-10-27",
+  "remaining_blockers": [
+    "no_independent_accredited_future_internal_target",
+    "no_eligible_prospective_model_prediction",
+    "original_ledger_requires_accredited_real_model_adapter",
+    "no_provider_closing_semantics",
+    "minimum_real_oos_not_met",
+    "exact_champion_challenger_comparison_missing"
+  ],
+  "runtime_artifacts": [
+    "v3_data/ops/batch-integrity-before.json",
+    "v3_data/ops/capture-status.json",
+    "v3_data/ops/decisions/598c403da382bee463a3a05488fd26f05f04e4a8bee63e0f96a5319d1227c713.json",
+    "v3_data/ops/operational-cycle-report.json",
+    "v3_data/ops/paper-status.json",
+    "v3_data/ops/pilot-config.json",
+    "v3_data/ops/pilot-targets.json",
+    "v3_data/ops/pytest.xml",
+    "v3_data/ops/ticks/2026-10-27.json",
+    "v3_data/ops/validation-receipt.json",
+    "v3_data/ops/validation.json"
+  ],
+  "verification": {
+    "compile_status": "PASS",
+    "final_validator": {
+      "failed": 0,
+      "passed": 69
+    },
+    "git_diff_check": "PASS",
+    "ops_validator": {
+      "failed": 0,
+      "passed": 56
+    },
+    "protected_integrity": "PASS",
+    "secrets_scan": "PASS",
+    "tests_new": 31,
+    "tests_total": 1299
+  },
+  "version": "ops-o02-o06-v1"
+}

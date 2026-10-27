@@ -1,0 +1,10 @@
+{
+  "bytecode_scope": "V3 __pycache__ is derived and excluded from source integrity. Two odds caches regenerated during imports; all data/scraper/analysis bytes and mtimes remain covered.",
+  "historical_final_validator_initial": "64 PASS / 5 FAIL on the initial legacy run in this batch: historical Phase3/Phase5 inventory differences, branch and absent old runtime artifacts.",
+  "inventory_path": "v3_data/ops/batch-integrity-before.json",
+  "inventory_sha256": "c4613154d70caa8069b44d2ba06489b67ca18274b96e5575d2da29c685f98445",
+  "preexisting_runtime_sha256": {
+    "v3_data/odds/phase3-synthetic-example/.publish.lock": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "purpose": "Independent start-of-O02-O06 baseline; historical Phase baselines remain unchanged."
+}

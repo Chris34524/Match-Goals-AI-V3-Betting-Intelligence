@@ -1,0 +1,899 @@
+{
+  "baseline_scope": "O02-O06 start; original Phase baselines preserved",
+  "blockers": [
+    "phase5_no_accredited_temporal_predictions",
+    "champion_cutoff_not_accredited",
+    "odds_source_not_authorized",
+    "no_accredited_closing",
+    "minimum_real_oos_not_met"
+  ],
+  "checkpoints": [
+    {
+      "checkpoint": "6.1",
+      "checkpoint_source_hashes": {
+        "v3/calibration/__init__.py": "e296d3c737bb54c869086b8a459df530c49996448962bc10ab03e77e38282ba3",
+        "v3/calibration/contract.py": "f8dcae6c6390d82e781652469ded14692675cacbfe11eccb8ed3e1340452f933",
+        "v3/calibration/engine.py": "7245410313c0400f1045ddc9fff3c39911b8d086b327d3bfb6defc311f618d23",
+        "v3/calibration/isotonic.py": "78dba8f7d244b77d8838a541b91303ebd3e32bbfb35dcf1d4b55a7316e011af0",
+        "v3/calibration/platt.py": "65dd64161662761c040ee8f9bf5f126f829becea98d99738358c9b1dc2b8b0d7",
+        "v3/calibration/reliability.py": "6b6ba97002fb108b4df57eddce91b9c13f61e415b11cf484ffd41cca8356f78f"
+      },
+      "hashes": {
+        "v3/calibration/__init__.py": "e296d3c737bb54c869086b8a459df530c49996448962bc10ab03e77e38282ba3",
+        "v3/calibration/contract.py": "f8dcae6c6390d82e781652469ded14692675cacbfe11eccb8ed3e1340452f933",
+        "v3/calibration/engine.py": "d81cefd88cb02eef27c26b597c13e7e12802c62f14ade1ab11fb165a65bbca6d",
+        "v3/calibration/isotonic.py": "31b94413ad93d733361ced0cedb6ed592476f332959178ea26b1d9f89ba07486",
+        "v3/calibration/platt.py": "47ef77010e47fee5bdf871c89383f089f0f147b626b2cc2276a22acadb46f47b",
+        "v3/calibration/reliability.py": "6b6ba97002fb108b4df57eddce91b9c13f61e415b11cf484ffd41cca8356f78f"
+      },
+      "implementation_status": "PASS",
+      "issue": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/42",
+      "limitations": [
+        "Synthetic fixtures validate software only; no real OOS or promotion evidence."
+      ],
+      "operational_status": "BLOCKED",
+      "real_status": "BLOCKED",
+      "reason_codes": [
+        "phase5_no_accredited_temporal_predictions"
+      ],
+      "test_files": [
+        "tests/v3/test_calibration_final.py"
+      ],
+      "tests": "12"
+    },
+    {
+      "checkpoint": "6.2",
+      "checkpoint_source_hashes": {
+        "v3/validation/__init__.py": "71481686d97a6e21c3881c243497a0b05fe4b0d0e6a6013812eb3f3bf385de50",
+        "v3/validation/economics.py": "c4f73ab2ce89ebf2185878a208f4c02605624bee6616c4391ed8627295f313b3",
+        "v3/validation/walkforward.py": "f2661d36590b6abcb7f26d8f9985339dd6cc5f2f3c8275c0ef1a316d24fc8a96"
+      },
+      "hashes": {
+        "v3/validation/__init__.py": "71481686d97a6e21c3881c243497a0b05fe4b0d0e6a6013812eb3f3bf385de50",
+        "v3/validation/economics.py": "c4f73ab2ce89ebf2185878a208f4c02605624bee6616c4391ed8627295f313b3",
+        "v3/validation/promotion.py": "fb9b45d71f77be2ac3fdffca99f23734eda84ba0ad184918aa5d125c32603cb8",
+        "v3/validation/walkforward.py": "f2661d36590b6abcb7f26d8f9985339dd6cc5f2f3c8275c0ef1a316d24fc8a96"
+      },
+      "implementation_status": "PASS",
+      "issue": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/43",
+      "limitations": [
+        "Synthetic fixtures validate software only; no real OOS or promotion evidence."
+      ],
+      "operational_status": "BLOCKED",
+      "real_status": "BLOCKED",
+      "reason_codes": [
+        "phase5_no_accredited_temporal_predictions"
+      ],
+      "test_files": [
+        "tests/v3/test_walkforward_final.py"
+      ],
+      "tests": "19"
+    },
+    {
+      "checkpoint": "6.3",
+      "checkpoint_source_hashes": {
+        "v3/validation/__init__.py": "71481686d97a6e21c3881c243497a0b05fe4b0d0e6a6013812eb3f3bf385de50",
+        "v3/validation/economics.py": "c4f73ab2ce89ebf2185878a208f4c02605624bee6616c4391ed8627295f313b3",
+        "v3/validation/promotion.py": "01ba8bebac19ac2fe1c8e8c9a01359fa644fbd88f2e17116d90beb54fe516a97",
+        "v3/validation/walkforward.py": "f2661d36590b6abcb7f26d8f9985339dd6cc5f2f3c8275c0ef1a316d24fc8a96"
+      },
+      "gate_status": "BLOCKED",
+      "hashes": {
+        "v3/validation/__init__.py": "71481686d97a6e21c3881c243497a0b05fe4b0d0e6a6013812eb3f3bf385de50",
+        "v3/validation/economics.py": "c4f73ab2ce89ebf2185878a208f4c02605624bee6616c4391ed8627295f313b3",
+        "v3/validation/promotion.py": "fb9b45d71f77be2ac3fdffca99f23734eda84ba0ad184918aa5d125c32603cb8",
+        "v3/validation/walkforward.py": "f2661d36590b6abcb7f26d8f9985339dd6cc5f2f3c8275c0ef1a316d24fc8a96"
+      },
+      "implementation_status": "PASS",
+      "issue": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/44",
+      "limitations": [
+        "Synthetic fixtures validate software only; no real OOS or promotion evidence."
+      ],
+      "operational_status": "BLOCKED",
+      "promotion_gate": "BLOCKED",
+      "real_status": "BLOCKED",
+      "reason_codes": [
+        "phase5_no_accredited_temporal_predictions"
+      ],
+      "test_files": [
+        "tests/v3/test_promotion_final.py"
+      ],
+      "tests": "34"
+    },
+    {
+      "checkpoint": "7.1",
+      "checkpoint_source_hashes": {
+        "v3/selection/__init__.py": "4365de21e78db33d6b1039935cbef707ba739a936712a9af19eb32d1a20f3c5c",
+        "v3/selection/pickscore.py": "1b8c176d43690646be78c4f7530535d0b016c3ee66f454e0ad0555301094e9a6"
+      },
+      "hashes": {
+        "v3/selection/__init__.py": "4365de21e78db33d6b1039935cbef707ba739a936712a9af19eb32d1a20f3c5c",
+        "v3/selection/cli.py": "04808248f917e8919b63462e883e79bbe85492fe1f9d70ff92bda39dd0820f20",
+        "v3/selection/daily.py": "1cfe749cb02d060ec791ae138b0535cb6da6c535408ede8adb1ca7ba42266859",
+        "v3/selection/pickscore.py": "1b8c176d43690646be78c4f7530535d0b016c3ee66f454e0ad0555301094e9a6",
+        "v3/selection/policy.py": "b727cfe5d72dbd9c71974813c7f4e2597d7d9e5a303e04dcb5fd3a5fbb637c96"
+      },
+      "implementation_status": "PASS",
+      "issue": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/45",
+      "limitations": [
+        "Synthetic fixtures validate software only; no real OOS or promotion evidence."
+      ],
+      "operational_status": "BLOCKED",
+      "real_status": "BLOCKED",
+      "reason_codes": [
+        "phase5_no_accredited_temporal_predictions"
+      ],
+      "test_files": [
+        "tests/v3/test_selection_pickscore_final.py"
+      ],
+      "tests": "27"
+    },
+    {
+      "checkpoint": "7.2",
+      "checkpoint_source_hashes": {
+        "v3/selection/__init__.py": "4365de21e78db33d6b1039935cbef707ba739a936712a9af19eb32d1a20f3c5c",
+        "v3/selection/pickscore.py": "1b8c176d43690646be78c4f7530535d0b016c3ee66f454e0ad0555301094e9a6",
+        "v3/selection/policy.py": "d939380607c0b0e22b7fc194cb91ec86b56936141e9be89cdf83299125c75821"
+      },
+      "hashes": {
+        "v3/selection/__init__.py": "4365de21e78db33d6b1039935cbef707ba739a936712a9af19eb32d1a20f3c5c",
+        "v3/selection/cli.py": "04808248f917e8919b63462e883e79bbe85492fe1f9d70ff92bda39dd0820f20",
+        "v3/selection/daily.py": "1cfe749cb02d060ec791ae138b0535cb6da6c535408ede8adb1ca7ba42266859",
+        "v3/selection/pickscore.py": "1b8c176d43690646be78c4f7530535d0b016c3ee66f454e0ad0555301094e9a6",
+        "v3/selection/policy.py": "b727cfe5d72dbd9c71974813c7f4e2597d7d9e5a303e04dcb5fd3a5fbb637c96"
+      },
+      "implementation_status": "PASS",
+      "issue": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/46",
+      "limitations": [
+        "Synthetic fixtures validate software only; no real OOS or promotion evidence."
+      ],
+      "operational_status": "BLOCKED",
+      "real_status": "BLOCKED",
+      "reason_codes": [
+        "phase5_no_accredited_temporal_predictions"
+      ],
+      "test_files": [
+        "tests/v3/test_selection_policy_final.py"
+      ],
+      "tests": "35"
+    },
+    {
+      "checkpoint": "7.3",
+      "checkpoint_source_hashes": {
+        "v3/selection/__init__.py": "4365de21e78db33d6b1039935cbef707ba739a936712a9af19eb32d1a20f3c5c",
+        "v3/selection/cli.py": "04808248f917e8919b63462e883e79bbe85492fe1f9d70ff92bda39dd0820f20",
+        "v3/selection/daily.py": "512f4eb1f2e41251dffd08a483515f05a14ca5a06b8be1f26807e96734cb82a7",
+        "v3/selection/pickscore.py": "1b8c176d43690646be78c4f7530535d0b016c3ee66f454e0ad0555301094e9a6",
+        "v3/selection/policy.py": "d939380607c0b0e22b7fc194cb91ec86b56936141e9be89cdf83299125c75821"
+      },
+      "hashes": {
+        "v3/selection/__init__.py": "4365de21e78db33d6b1039935cbef707ba739a936712a9af19eb32d1a20f3c5c",
+        "v3/selection/cli.py": "04808248f917e8919b63462e883e79bbe85492fe1f9d70ff92bda39dd0820f20",
+        "v3/selection/daily.py": "1cfe749cb02d060ec791ae138b0535cb6da6c535408ede8adb1ca7ba42266859",
+        "v3/selection/pickscore.py": "1b8c176d43690646be78c4f7530535d0b016c3ee66f454e0ad0555301094e9a6",
+        "v3/selection/policy.py": "b727cfe5d72dbd9c71974813c7f4e2597d7d9e5a303e04dcb5fd3a5fbb637c96"
+      },
+      "implementation_status": "PASS",
+      "issue": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/47",
+      "limitations": [
+        "Synthetic fixtures validate software only; no real OOS or promotion evidence."
+      ],
+      "operational_status": "BLOCKED",
+      "real_daily_picks_status": "BLOCKED",
+      "real_status": "BLOCKED",
+      "reason_codes": [
+        "phase5_no_accredited_temporal_predictions"
+      ],
+      "test_files": [
+        "tests/v3/test_selection_daily_final.py"
+      ],
+      "tests": "37"
+    },
+    {
+      "checkpoint": "8.1",
+      "checkpoint_source_hashes": {
+        "v3/paper/__init__.py": "66c5bd8c1f21c62d0ca65590f06d96f5e080ccae00e579918d2ff61533f6b1ea",
+        "v3/paper/ledger.py": "cec08fcfdbf0b387f3fc3abe100aa7c1b20e9ac2aac91414baa2986b55c2460e"
+      },
+      "hashes": {
+        "v3/paper/__init__.py": "66c5bd8c1f21c62d0ca65590f06d96f5e080ccae00e579918d2ff61533f6b1ea",
+        "v3/paper/ledger.py": "7173a788e9532b07303013941c4f16f164b718de3088fe3a4357402e50d124b4"
+      },
+      "implementation_status": "PASS",
+      "issue": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/48",
+      "limitations": [
+        "Synthetic fixtures validate software only; no real OOS or promotion evidence."
+      ],
+      "operational_status": "BLOCKED",
+      "real_status": "BLOCKED",
+      "reason_codes": [
+        "phase5_no_accredited_temporal_predictions"
+      ],
+      "test_files": [
+        "tests/v3/test_paper_final.py"
+      ],
+      "tests": "7"
+    },
+    {
+      "checkpoint": "8.2",
+      "checkpoint_source_hashes": {
+        "v3/performance/__init__.py": "0c2a5ea641cd951c811a079562825ea27a89994b363927025c3f39b7680e2346",
+        "v3/performance/analyzer.py": "a834d2581b8acf32d3e078f626183c0761370e90fde95c4bc911c361c9330709",
+        "v3/performance/drawdown.py": "6ff252c58a29c6c59ce8e084ecb6d587a9a1c6c73ab9975abd5613426ff9a816"
+      },
+      "hashes": {
+        "v3/performance/__init__.py": "0c2a5ea641cd951c811a079562825ea27a89994b363927025c3f39b7680e2346",
+        "v3/performance/analyzer.py": "a834d2581b8acf32d3e078f626183c0761370e90fde95c4bc911c361c9330709",
+        "v3/performance/drawdown.py": "6ff252c58a29c6c59ce8e084ecb6d587a9a1c6c73ab9975abd5613426ff9a816",
+        "v3/performance/oos_gate.py": "73331ac2e94498dbd4e0615e0975e7ee84171227db6a58ae3a75561b083cc9e0"
+      },
+      "implementation_status": "PASS",
+      "issue": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/49",
+      "limitations": [
+        "Synthetic fixtures validate software only; no real OOS or promotion evidence."
+      ],
+      "operational_status": "BLOCKED",
+      "real_status": "BLOCKED",
+      "reason_codes": [
+        "phase5_no_accredited_temporal_predictions"
+      ],
+      "test_files": [
+        "tests/v3/test_performance_final.py"
+      ],
+      "tests": "5"
+    },
+    {
+      "checkpoint": "8.3",
+      "checkpoint_source_hashes": {
+        "v3/performance/__init__.py": "0c2a5ea641cd951c811a079562825ea27a89994b363927025c3f39b7680e2346",
+        "v3/performance/analyzer.py": "a834d2581b8acf32d3e078f626183c0761370e90fde95c4bc911c361c9330709",
+        "v3/performance/drawdown.py": "6ff252c58a29c6c59ce8e084ecb6d587a9a1c6c73ab9975abd5613426ff9a816",
+        "v3/performance/oos_gate.py": "73331ac2e94498dbd4e0615e0975e7ee84171227db6a58ae3a75561b083cc9e0"
+      },
+      "gate_status": "NOT_MET",
+      "hashes": {
+        "v3/performance/__init__.py": "0c2a5ea641cd951c811a079562825ea27a89994b363927025c3f39b7680e2346",
+        "v3/performance/analyzer.py": "a834d2581b8acf32d3e078f626183c0761370e90fde95c4bc911c361c9330709",
+        "v3/performance/drawdown.py": "6ff252c58a29c6c59ce8e084ecb6d587a9a1c6c73ab9975abd5613426ff9a816",
+        "v3/performance/oos_gate.py": "73331ac2e94498dbd4e0615e0975e7ee84171227db6a58ae3a75561b083cc9e0"
+      },
+      "implementation_status": "PASS",
+      "issue": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/50",
+      "limitations": [
+        "Synthetic fixtures validate software only; no real OOS or promotion evidence."
+      ],
+      "operational_status": "BLOCKED",
+      "real_oos_count": 0,
+      "real_status": "BLOCKED",
+      "reason_codes": [
+        "phase5_no_accredited_temporal_predictions"
+      ],
+      "required_oos_count": 200,
+      "test_files": [
+        "tests/v3/test_performance_oos_final.py"
+      ],
+      "tests": "17"
+    },
+    {
+      "checkpoint": "9.1",
+      "checkpoint_source_hashes": {
+        "v3/operation/__init__.py": "8ff64f6dba47eb8e483ae9226dc3ed6fdd660159163f968fb1d041e45721557a",
+        "v3/operation/cli.py": "546e77e3f53315495036fcce13a5caf86ad21cedc04977474f80702bf1f1e866",
+        "v3/operation/manifest.py": "4c8089ddcc9545633175409ca740ccc03a564dadc5e72fe58ee5725178399864",
+        "v3/operation/pipeline.py": "de6f02d16af6d737d9a4326e27902e5693a61116141c39bccd602e2de43b7cdb",
+        "v3/operation/release_gate.py": "b54ff06d715ce3dc9be0843f26555b8db76c93bbeff49159852592c30e41dc41"
+      },
+      "hashes": {
+        "v3/operation/__init__.py": "8ff64f6dba47eb8e483ae9226dc3ed6fdd660159163f968fb1d041e45721557a",
+        "v3/operation/cli.py": "546e77e3f53315495036fcce13a5caf86ad21cedc04977474f80702bf1f1e866",
+        "v3/operation/handoff.py": "ecb2c66209bb71ad238d7cc2fae8bc142718d31695766308dd570065202626bd",
+        "v3/operation/manifest.py": "bbf2440c8bb9f96188179939319e73613b13a3b660a1b78a1dac7fb26574f1e8",
+        "v3/operation/pipeline.py": "f1a85ede5ee4afef0ad071a69e589c4dea698412bc7e4234d384f935c32bf202",
+        "v3/operation/release_gate.py": "b54ff06d715ce3dc9be0843f26555b8db76c93bbeff49159852592c30e41dc41"
+      },
+      "implementation_status": "PASS",
+      "issue": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/51",
+      "limitations": [
+        "Synthetic fixtures validate software only; no real OOS or promotion evidence."
+      ],
+      "operational_status": "BLOCKED",
+      "real_status": "BLOCKED",
+      "reason_codes": [
+        "phase5_no_accredited_temporal_predictions"
+      ],
+      "release_status": "BLOCKED",
+      "synthetic_e2e_status": "PASS",
+      "test_files": [
+        "tests/v3/test_operation_final.py"
+      ],
+      "tests": "3"
+    },
+    {
+      "automated_real_betting": false,
+      "checkpoint": "9.2",
+      "checkpoint_source_hashes": {
+        "v3/operation/__init__.py": "8ff64f6dba47eb8e483ae9226dc3ed6fdd660159163f968fb1d041e45721557a",
+        "v3/operation/cli.py": "546e77e3f53315495036fcce13a5caf86ad21cedc04977474f80702bf1f1e866",
+        "v3/operation/handoff.py": "3bedc38b431cf68ccd3040ecdbafbcf1b48bff70ba73f5a47d09e77ce5487ed7",
+        "v3/operation/manifest.py": "4c8089ddcc9545633175409ca740ccc03a564dadc5e72fe58ee5725178399864",
+        "v3/operation/pipeline.py": "de6f02d16af6d737d9a4326e27902e5693a61116141c39bccd602e2de43b7cdb",
+        "v3/operation/release_gate.py": "b54ff06d715ce3dc9be0843f26555b8db76c93bbeff49159852592c30e41dc41"
+      },
+      "confirmation_implementation_status": "PASS",
+      "hashes": {
+        "v3/operation/__init__.py": "8ff64f6dba47eb8e483ae9226dc3ed6fdd660159163f968fb1d041e45721557a",
+        "v3/operation/cli.py": "546e77e3f53315495036fcce13a5caf86ad21cedc04977474f80702bf1f1e866",
+        "v3/operation/handoff.py": "ecb2c66209bb71ad238d7cc2fae8bc142718d31695766308dd570065202626bd",
+        "v3/operation/manifest.py": "bbf2440c8bb9f96188179939319e73613b13a3b660a1b78a1dac7fb26574f1e8",
+        "v3/operation/pipeline.py": "f1a85ede5ee4afef0ad071a69e589c4dea698412bc7e4234d384f935c32bf202",
+        "v3/operation/release_gate.py": "b54ff06d715ce3dc9be0843f26555b8db76c93bbeff49159852592c30e41dc41"
+      },
+      "human_confirmation_required": true,
+      "implementation_status": "PASS",
+      "issue": "https://github.com/Chris34524/Match-Goals-AI-V3-Betting-Intelligence/issues/52",
+      "limitations": [
+        "Synthetic fixtures validate software only; no real OOS or promotion evidence."
+      ],
+      "operational_status": "BLOCKED",
+      "real_status": "BLOCKED",
+      "reason_codes": [
+        "phase5_no_accredited_temporal_predictions"
+      ],
+      "test_files": [
+        "tests/v3/test_operation_human_final.py"
+      ],
+      "tests": "5"
+    }
+  ],
+  "checks": [
+    {
+      "id": "01",
+      "name": "Phase1 intact",
+      "status": "PASS"
+    },
+    {
+      "id": "02",
+      "name": "Phase2 intact",
+      "status": "PASS"
+    },
+    {
+      "id": "03",
+      "name": "Phase3 intact",
+      "status": "PASS"
+    },
+    {
+      "id": "04",
+      "name": "Phase4 intact",
+      "status": "PASS"
+    },
+    {
+      "id": "05",
+      "name": "Phase5 intact",
+      "status": "PASS"
+    },
+    {
+      "id": "06",
+      "name": "data intact",
+      "status": "PASS"
+    },
+    {
+      "id": "07",
+      "name": "scraper intact",
+      "status": "PASS"
+    },
+    {
+      "id": "08",
+      "name": "analysis/backups intact",
+      "status": "PASS"
+    },
+    {
+      "id": "09",
+      "name": "main.py intact",
+      "status": "PASS"
+    },
+    {
+      "id": "10",
+      "name": "Champion lineage intact",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_final_timestamp_contract",
+        "test_real_calibration_blocked"
+      ],
+      "id": "11",
+      "name": "no fabricated kickoff/cutoff",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_real_operation_dry_run_no_fabricated_picks"
+      ],
+      "id": "12",
+      "name": "no fabricated real predictions",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_real_calibration_blocked",
+        "test_final_real_state_source"
+      ],
+      "id": "13",
+      "name": "no fabricated real metrics",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_calibration_future_overlap_and_missing_lineage",
+        "test_calibration_forbidden_fit"
+      ],
+      "id": "14",
+      "name": "calibration fit/OOS separation",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_calibration_forbidden_fit"
+      ],
+      "id": "15",
+      "name": "no fitting on final TEST",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_platt_endpoints_deterministic"
+      ],
+      "id": "16",
+      "name": "Platt deterministic",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_isotonic_ties_monotonic_and_serializable"
+      ],
+      "id": "17",
+      "name": "isotonic monotonic",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_reliability_ece_known"
+      ],
+      "id": "18",
+      "name": "reliability deterministic",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_walkforward_multiple_folds_temporal_deterministic"
+      ],
+      "id": "19",
+      "name": "walk-forward temporal",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_walkforward_leakage_rejected",
+        "test_walkforward_oos_labels_do_not_change_fit",
+        "test_same_date_never_crosses_fold_and_oos_disjoint"
+      ],
+      "id": "20",
+      "name": "no fold leakage",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_economics_rejects_invalid_odds_or_settlement"
+      ],
+      "id": "21",
+      "name": "economics requires valid odds",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_final_clv_contract"
+      ],
+      "id": "22",
+      "name": "CLV requires accredited closing",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_promotion_blocked",
+        "test_promotion_rejects_insufficient_or_worse"
+      ],
+      "id": "23",
+      "name": "promotion fail-closed",
+      "status": "PASS"
+    },
+    {
+      "id": "24",
+      "name": "current Champion unchanged",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_score_breakdown_range_deterministic"
+      ],
+      "id": "25",
+      "name": "PickScore range",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_score_breakdown_range_deterministic"
+      ],
+      "id": "26",
+      "name": "PickScore component breakdown",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_score_required_components_blocked"
+      ],
+      "id": "27",
+      "name": "blocked components cannot create score",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_score_breakdown_range_deterministic",
+        "test_final_no_optimization_interface"
+      ],
+      "id": "28",
+      "name": "weights not optimized on TEST/ROI",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_policy_pass_no_bet_blocked"
+      ],
+      "id": "29",
+      "name": "PASS/NO_BET/BLOCKED semantics",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_daily_fields_and_deterministic_ranking"
+      ],
+      "id": "30",
+      "name": "deterministic Daily Picks ranking",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_daily_blocked_real_no_bet_and_duplicates"
+      ],
+      "id": "31",
+      "name": "blocked dependencies no real picks",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_paper_append_only_fixed_unit_settlement",
+        "test_paper_detects_tampering"
+      ],
+      "id": "32",
+      "name": "paper append-only",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_paper_no_backdating_or_postkickoff"
+      ],
+      "id": "33",
+      "name": "paper pre-kickoff/no backdating",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_settlement_post_event_and_label_consistent"
+      ],
+      "id": "34",
+      "name": "settlement post-event",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_paper_append_only_fixed_unit_settlement"
+      ],
+      "id": "35",
+      "name": "fixed 1u stake",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_final_no_execution_or_adaptive_staking"
+      ],
+      "id": "36",
+      "name": "no Kelly",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_final_no_execution_or_adaptive_staking"
+      ],
+      "id": "37",
+      "name": "no martingale",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_predictive_economic_known_formulas_and_clv_blocked",
+        "test_operation_all_markets_software_only"
+      ],
+      "id": "38",
+      "name": "correct predictive metrics",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_predictive_economic_known_formulas_and_clv_blocked",
+        "test_loss_void_and_unsettled"
+      ],
+      "id": "39",
+      "name": "correct ROI/Yield formulas",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_drawdown_chronology_initial_loss_and_ties"
+      ],
+      "id": "40",
+      "name": "correct temporal drawdown",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_final_clv_contract",
+        "test_predictive_economic_known_formulas_and_clv_blocked"
+      ],
+      "id": "41",
+      "name": "CLV blocked without closing",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_synthetic_journal_never_counts_real"
+      ],
+      "id": "42",
+      "name": "counter excludes synthetic",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_oos_duplicates_and_multiple_markets_cannot_inflate"
+      ],
+      "id": "43",
+      "name": "counter excludes duplicates",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_oos_counter_threshold_contract_only"
+      ],
+      "id": "44",
+      "name": "threshold >=200 default 200",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_synthetic_journal_never_counts_real",
+        "test_final_real_state_source"
+      ],
+      "id": "45",
+      "name": "current real gate not falsely MET",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_synthetic_e2e_all_layers_never_ready"
+      ],
+      "id": "46",
+      "name": "synthetic E2E passes",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_synthetic_e2e_all_layers_never_ready"
+      ],
+      "id": "47",
+      "name": "synthetic E2E cannot release READY",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_release_all_missing_and_synthetic_fail_closed"
+      ],
+      "id": "48",
+      "name": "real release fail-closed",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_human_acknowledgement_immutable_no_execution"
+      ],
+      "id": "49",
+      "name": "human confirmation required",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_human_acknowledgement_immutable_no_execution"
+      ],
+      "id": "50",
+      "name": "automated real betting false",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_final_no_execution_or_adaptive_staking"
+      ],
+      "id": "51",
+      "name": "no sportsbook order implementation",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_final_network_guard",
+        "test_final_no_network_imports"
+      ],
+      "id": "52",
+      "name": "no network during tests",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_synthetic_e2e_all_layers_never_ready",
+        "test_calibration_deterministic_original_preserved"
+      ],
+      "id": "53",
+      "name": "deterministic outputs",
+      "status": "PASS"
+    },
+    {
+      "evidence_tests": [
+        "test_production_clock_runtime_and_synthetic_protection"
+      ],
+      "id": "54",
+      "name": "runtime isolated in v3_data",
+      "status": "PASS"
+    },
+    {
+      "id": "55",
+      "name": "all protected fingerprints/counts/mtimes unchanged",
+      "status": "PASS"
+    },
+    {
+      "id": "56",
+      "name": "compile and full tests pass",
+      "status": "PASS"
+    },
+    {
+      "id": "57",
+      "name": "git diff check clean",
+      "status": "PASS"
+    },
+    {
+      "id": "58",
+      "name": "exclusive requested branch",
+      "status": "PASS"
+    },
+    {
+      "id": "59",
+      "name": "nothing staged",
+      "status": "PASS"
+    },
+    {
+      "id": "60",
+      "name": "preexisting untracked odds artifacts intact",
+      "status": "PASS"
+    },
+    {
+      "id": "61",
+      "name": "manifest source identity matches current sources",
+      "status": "PASS"
+    },
+    {
+      "id": "62",
+      "name": "generation HEAD is an existing Git commit",
+      "status": "PASS"
+    },
+    {
+      "id": "63",
+      "name": "generation worktree state has explicit snapshot vocabulary",
+      "status": "PASS"
+    },
+    {
+      "id": "64",
+      "name": "no self-referential final commit claim",
+      "status": "PASS"
+    },
+    {
+      "id": "65",
+      "name": "release remains blocked with missing real evidence",
+      "status": "PASS"
+    },
+    {
+      "id": "66",
+      "name": "manifest seal and human-only controls",
+      "status": "PASS"
+    },
+    {
+      "id": "67",
+      "name": "traceability regression tests executed",
+      "status": "PASS"
+    },
+    {
+      "id": "68",
+      "name": "Champion identity remains frozen",
+      "status": "PASS"
+    },
+    {
+      "id": "69",
+      "name": "unaccredited closing remains blocked",
+      "status": "PASS"
+    }
+  ],
+  "closing_status": "BLOCKED",
+  "clv_status": "BLOCKED",
+  "compile_status": "PASS",
+  "current_champion": "BT0 / J_BT_sin_temporada",
+  "failed": 0,
+  "files_created": [
+    "docs/v3/operations/batch-integrity-baseline.json",
+    "docs/v3/operations/final-validation-report.json",
+    "docs/v3/operations/integrity-after.json",
+    "docs/v3/operations/o-02-final.md",
+    "docs/v3/operations/o-03-final.md",
+    "docs/v3/operations/o-04-final.md",
+    "docs/v3/operations/o-05-final.md",
+    "docs/v3/operations/o-06-final.md",
+    "docs/v3/operations/operational-cycle-final.md",
+    "docs/v3/operations/operational-cycle-report.json",
+    "tests/v3/test_ops_cycle.py",
+    "v3/ops/__init__.py",
+    "v3/ops/cli.py",
+    "v3/ops/closing.py",
+    "v3/ops/oos.py",
+    "v3/ops/paper_cycle.py",
+    "v3/ops/promotion.py",
+    "v3/ops/prospective.py",
+    "v3/ops/report.py",
+    "v3/ops/runtime.py",
+    "v3/ops/target_discovery.py",
+    "v3/ops/validation.py"
+  ],
+  "files_modified": [
+    "v3/final_validation.py"
+  ],
+  "gate_status": "NOT_MET",
+  "hashes": {
+    "final_source": "0489e42f941df0fa5940ae8ca31250107cf6446f07afb36adfcc3d933326e079",
+    "issues_sha256": "d6a51ca072291a8cb0b6e2f3c7558b52ddde60201b05352dacb9c39d556ef72b",
+    "protected_inventory": "c4613154d70caa8069b44d2ba06489b67ca18274b96e5575d2da29c685f98445",
+    "release_manifest": "724f573deeaad2b9c55f882cb9d2bd6c5329fc12dd57c00bbb2ad58e35525bff",
+    "tests_sha256": "93045fc824a3994dd2fe0667835b48edf08457c52cf633b5558f20c29dea35e2",
+    "validator_sha256": "ec9d64b25c858bf821522f5bcc0ac655ddee746bb6d16fb718fc50b86b9a614f"
+  },
+  "historical_baseline_differences_at_start": "64 PASS / 5 FAIL on the initial legacy run in this batch: historical Phase3/Phase5 inventory differences, branch and absent old runtime artifacts.",
+  "implementation_status": "PASS",
+  "limitations": [
+    "Local fingerprints are not independent signed attestations.",
+    "Synthetic tests are software evidence only.",
+    "Real source adapters and prospective accreditation remain required."
+  ],
+  "passed": 69,
+  "preexisting_untracked_preserved": [
+    "v3_data/odds/phase3-synthetic-example/.publish.lock"
+  ],
+  "protected_file_count": 67554,
+  "protected_integrity": "PASS",
+  "real_daily_picks_status": "BLOCKED",
+  "real_oos_count": 0,
+  "real_status": "BLOCKED",
+  "release_status": "BLOCKED",
+  "required_oos_count": 200,
+  "tests_new": 133,
+  "tests_total": 1299
+}

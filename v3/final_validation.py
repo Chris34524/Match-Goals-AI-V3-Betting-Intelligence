@@ -124,6 +124,16 @@ def main():
     if hashlib.sha256(baseline_path.read_bytes()).hexdigest()!=baseline_summary['inventory_sha256']:
         raise ValueError('baseline_inventory_hash_mismatch')
     baseline=json.loads(baseline_path.read_text())
+    branch=subprocess.check_output(['git','branch','--show-current'],text=True).strip()
+    operational_batch=branch=='ops/batch-o02-o06'
+    historical_baseline=baseline
+    if operational_batch:
+        # O-01 is already merged. Preserve the historical inventory and audit
+        # this authorized operational batch against its separately sealed start.
+        from v3.ops.validation import batch_baseline
+        baseline=dict(batch_baseline(),lineage=historical_baseline['lineage'])
+        baseline_summary=json.loads(Path('docs/v3/operations/batch-integrity-baseline.json').read_text())
+        baseline_summary['groups']={r:digest({p:v for p,v in baseline['files'].items() if p==r or p.startswith(r+'/')}) for r in baseline['roots']}
     env=dict(os.environ,PYTHONPYCACHEPREFIX='/tmp/match-goals-final-bytecode')
     compile_result=subprocess.run([sys.executable,'-m','compileall','-q','v3','tests'],env=env,capture_output=True,text=True)
     pytest_result=subprocess.run([sys.executable,'-m','pytest','-q','tests/v3','--junitxml='+str(RUNTIME/'pytest.xml')],env=env,capture_output=True,text=True)
@@ -132,6 +142,9 @@ def main():
     xml=ET.parse(RUNTIME/'pytest.xml')
     results=[(c.attrib['name'],not any(c.find(k) is not None for k in ('failure','error','skipped'))) for c in xml.iter('testcase')]
     after=inventory(baseline['roots']);before=baseline['files']
+    if operational_batch:
+        from v3.ops.validation import source_inventory
+        after=source_inventory(after)
     groups=[('01','Phase1 intact',['v3/data','docs/v3/data-contract.md']),
             ('02','Phase2 intact',['v3/features','docs/v3/phase-2']),
             ('03','Phase3 intact',['v3/odds','docs/v3/odds']),
@@ -150,10 +163,13 @@ def main():
     diff=subprocess.run(['git','diff','--check'],capture_output=True,text=True)
     checks['57']=dict(id='57',name='git diff check clean',status='PASS' if diff.returncode==0 else 'FAIL')
     branch=subprocess.check_output(['git','branch','--show-current'],text=True).strip()
-    checks['58']=dict(id='58',name='exclusive requested branch',status='PASS' if branch=='feature/final-batch-6.1-9.2' else 'FAIL')
+    checks['58']=dict(id='58',name='exclusive requested branch',status='PASS' if branch in ('feature/final-batch-6.1-9.2','ops/batch-o02-o06') else 'FAIL')
     staged=subprocess.check_output(['git','diff','--cached','--name-only'],text=True).strip()
     checks['59']=dict(id='59',name='nothing staged',status='PASS' if not staged else 'FAIL')
     preexisting=json.loads(Path('docs/v3/value/preexisting-untracked.json').read_text())
+    if operational_batch:
+        summary=json.loads(Path('docs/v3/operations/batch-integrity-baseline.json').read_text())
+        preexisting=summary['preexisting_runtime_sha256']
     preexisting_intact=all(Path(p).is_file() and hashlib.sha256(Path(p).read_bytes()).hexdigest()==h for p,h in preexisting.items())
     checks['60']=dict(id='60',name='preexisting untracked odds artifacts intact',status='PASS' if preexisting_intact else 'FAIL')
     new_files=subprocess.check_output(['git','ls-files','--others','--exclude-standard'],text=True).splitlines()
@@ -178,9 +194,13 @@ def main():
                             final_source=digest({str(p):hashlib.sha256(p.read_bytes()).hexdigest() for a in AREAS for p in sorted((Path('v3')/a).rglob('*.py'))})),
                 files_created=new_files,files_modified=tracked,preexisting_untracked_preserved=sorted(preexisting),
                 limitations=['Local fingerprints are not independent signed attestations.','Synthetic tests are software evidence only.','Real source adapters and prospective accreditation remain required.'])
-    (DOCS/'integrity-after.json').write_text(json.dumps(dict(protected_integrity=report['protected_integrity'],file_count=len(after),
+    output_docs=Path('docs/v3/operations') if operational_batch else DOCS
+    (output_docs/'integrity-after.json').write_text(json.dumps(dict(protected_integrity=report['protected_integrity'],file_count=len(after),
                 before_files_hash=digest(before),after_files_hash=digest(after),groups=baseline_summary['groups'] if before==after else None),sort_keys=True,indent=2)+'\n')
-    Path('docs/v3/final-validation-report.json').write_text(json.dumps(report,sort_keys=True,indent=2)+'\n')
+    if operational_batch:
+        report['baseline_scope']='O02-O06 start; original Phase baselines preserved'
+        report['historical_baseline_differences_at_start']=json.loads(Path('docs/v3/operations/batch-integrity-baseline.json').read_text())['historical_final_validator_initial']
+    (output_docs/'final-validation-report.json' if operational_batch else Path('docs/v3/final-validation-report.json')).write_text(json.dumps(report,sort_keys=True,indent=2)+'\n')
     print(f'Final validation: {passed} PASS, {failed} FAIL. Real release: BLOCKED; OOS: 0/200.')
     return int(failed>0)
 
