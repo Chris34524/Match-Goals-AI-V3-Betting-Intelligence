@@ -94,7 +94,8 @@ def test_live_missing_credentials_zero_transport(monkeypatch,tmp_path):
     with pytest.raises(ProviderError,match='missing_credentials'):
         collect_live(t,c,r,live=True,root=tmp_path,adapter=TheOddsAPI(c,forbidden))
     monkeypatch.setenv('THE_ODDS_API_KEY','synthetic-credential-sentinel')
-    assert live_status(True) == 'blocked_source_authorization'
+    assert live_status(True) == 'live_enabled'
+    monkeypatch.setattr('v3.odds.the_odds_api.source_matrix', lambda **kw: [])
     with pytest.raises(ProviderError,match='authorization'):
         TheOddsAPI(c,forbidden).fetch(c.sports[0],c.markets,event_id='x',live=True)
     with pytest.raises(ProviderError,match='live_flag'):

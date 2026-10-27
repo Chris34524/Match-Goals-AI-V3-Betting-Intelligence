@@ -73,3 +73,6 @@ dist/
 /v3_data/paper/
 /v3_data/performance/
 /v3_data/operation/
+
+# All V3 runtime artifacts stay local
+/v3_data/

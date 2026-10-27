@@ -9,7 +9,7 @@ def test_versioned_matrix_is_deterministic_and_complete():
     assert len(rows)==5
     assert not matrix_errors(rows)
     assert matrix_json()==MATRIX_PATH.read_text()
-    assert not any(automatable(r) for r in rows)
+    assert [r['provider'] for r in rows if automatable(r)] == ['the_odds_api']
     assert {r['provider'] for r in rows}=={'flashscore','football_data','the_odds_api','api_football','local_inventory'}
 
 
@@ -29,7 +29,7 @@ def test_registry_is_fresh_and_candidates_are_explicit():
     assert fs['surface_availability']=='public_visible' and not automatable(fs)
     fd=source_matrix(provider='football_data')[0]
     assert fd['snapshots']['opening']=='unverified' and fd['capture_policy']=='requires_authorization'
-    assert not source_matrix(status='available')
+    assert len(source_matrix(status='available')) == 1
     assert not any(r['surface_availability']=='existing_local' for r in source_matrix())
 
 
