@@ -1,0 +1,25 @@
+{
+  "provider": {
+    "sports": ["soccer_replace_me"],
+    "regions": ["eu"],
+    "bookmakers": [],
+    "markets": ["1X2", "BTTS", "OVER_1_5", "OVER_2_5", "OVER_3_5"],
+    "timeout": 10.0
+  },
+  "reconciliation": {
+    "competition_mapping": {
+      "soccer_replace_me": "REPLACE_ME"
+    },
+    "mapping_version": "ops-local-1",
+    "kickoff_tolerance_seconds": 300
+  },
+  "budget": {
+    "monthly_hard_limit": 500,
+    "monthly_soft_limit": 450,
+    "max_credits_per_run": 30
+  },
+  "schedule": {
+    "window_seconds": 60,
+    "decision_offset_seconds": null
+  }
+}
