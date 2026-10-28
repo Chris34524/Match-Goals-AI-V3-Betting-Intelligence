@@ -9,11 +9,13 @@ def main(argv=None):
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('command',choices=('forecast','picks','status','prepare','capture','paper','settle','report','cycle'))
     parser.add_argument('--live',action='store_true')
+    parser.add_argument('--source')
     args=parser.parse_args(argv)
     try:
         if args.command in ('forecast','picks'):
             from .forecast import generate
-            result=generate()
+            result=generate(args.source)
+            result={k:v for k,v in result.items() if k != 'matches'}
         elif args.command=='prepare':
             result=prospective.prepare(live=args.live)
         elif args.command=='capture':

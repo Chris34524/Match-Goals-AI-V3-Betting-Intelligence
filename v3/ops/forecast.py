@@ -114,54 +114,50 @@ def candidates(row, now):
     return out
 
 
-def sources():
-    """Accredited adapter first, then exact BT0 lambdas, then legacy outputs."""
+def sources(source=None):
+    """Explicit targets only; historical files enrich exact IDs, never select them."""
+    path = Path(source) if source is not None else ROOT/'targets.json'
+    if not path.exists():
+        if source is not None:
+            raise ValueError('forecast_source_missing')
+        return []
+    document = json.loads(path.read_text())
+    rows = document if isinstance(document, list) else next(
+        (document[k] for k in ('targets', 'partidos', 'candidatos') if isinstance(document.get(k), list)), None)
+    if rows is None:
+        raise ValueError('forecast_source_schema')
     selected = {}
-    for row in load(ROOT/'prospective.json', []) or []:
-        if accredited(row, datetime.now(timezone.utc).isoformat()):
-            selected[row['internal_match_id']] = row
-    for path in sorted(Path('data/matches').glob('*/lambda_comparison.json')):
-        comp = load(path, {})
+    prospective = {r.get('internal_match_id'): r for r in load(ROOT/'prospective.json', []) or []
+                   if isinstance(r, dict) and accredited(r, datetime.now(timezone.utc).isoformat())}
+    for target in rows:
+        if not isinstance(target, dict):
+            continue
+        ids = [target[k] for k in ('match_id', 'id', 'flashscore_id', 'internal_match_id') if target.get(k) is not None]
+        if not ids or any(not isinstance(x, str) or not x or not all(c.isalnum() or c in '_-' for c in x) for x in ids) or len(set(ids)) != 1:
+            continue  # BLOCKED_IDENTITY: no name matching or inferred IDs.
+        mid = ids[0]
+        if mid in selected:
+            continue
+        directory = Path('data/matches')/mid
+        comp = load(directory/'lambda_comparison.json', {})
+        conf = load(directory/'confidence_v2.json', {})
         method = comp.get('metodos', {}).get(CHAMPION)
-        if not method:
-            continue
-        mid = path.parent.name
-        conf = load(path.parent/'confidence_v2.json', {})
-        p = comp.get('partido', {})
-        selected.setdefault(mid, dict(internal_match_id=mid, home=p.get('local'), away=p.get('visitante'),
-            competition=p.get('competicion'), lambda_home=method.get('local'), lambda_away=method.get('visitante'),
-            lambda_total=method.get('total'), data_quality=conf.get('calidad_datos_global'),
-            source_path=str(path), source_digest=hashlib.sha256(path.read_bytes()).hexdigest(),
-            legacy_date=p.get('fecha'), legacy_time=p.get('hora')))
-    for path in sorted(Path('data/matches').glob('*/confidence_v2.json')):
-        conf = load(path, {})
-        if conf.get('modelo') != CHAMPION:
-            continue
-        base = (conf.get('detalle_v1') or {}).get('lambda_base') or {}
-        p = (conf.get('detalle_v1') or {}).get('partido') or {}
-        if base.get('local') is None or base.get('visitante') is None:
-            continue
-        mid = path.parent.name
-        selected.setdefault(mid, dict(internal_match_id=mid, home=p.get('local'), away=p.get('visitante'),
-            competition=p.get('competicion'), lambda_home=base['local'], lambda_away=base['visitante'],
-            lambda_total=base.get('total'), data_quality=conf.get('calidad_datos_global'),
-            source_path=str(path), source_digest=hashlib.sha256(path.read_bytes()).hexdigest(),
-            legacy_date=p.get('fecha'), legacy_time=p.get('hora')))
-    for path in map(Path, ('data/day_predictions_v2.json','data/day_predictions.json','data/all_predictions.json')):
-        document = load(path, {})
-        if document.get('modelo_principal') != CHAMPION:
-            continue
-        for p in document.get('partidos', []):
-            mid = p.get('match_id')
-            if not mid or mid in selected:
-                continue
-            confpath = Path('data/matches')/mid/'confidence_v2.json'
-            conf = load(confpath, {})
-            base = (conf.get('detalle_v1') or {}).get('lambda_base') or {}
-            selected[mid] = dict(internal_match_id=mid, home=p.get('local'), away=p.get('visitante'), competition=p.get('competicion'),
-                lambda_home=base.get('local', p.get('lambda_local')), lambda_away=base.get('visitante', p.get('lambda_visitante')),
-                lambda_total=base.get('total', p.get('lambda_total')), data_quality=p.get('calidad'),
-                source_path=str(path), source_digest=hashlib.sha256(path.read_bytes()).hexdigest(), legacy_date=p.get('fecha'), legacy_time=p.get('hora'))
+        feature_path = directory/'lambda_comparison.json'
+        if not method and conf.get('modelo') == CHAMPION:
+            method = (conf.get('detalle_v1') or {}).get('lambda_base')
+            feature_path = directory/'confidence_v2.json'
+        target_model = target.get('modelo_lambda') or (document.get('modelo_principal') or document.get('modelo') if isinstance(document, dict) else None)
+        if not method and target_model == CHAMPION:
+            method = dict(local=target.get('lambda_local'), visitante=target.get('lambda_visitante'), total=target.get('lambda_total'))
+            feature_path = path
+        p = comp.get('partido') or (conf.get('detalle_v1') or {}).get('partido') or target
+        method = method or {}
+        selected[mid] = prospective.get(mid) or dict(internal_match_id=mid,
+            home=target.get('local', p.get('local')), away=target.get('visitante', p.get('visitante')),
+            competition=target.get('competicion', p.get('competicion')),
+            lambda_home=method.get('local'), lambda_away=method.get('visitante'), lambda_total=method.get('total'),
+            data_quality=conf.get('calidad_datos_global', target.get('calidad')),
+            source_path=str(feature_path), source_digest=hashlib.sha256(feature_path.read_bytes()).hexdigest() if feature_path.exists() else None)
     return [selected[k] for k in sorted(selected)]
 
 
@@ -212,10 +208,10 @@ def oos_report(rows, settlements=(), now=None):
                 forecast_oos_status='COLLECTING' if unique else 'NO_ACCREDITED_SETTLED_FORECASTS', by_market=by_market)
 
 
-def generate():
+def generate(source=None):
     now = datetime.now(timezone.utc).isoformat()
     groups = []
-    for row in sources():
+    for row in (sources(source) if source is not None else sources()):
         ranked = candidates(row, now)
         if ranked:
             groups.append(dict(internal_match_id=row['internal_match_id'], ranked_forecast_candidates=ranked))
@@ -234,7 +230,8 @@ def generate():
         stats = oos_report(existing+fresh, load(ROOT/'settlements.json', []), now)
     from .oos import report as betting_report
     betting = betting_report()['real_oos_count']
-    result = dict(forecast_generation_status='AVAILABLE' if flat else 'NO_FORECAST_SOURCES',
+    result = dict(forecast_generation_status='AVAILABLE' if flat else 'NO_ACTIVE_FORECAST_TARGETS',
+        source=str(source or ROOT/'targets.json'), identity_policy='BLOCKED_IDENTITY_without_explicit_unique_id',
         matches=groups, forecast_matches=len(groups), forecast_candidates=len(flat),
         accredited_forecasts=sum(r['oos_eligible'] for r in flat), legacy_operational_forecasts=sum(not r['oos_eligible'] for r in flat),
         champion='BT0 / '+CHAMPION, odds_required_for_forecast=False, value_evaluated=False,

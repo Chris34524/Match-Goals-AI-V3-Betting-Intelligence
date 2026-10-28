@@ -132,3 +132,90 @@ def test_forecast_journal_append_only_and_deduplicated(row,tmp_path,monkeypatch)
     assert first['accredited_forecasts']==1
     assert first['forecast_oos_count']==0
     assert first['betting_oos_matches']==0
+
+
+def target_fixture(tmp_path, count):
+    for i in range(count):
+        p=tmp_path/f'data/matches/m{i}/lambda_comparison.json'
+        p.parent.mkdir(parents=True)
+        p.write_text(json.dumps({'metodos':{f.CHAMPION:{'local':1.2,'visitante':.9}}}))
+
+
+@pytest.mark.parametrize('active',[2,3])
+def test_forecast_explicit_allowlist(tmp_path,monkeypatch,active):
+    monkeypatch.chdir(tmp_path)
+    target_fixture(tmp_path,4315 if active==2 else 5)
+    source=tmp_path/'targets.json'
+    source.write_text(json.dumps([{'id':f'm{i}'} for i in range(active)]))
+    result=f.generate(source)
+    assert result['forecast_matches']==active
+    assert result['forecast_candidates']==active*10
+    assert {g['internal_match_id'] for g in result['matches']}=={f'm{i}' for i in range(active)}
+    assert result['forecast_oos_count']==result['betting_oos_matches']==0
+    assert all(not c['oos_eligible'] for g in result['matches'] for c in g['ranked_forecast_candidates'])
+
+
+def test_forecast_safe_default_and_missing_source(tmp_path,monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    target_fixture(tmp_path,2)
+    result=f.generate()
+    assert result['forecast_generation_status']=='NO_ACTIVE_FORECAST_TARGETS'
+    assert result['forecast_matches']==result['forecast_candidates']==0
+    with pytest.raises(ValueError,match='forecast_source_missing'):
+        f.generate('missing.json')
+
+
+def test_forecast_identity_and_duplicates(tmp_path,monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    target_fixture(tmp_path,2)
+    p=tmp_path/'targets.json'
+    p.write_text(json.dumps([{'local':'m0'}, {'id':'m0'}, {'match_id':'m0'},
+                             {'id':'m1','match_id':'different'}, {'id':'../m1'}]))
+    result=f.generate(p)
+    assert result['forecast_matches']==1 and result['forecast_candidates']==10
+    assert result['matches'][0]['internal_match_id']=='m0'
+
+
+@pytest.mark.parametrize('quota',['UNAVAILABLE','EXHAUSTED'])
+def test_forecast_allowlist_without_odds(tmp_path,monkeypatch,quota):
+    monkeypatch.chdir(tmp_path)
+    target_fixture(tmp_path,1)
+    p=tmp_path/'targets.json';p.write_text('[{"id":"m0"}]')
+    monkeypatch.setenv('THE_ODDS_API_KEY','synthetic_test_key')
+    first=f.generate(p)
+    monkeypatch.delenv('THE_ODDS_API_KEY')
+    (tmp_path/'v3_data/ops/quota.json').write_text(json.dumps({'status':quota}))
+    assert first==f.generate(p)
+
+
+def test_ops_code_integrity_gates(monkeypatch):
+    from v3.ops import integrity as i
+    def run(branch=(),work=()):
+        def git(args,**kwargs):
+            if 'origin/main...HEAD' in args:return '\n'.join(branch)
+            if 'HEAD' in args:return '\n'.join(work)
+            return ''
+        monkeypatch.setattr(i.subprocess,'check_output',git)
+        return i.code_integrity()['immutable_code_integrity']
+    assert run(work=['data/live.json'])=='PASS'
+    for path in ['data/artificial.json','analysis/model.py','scraper/a.py','main.py','v3/models/a.py']:
+        assert run(branch=[path])=='FAIL'
+    for path in ['analysis/a.py','scraper/a.py','main.py','v3/models/a.py']:
+        assert run(work=[path])=='FAIL'
+
+
+def test_ops_data_drift_informational(tmp_path,monkeypatch):
+    from v3.ops import integrity as i
+    monkeypatch.chdir(tmp_path)
+    (tmp_path/'data').mkdir();p=tmp_path/'data/live.json';p.write_text('new')
+    baseline={'files':{'data/live.json':{'sha256':'old','mtime_ns':0}}}
+    report=i.data_drift(baseline)
+    assert report['operational_data_drift_detected']
+    assert report['operational_data_changed_files']==['data/live.json']
+    monkeypatch.setattr(i.subprocess,'check_output',lambda *a,**k:'')
+    assert i.code_integrity()['immutable_code_integrity']=='PASS'
+
+
+def test_ops_champion_direct():
+    from v3.ops.integrity import champion_integrity
+    assert champion_integrity()

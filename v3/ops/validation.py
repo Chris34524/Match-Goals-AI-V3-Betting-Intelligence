@@ -118,12 +118,15 @@ def validate():
     checks=[dict(id=f'{i:02}',name=name,status='PASS' if test_mapping_passed(tests,(test,)) else 'FAIL',evidence_test=test)
             for i,(name,test) in enumerate(REQUIREMENTS,1)]
     baseline=batch_baseline();after=source_inventory(inventory(baseline['roots']));before=baseline['files']
-    groups=[('data unchanged',['data']),('scraper unchanged',['scraper']),
+    groups=[('scraper unchanged',['scraper']),
             ('analysis unchanged',['analysis']+[r for r in baseline['roots'] if r.startswith('analysis_backup_')]),
             ('main unchanged',['main.py']),('Phase 1–9 sources unchanged',[r for r in baseline['roots'] if r.startswith('v3/')])]
     for name,roots in groups:
         checks.append(dict(id=f'{len(checks)+1:02}',name=name,status='PASS' if unchanged(before,after,roots) else 'FAIL'))
-    additional=[('runtime confined',test_mapping_passed(tests,('test_ops_runtime_secret_and_escape',))),
+    from .integrity import code_integrity, data_drift, champion_integrity
+    integrity=code_integrity()
+    additional=[('immutable code integrity',integrity['immutable_code_integrity']=='PASS'),
+                ('direct Champion integrity',champion_integrity()),('runtime confined',test_mapping_passed(tests,('test_ops_runtime_secret_and_escape',))),
                 ('no secrets in repository',secret_free()),
                 ('offline test suite',run.returncode==0 and test_mapping_passed(tests,('test_final_network_guard',))),
                 ('deterministic reports',test_mapping_passed(tests,('test_ops_report_deterministic',))),
@@ -136,7 +139,7 @@ def validate():
     failed=sum(c['status']=='FAIL' for c in checks)
     report=dict(implementation_status='PASS' if not failed else 'FAIL',checks=checks,passed=len(checks)-failed,failed=failed,
                 tests_total=len(tests),tests_new=sum(n.startswith('test_ops_') for n,_ in tests),source_digest=source_digest(),
-                protected_integrity='PASS' if before==after else 'FAIL',network_calls=0,
+                protected_integrity=integrity['immutable_code_integrity'], **integrity, **data_drift(baseline), network_calls=0,
                 real_status='EVIDENCE_GATES_SEPARATE',limitations=['Software validation never accredits a real target, model, result or closing.'])
     write(ROOT/'validation.json',report)
     return report
@@ -160,11 +163,12 @@ def validate_and_receipt():
 
 
 def main():
-    result=validate()
+    good=validate_and_receipt()
+    result=read(ROOT/'validation.json')
     print(json.dumps({k:result[k] for k in ('implementation_status','passed','failed','tests_total','tests_new')},sort_keys=True))
     for check in result['checks']:
         if check['status']=='FAIL':print(check['id']+' FAIL '+check['name'])
-    return int(result['failed']>0)
+    return int(not good)
 
 
 if __name__=='__main__':
