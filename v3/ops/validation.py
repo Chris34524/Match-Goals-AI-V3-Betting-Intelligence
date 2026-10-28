@@ -39,6 +39,15 @@ def source_inventory(files):
 
 # Each check is tied to assertions executed under the socket/DNS test guard.
 REQUIREMENTS=[
+ ('structured kickoff lineage required','test_ops_lineage_negative_cases'),
+ ('source digest verified','test_ops_lineage_negative_cases'),
+ ('identity verified','test_ops_lineage_negative_cases'),
+ ('kickoff verified','test_ops_lineage_negative_cases'),
+ ('timezone basis explicit','test_ops_lineage_negative_cases'),
+ ('self-reference rejected','test_ops_lineage_negative_cases'),
+ ('invalid lineage cannot reach odds plan/capture','test_ops_lineage_negative_cases'),
+ ('authorized source is not reported as unauthorized','test_ops_authorized_source_missing_evidence'),
+ ('duplicate exclusion metric semantics correct','test_ops_duplicates_no_inflation'),
  ('provider remains authorized','test_authorization'),
  ('key never serialized','test_ops_runtime_secret_and_escape'),
  ('source matrix valid','test_versioned_matrix_is_deterministic_and_complete'),

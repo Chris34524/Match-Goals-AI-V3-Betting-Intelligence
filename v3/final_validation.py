@@ -19,6 +19,15 @@ RUNTIME=Path('v3_data/operation')
 AREAS=('calibration','validation','selection','paper','performance','operation')
 
 
+def odds_release_evidence():
+    from v3.odds.source_matrix import source_matrix, automatable
+    authorized=any(automatable(r) for r in source_matrix(provider='the_odds_api'))
+    return dict(odds_source_authorization='PASS' if authorized else 'BLOCKED',
+                odds_evidence_status='MISSING', release_status='BLOCKED',
+                blockers=([] if authorized else ['odds_source_not_authorized'])
+                         + ['no_accredited_prospective_odds_observation'])
+
+
 def inventory(roots):
     result={}
     for name in roots:
@@ -186,7 +195,9 @@ def main():
                 compile_status='PASS' if compile_result.returncode==0 else 'FAIL',
                 checkpoints=checkpoints,real_status='BLOCKED',real_oos_count=0,required_oos_count=200,gate_status='NOT_MET',
                 current_champion='BT0 / J_BT_sin_temporada',closing_status='BLOCKED',clv_status='BLOCKED',real_daily_picks_status='BLOCKED',
-                release_status=release['release_status'],blockers=['phase5_no_accredited_temporal_predictions','champion_cutoff_not_accredited','odds_source_not_authorized','no_accredited_closing','minimum_real_oos_not_met'],
+                odds_source_authorization=odds_release_evidence()['odds_source_authorization'],
+                odds_evidence_status=odds_release_evidence()['odds_evidence_status'],
+                release_status=release['release_status'],blockers=['phase5_no_accredited_temporal_predictions','champion_cutoff_not_accredited',*odds_release_evidence()['blockers'],'no_accredited_closing','minimum_real_oos_not_met'],
                 protected_integrity='PASS' if before==after else 'FAIL',protected_file_count=len(before),
                 hashes=dict(validator_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
                             tests_sha256=digest({str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(Path('tests/v3').glob('*_final.py'))}),

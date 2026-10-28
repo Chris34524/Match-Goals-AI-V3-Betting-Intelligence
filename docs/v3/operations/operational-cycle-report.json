@@ -154,6 +154,8 @@
     "blocked_picks": 0,
     "by_market": {},
     "checkpoint_status": "COLLECTING",
+    "duplicate_identity_records_ineligible": 0,
+    "duplicate_records_excluded": 0,
     "duplicates_excluded": 0,
     "eligible_picks": 0,
     "gate": {
@@ -189,6 +191,7 @@
     "reason_codes": [
       "minimum_real_oos_not_met"
     ],
+    "records_total": 0,
     "required_oos_count": 200,
     "settled_picks": 0,
     "synthetic_excluded": 0,
@@ -262,6 +265,23 @@
     ]
   },
   "automated_real_betting": false,
+  "correction": {
+    "final_failed_checks": [
+      "06",
+      "24",
+      "55"
+    ],
+    "kickoff_lineage_version": "kickoff-lineage-v1",
+    "negative_lineage_cases": 22,
+    "network_calls": 0,
+    "odds_credits_consumed": 0,
+    "ops_failed_checks": [
+      "53"
+    ],
+    "protected_integrity_note": "1533 preexisting data differences against sealed batch baseline; latest differing file mtime 2026-10-27T06:51:11.856838Z. No protected files or baseline modified by this correction.",
+    "real_odds_evidence": "MISSING",
+    "source_authorization": "PASS"
+  },
   "credits": {
     "credits_reported_used": null,
     "odds_credits_consumed": 0,
@@ -295,6 +315,49 @@
   "files_modified": [
     "v3/final_validation.py"
   ],
+  "files_modified_this_correction": [
+    "v3/ops/target_discovery.py",
+    "v3/ops/oos.py",
+    "v3/ops/validation.py",
+    "v3/final_validation.py",
+    "tests/v3/test_ops_cycle.py",
+    "docs/v3/operations/o-02-final.md",
+    "docs/v3/operations/o-05-final.md",
+    "docs/v3/operations/operational-cycle-final.md",
+    "docs/v3/operations/operational-cycle-report.json",
+    "docs/v3/operations/final-validation-report.json",
+    "docs/v3/operations/integrity-after.json"
+  ],
+  "forecast": {
+    "accredited_forecasts": 0,
+    "betting_oos_matches": 0,
+    "by_market": {},
+    "champion": "BT0 / J_BT_sin_temporada",
+    "forecast_candidates": 43150,
+    "forecast_generation_status": "AVAILABLE",
+    "forecast_matches": 4315,
+    "forecast_oos_count": 0,
+    "forecast_oos_matches": 0,
+    "forecast_oos_predictions": 0,
+    "forecast_oos_status": "NO_ACCREDITED_SETTLED_FORECASTS",
+    "legacy_operational_forecasts": 43150,
+    "network_calls": 0,
+    "odds_required_for_forecast": false,
+    "value_evaluated": false
+  },
+  "forecast_generation_status": "AVAILABLE",
+  "forecast_implementation": {
+    "command": "python -m v3.ops.cli forecast",
+    "historical_legacy_only": true,
+    "lineage_correction_preserved": true,
+    "minimum_acceptable_odds_note": "Existing Phase 4 default policy is synthetic; no real price policy inferred.",
+    "network_calls": 0,
+    "runtime_root": "v3_data/ops/forecast/",
+    "tests_new": 20,
+    "tests_total": 1342,
+    "value_evaluated": false
+  },
+  "forecast_oos_status": "NO_ACCREDITED_SETTLED_FORECASTS",
   "human_confirmation_required": true,
   "implementation_scope": "Operational orchestration and existing gates; not accreditation of new real model adapters.",
   "limitations": [
@@ -319,6 +382,7 @@
     "An accredited real model adapter and prediction are required before real paper admission."
   ],
   "operational_day": "2026-10-27",
+  "picks_depend_on_odds": false,
   "remaining_blockers": [
     "no_independent_accredited_future_internal_target",
     "no_eligible_prospective_model_prediction",
@@ -343,18 +407,22 @@
   "verification": {
     "compile_status": "PASS",
     "final_validator": {
-      "failed": 0,
-      "passed": 69
+      "failed": 3,
+      "passed": 66,
+      "status": "FAIL"
     },
+    "forecast_tests_new": 20,
     "git_diff_check": "PASS",
     "ops_validator": {
-      "failed": 0,
-      "passed": 56
+      "failed": 1,
+      "passed": 64,
+      "status": "FAIL"
     },
-    "protected_integrity": "PASS",
+    "protected_integrity": "FAIL",
     "secrets_scan": "PASS",
-    "tests_new": 31,
-    "tests_total": 1299
+    "tests_added_this_correction": 23,
+    "tests_new": 54,
+    "tests_total": 1342
   },
   "version": "ops-o02-o06-v1"
 }

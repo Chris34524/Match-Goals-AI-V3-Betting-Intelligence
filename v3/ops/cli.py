@@ -7,11 +7,14 @@ from .report import report
 
 def main(argv=None):
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command',choices=('status','prepare','capture','paper','settle','report','cycle'))
+    parser.add_argument('command',choices=('forecast','picks','status','prepare','capture','paper','settle','report','cycle'))
     parser.add_argument('--live',action='store_true')
     args=parser.parse_args(argv)
     try:
-        if args.command=='prepare':
+        if args.command in ('forecast','picks'):
+            from .forecast import generate
+            result=generate()
+        elif args.command=='prepare':
             result=prospective.prepare(live=args.live)
         elif args.command=='capture':
             result=prospective.capture(live=args.live)

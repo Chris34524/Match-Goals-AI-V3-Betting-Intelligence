@@ -1,5 +1,6 @@
 """All fixtures here are synthetic_test_only; no runtime real evidence is created."""
 import json
+import hashlib
 from dataclasses import asdict
 from pathlib import Path
 import pytest
@@ -10,7 +11,7 @@ NOW='2026-11-01T09:00:00Z'
 
 def internal():
     return dict(synthetic_test_only=False, internal_match_id='synthetic-contract-target',
-                kickoff_accredited=True,kickoff_lineage='synthetic-test-only-independent-clock',
+                kickoff_accredited=True,kickoff_lineage={},
                 kickoff_at='2026-11-02T12:00:00Z',season='explicit-fixture-season',
                 sport_key='soccer_epl',competition='Premier League',home='Home',away='Away')
 
@@ -22,7 +23,34 @@ def isolated(tmp_path,monkeypatch):
     return tmp_path
 
 
+def evidence(tmp_path, row):
+    identity={k:row[k] for k in ('internal_match_id','home','away','competition')}
+    record=dict(source_record_id='record-1', identity=identity, kickoff_at=row['kickoff_at'],
+                captured_at=NOW, timezone_basis='explicit_utc_offset', synthetic_test_only=False)
+    document=dict(synthetic_test_only=False, records=[record])
+    lineage=dict(version='kickoff-lineage-v1', source_record_id='record-1', identity=identity,
+                 kickoff_field='kickoff_at', kickoff_value=row['kickoff_at'],
+                 captured_at=NOW, timezone_basis='explicit_utc_offset')
+    return document,lineage
+
+
+def seal(tmp_path, document, lineage):
+    raw=json.dumps(document).encode();digest=hashlib.sha256(raw).hexdigest()
+    path=tmp_path/'v3_data/ops/evidence'/ (digest+'.json')
+    path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(raw)
+    lineage.update(source_path=str(path),source_sha256=digest)
+    return path
+
+
+@pytest.fixture(autouse=True)
+def evidence_root(tmp_path,monkeypatch):
+    monkeypatch.chdir(tmp_path)
+
+
 def source(tmp_path,row):
+    if row.get('kickoff_lineage') == {}:
+        document,lineage=evidence(tmp_path,row)
+        seal(tmp_path,document,lineage);row=dict(row,kickoff_lineage=lineage)
     path=tmp_path/'internal.json';path.write_text(json.dumps([row]));return path
 
 
@@ -37,7 +65,7 @@ def test_ops_target_fail_closed(tmp_path,patch):
 def test_ops_target_independent_and_duplicate(tmp_path):
     path=source(tmp_path,internal());result=target_discovery.inspect(NOW,[path])
     assert len(result['targets'])==1 and result['targets'][0]['external_event_id'] is None
-    path.write_text(json.dumps([internal(),internal()]))
+    row=json.loads(path.read_text())[0];path.write_text(json.dumps([row,row]))
     with pytest.raises(ValueError,match='ambiguous'):target_discovery.inspect(NOW,[path])
 
 
@@ -121,7 +149,9 @@ def test_ops_duplicates_no_inflation():
     from test_performance_oos_final import real_position
     # Existing counter contract fixture only; never serialized as operational evidence.
     row=dict(real_position(),market='1X2')
-    assert oos.report([row,row])['duplicates_excluded']==2
+    assert oos.report([row,row])['duplicate_records_excluded']==1
+    assert oos.report([row,row])['records_total']==2
+    assert oos.report([row,row])['duplicate_identity_records_ineligible']==2
     assert oos.report([row,row])['real_oos_count']==0
 
 
@@ -193,3 +223,78 @@ def test_ops_closing_current_is_blocked():
     r=report()
     assert r['real_status']=='BLOCKED_PROVIDER_CLOSING_SEMANTICS'
     assert not r['closing_accredited'] and r['clv_value'] is None
+
+
+@pytest.mark.parametrize('case,code',[
+    ('string','kickoff_lineage_invalid'), ('none','kickoff_lineage_invalid'),
+    ('version','kickoff_lineage_invalid'),
+    ('missing','kickoff_lineage_source_missing'), ('symlink','kickoff_lineage_source_symlink'),
+    ('hash','kickoff_lineage_digest_mismatch'), ('modified','kickoff_lineage_digest_mismatch'),
+    ('internal_match_id','kickoff_lineage_identity_mismatch'), ('home','kickoff_lineage_identity_mismatch'),
+    ('away','kickoff_lineage_identity_mismatch'), ('competition','kickoff_lineage_identity_mismatch'),
+    ('kickoff','kickoff_lineage_kickoff_mismatch'), ('naive','kickoff_lineage_timestamp_invalid'),
+    ('basis','kickoff_timezone_basis_missing'), ('self','kickoff_lineage_not_independent'),
+    ('synthetic','kickoff_lineage_synthetic'), ('duplicate','kickoff_lineage_identity_mismatch'),
+    ('naive_capture','kickoff_lineage_timestamp_invalid'),
+    ('late_capture','kickoff_lineage_capture_not_prospective'),
+    ('inferred_basis','kickoff_timezone_basis_missing'),
+    ('outside','kickoff_lineage_source_outside_root'),
+    ('mutable','kickoff_lineage_not_immutable'),
+])
+def test_ops_lineage_negative_cases(isolated,monkeypatch,case,code):
+    row=internal();document,lineage=evidence(isolated,row)
+    if case in ('internal_match_id','home','away','competition'):
+        document['records'][0]['identity']=dict(lineage['identity'],**{case:'wrong'})
+    if case=='synthetic':document['synthetic_test_only']=True
+    if case=='duplicate':document['records']*=2
+    if case=='naive_capture':
+        lineage['captured_at']=document['records'][0]['captured_at']='2026-11-01T09:00:00'
+    if case=='late_capture':
+        lineage['captured_at']=document['records'][0]['captured_at']=row['kickoff_at']
+    artifact=seal(isolated,document,lineage)
+    if case=='string':lineage='synthetic-test-only-independent-clock'
+    elif case=='none':lineage=None
+    elif case=='version':lineage['version']='unsupported'
+    elif case=='missing':artifact.unlink()
+    elif case=='symlink':
+        link=artifact.with_name('link.json');link.symlink_to(artifact);lineage['source_path']=str(link)
+    elif case=='hash':lineage['source_sha256']='0'*64
+    elif case=='modified':artifact.write_text('{}')
+    elif case=='kickoff':row['kickoff_at']='2026-11-02T13:00:00Z'
+    elif case=='naive':row['kickoff_at']='2026-11-02T12:00:00'
+    elif case=='basis':lineage.pop('timezone_basis')
+    elif case=='inferred_basis':lineage['timezone_basis']='inferred timezone'
+    elif case=='self':lineage['source_path']=str(isolated/'internal.json')
+    elif case=='outside':lineage['source_path']=str(isolated/'elsewhere.json')
+    elif case=='mutable':
+        other=artifact.with_name('mutable.json');other.write_bytes(artifact.read_bytes());lineage['source_path']=str(other)
+    row['kickoff_lineage']=lineage
+    path=source(isolated,row)
+    # The naive target is rejected by the existing aware-time guard first.
+    report=target_discovery.inspect(NOW,[path])
+    assert report['targets']==[] and report['internal_target_status']=='BLOCKED_NO_FRESH_INTERNAL_TARGET'
+    if case!='naive':assert report['exclusions']=={code:1}
+    monkeypatch.setattr(prospective,'inspect',lambda *a:target_discovery.inspect(NOW,[path]))
+    def forbidden(*args,**kwargs):pytest.fail('invalid lineage reached odds planner/capture')
+    monkeypatch.setattr(prospective,'plan',forbidden)
+    monkeypatch.setattr(prospective,'collect_live',forbidden)
+    from v3.ops import validation
+    monkeypatch.setattr(validation,'receipt_valid',lambda:True)
+    assert prospective.prepare()['capture_status']=='BLOCKED_NO_FRESH_INTERNAL_TARGET'
+    # Even a manually populated pilot envelope cannot bypass replay of lineage.
+    pilot={k:v for k,v in internal().items() if k not in ('synthetic_test_only','kickoff_accredited','kickoff_lineage')}
+    pilot.update(markets=['1X2'],priority='P0',external_event_id='manual')
+    runtime.write(runtime.ROOT/'pilot-targets.json',[pilot])
+    assert prospective.capture(live=True)['capture_status']=='BLOCKED_INTERNAL_TARGET_CHANGED'
+    assert prospective.tick()['odds_calls_attempted']==0
+
+
+def test_ops_authorized_source_missing_evidence():
+    from v3.odds.source_matrix import source_matrix,automatable
+    assert any(r['provider']=='the_odds_api' and automatable(r) for r in source_matrix())
+    from v3.final_validation import odds_release_evidence
+    result=odds_release_evidence()
+    assert result['odds_source_authorization']=='PASS'
+    assert result['odds_evidence_status']=='MISSING'
+    assert result['release_status']=='BLOCKED'
+    assert result['blockers']==['no_accredited_prospective_odds_observation']

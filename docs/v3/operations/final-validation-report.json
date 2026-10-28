@@ -3,7 +3,7 @@
   "blockers": [
     "phase5_no_accredited_temporal_predictions",
     "champion_cutoff_not_accredited",
-    "odds_source_not_authorized",
+    "no_accredited_prospective_odds_observation",
     "no_accredited_closing",
     "minimum_real_oos_not_met"
   ],
@@ -374,7 +374,7 @@
     {
       "id": "06",
       "name": "data intact",
-      "status": "PASS"
+      "status": "FAIL"
     },
     {
       "id": "07",
@@ -509,7 +509,7 @@
     {
       "id": "24",
       "name": "current Champion unchanged",
-      "status": "PASS"
+      "status": "FAIL"
     },
     {
       "evidence_tests": [
@@ -762,7 +762,7 @@
     {
       "id": "55",
       "name": "all protected fingerprints/counts/mtimes unchanged",
-      "status": "PASS"
+      "status": "FAIL"
     },
     {
       "id": "56",
@@ -839,33 +839,25 @@
   "clv_status": "BLOCKED",
   "compile_status": "PASS",
   "current_champion": "BT0 / J_BT_sin_temporada",
-  "failed": 0,
+  "failed": 3,
   "files_created": [
-    "docs/v3/operations/batch-integrity-baseline.json",
+    "tests/v3/test_ops_forecast.py",
+    "v3/ops/forecast.py"
+  ],
+  "files_modified": [
     "docs/v3/operations/final-validation-report.json",
     "docs/v3/operations/integrity-after.json",
     "docs/v3/operations/o-02-final.md",
     "docs/v3/operations/o-03-final.md",
-    "docs/v3/operations/o-04-final.md",
     "docs/v3/operations/o-05-final.md",
-    "docs/v3/operations/o-06-final.md",
     "docs/v3/operations/operational-cycle-final.md",
     "docs/v3/operations/operational-cycle-report.json",
     "tests/v3/test_ops_cycle.py",
-    "v3/ops/__init__.py",
+    "v3/final_validation.py",
     "v3/ops/cli.py",
-    "v3/ops/closing.py",
     "v3/ops/oos.py",
-    "v3/ops/paper_cycle.py",
-    "v3/ops/promotion.py",
-    "v3/ops/prospective.py",
-    "v3/ops/report.py",
-    "v3/ops/runtime.py",
     "v3/ops/target_discovery.py",
     "v3/ops/validation.py"
-  ],
-  "files_modified": [
-    "v3/final_validation.py"
   ],
   "gate_status": "NOT_MET",
   "hashes": {
@@ -874,26 +866,28 @@
     "protected_inventory": "c4613154d70caa8069b44d2ba06489b67ca18274b96e5575d2da29c685f98445",
     "release_manifest": "724f573deeaad2b9c55f882cb9d2bd6c5329fc12dd57c00bbb2ad58e35525bff",
     "tests_sha256": "93045fc824a3994dd2fe0667835b48edf08457c52cf633b5558f20c29dea35e2",
-    "validator_sha256": "ec9d64b25c858bf821522f5bcc0ac655ddee746bb6d16fb718fc50b86b9a614f"
+    "validator_sha256": "8d5a8806bdacec80c70a6cb101e88a079d4fdf681f5d573ca65774bbc8d443de"
   },
   "historical_baseline_differences_at_start": "64 PASS / 5 FAIL on the initial legacy run in this batch: historical Phase3/Phase5 inventory differences, branch and absent old runtime artifacts.",
-  "implementation_status": "PASS",
+  "implementation_status": "FAIL",
   "limitations": [
     "Local fingerprints are not independent signed attestations.",
     "Synthetic tests are software evidence only.",
     "Real source adapters and prospective accreditation remain required."
   ],
-  "passed": 69,
+  "odds_evidence_status": "MISSING",
+  "odds_source_authorization": "PASS",
+  "passed": 66,
   "preexisting_untracked_preserved": [
     "v3_data/odds/phase3-synthetic-example/.publish.lock"
   ],
   "protected_file_count": 67554,
-  "protected_integrity": "PASS",
+  "protected_integrity": "FAIL",
   "real_daily_picks_status": "BLOCKED",
   "real_oos_count": 0,
   "real_status": "BLOCKED",
   "release_status": "BLOCKED",
   "required_oos_count": 200,
   "tests_new": 133,
-  "tests_total": 1299
+  "tests_total": 1342
 }

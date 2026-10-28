@@ -29,3 +29,12 @@ Una observación futura conservará `snapshot_type=current`. `pilot-current.json
 Runtime: `v3_data/ops/pilot-config.json`, `pilot-targets.json`, `capture-status.json`, `ticks/<UTC-day>.json`; futuros bundles en `v3_data/odds/<run_id>/`. Nunca Git.
 
 Reason: `no_independent_accredited_future_timezone_aware_internal_target`. Siguiente acción: aportar una identidad interna futura con kickoff/season y evidencia temporal independiente; después ejecutar un tick en otro día. No copiar kickoff del provider al manifiesto interno.
+
+
+Corrección offline de auditoría: contrato `kickoff-lineage-v1`. Las flags no acreditan kickoff. `inspect()` verifica un envelope estructurado y evidencia JSON separada dentro de `data/` (sólo lectura) o `v3_data/ops/evidence/`. En runtime el nombre obligatorio es `<sha256>.json`: cualquier cambio de bytes invalida el digest y requiere otro artefacto. El source nunca puede ser el inventario target, `internal-targets.json` ni un symlink. No se creó evidencia real.
+
+El documento contiene `synthetic_test_only=false` y `records`; cada registro acredita `source_record_id`, `identity` (internal_match_id/home/away/competition exactos), `kickoff_at`, `captured_at`, `timezone_basis` y exclusión sintética explícita. Se exige exactamente una identidad y record ID, sin flags de autoacreditación. El envelope repite identidad, record ID, captured_at, kickoff_field=`kickoff_at`, kickoff_value y timezone_basis, junto con source_path/source_sha256 y version. Kickoff y captura deben tener offset; captura anterior al kickoff y no futura. Bases admitidas: `explicit_utc_offset` o `explicit_utc`; ninguna inferencia por país, máquina, provider, mtime o archivo. Los timestamps se comparan normalizados a UTC.
+
+Los fallos conservan reason codes distintos para formato/versión, ruta ausente/fuera de raíz/symlink, independencia/inmutabilidad, digest, identidad, kickoff, temporalidad, timezone y evidencia sintética. El runner revalida antes de capturar. Legacy fecha/hora sigue bloqueado. O-02 mantiene `BLOCKED_NO_FRESH_INTERNAL_TARGET`.
+
+NO network calls were executed during this correction. Histórico conservado: metadata 1/1, events 0, odds 0, créditos 0.
