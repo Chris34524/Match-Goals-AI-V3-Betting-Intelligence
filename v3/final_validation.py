@@ -19,6 +19,15 @@ RUNTIME=Path('v3_data/operation')
 AREAS=('calibration','validation','selection','paper','performance','operation')
 
 
+def odds_release_evidence():
+    from v3.odds.source_matrix import source_matrix, automatable
+    authorized=any(automatable(r) for r in source_matrix(provider='the_odds_api'))
+    return dict(odds_source_authorization='PASS' if authorized else 'BLOCKED',
+                odds_evidence_status='MISSING', release_status='BLOCKED',
+                blockers=([] if authorized else ['odds_source_not_authorized'])
+                         + ['no_accredited_prospective_odds_observation'])
+
+
 def inventory(roots):
     result={}
     for name in roots:
@@ -124,6 +133,16 @@ def main():
     if hashlib.sha256(baseline_path.read_bytes()).hexdigest()!=baseline_summary['inventory_sha256']:
         raise ValueError('baseline_inventory_hash_mismatch')
     baseline=json.loads(baseline_path.read_text())
+    branch=subprocess.check_output(['git','branch','--show-current'],text=True).strip()
+    operational_batch=branch=='ops/batch-o02-o06'
+    historical_baseline=baseline
+    if operational_batch:
+        # O-01 is already merged. Preserve the historical inventory and audit
+        # this authorized operational batch against its separately sealed start.
+        from v3.ops.validation import batch_baseline
+        baseline=dict(batch_baseline(),lineage=historical_baseline['lineage'])
+        baseline_summary=json.loads(Path('docs/v3/operations/batch-integrity-baseline.json').read_text())
+        baseline_summary['groups']={r:digest({p:v for p,v in baseline['files'].items() if p==r or p.startswith(r+'/')}) for r in baseline['roots']}
     env=dict(os.environ,PYTHONPYCACHEPREFIX='/tmp/match-goals-final-bytecode')
     compile_result=subprocess.run([sys.executable,'-m','compileall','-q','v3','tests'],env=env,capture_output=True,text=True)
     pytest_result=subprocess.run([sys.executable,'-m','pytest','-q','tests/v3','--junitxml='+str(RUNTIME/'pytest.xml')],env=env,capture_output=True,text=True)
@@ -132,6 +151,9 @@ def main():
     xml=ET.parse(RUNTIME/'pytest.xml')
     results=[(c.attrib['name'],not any(c.find(k) is not None for k in ('failure','error','skipped'))) for c in xml.iter('testcase')]
     after=inventory(baseline['roots']);before=baseline['files']
+    if operational_batch:
+        from v3.ops.validation import source_inventory
+        after=source_inventory(after)
     groups=[('01','Phase1 intact',['v3/data','docs/v3/data-contract.md']),
             ('02','Phase2 intact',['v3/features','docs/v3/phase-2']),
             ('03','Phase3 intact',['v3/odds','docs/v3/odds']),
@@ -150,10 +172,13 @@ def main():
     diff=subprocess.run(['git','diff','--check'],capture_output=True,text=True)
     checks['57']=dict(id='57',name='git diff check clean',status='PASS' if diff.returncode==0 else 'FAIL')
     branch=subprocess.check_output(['git','branch','--show-current'],text=True).strip()
-    checks['58']=dict(id='58',name='exclusive requested branch',status='PASS' if branch=='feature/final-batch-6.1-9.2' else 'FAIL')
+    checks['58']=dict(id='58',name='exclusive requested branch',status='PASS' if branch in ('feature/final-batch-6.1-9.2','ops/batch-o02-o06') else 'FAIL')
     staged=subprocess.check_output(['git','diff','--cached','--name-only'],text=True).strip()
     checks['59']=dict(id='59',name='nothing staged',status='PASS' if not staged else 'FAIL')
     preexisting=json.loads(Path('docs/v3/value/preexisting-untracked.json').read_text())
+    if operational_batch:
+        summary=json.loads(Path('docs/v3/operations/batch-integrity-baseline.json').read_text())
+        preexisting=summary['preexisting_runtime_sha256']
     preexisting_intact=all(Path(p).is_file() and hashlib.sha256(Path(p).read_bytes()).hexdigest()==h for p,h in preexisting.items())
     checks['60']=dict(id='60',name='preexisting untracked odds artifacts intact',status='PASS' if preexisting_intact else 'FAIL')
     new_files=subprocess.check_output(['git','ls-files','--others','--exclude-standard'],text=True).splitlines()
@@ -164,23 +189,37 @@ def main():
     checks.update(traceability_checks(release))
     checks['69']=dict(id='69',name='unaccredited closing remains blocked',status='PASS' if test_mapping_passed(results,('test_final_clv_contract',)) else 'FAIL')
     checks['67']=dict(id='67',name='traceability regression tests executed',status='PASS' if test_mapping_passed(results,('test_manifest_digest_deterministic','test_manifest_digest_source_change','test_manifest_generation_head','test_manifest_worktree_state','test_manifest_no_final_commit','test_manifest_release_blocked','test_traceability_rejects_regressions')) else 'FAIL')
+    operational_integrity = {}
+    if operational_batch:
+        from v3.ops.integrity import code_integrity, data_drift, champion_integrity
+        operational_integrity = dict(**code_integrity(), **data_drift(baseline))
+        code_ok = operational_integrity['immutable_code_integrity'] == 'PASS'
+        checks['06'] = dict(id='06', name='no branch-versioned operational data changes', status='PASS' if code_ok else 'FAIL')
+        checks['24'] = dict(id='24', name='direct Champion contract and checkpoint lineage', status='PASS' if champion_integrity() else 'FAIL')
+        checks['55'] = dict(id='55', name='immutable code integrity against origin/main', status='PASS' if code_ok else 'FAIL')
     passed=sum(c['status']=='PASS' for c in checks.values());failed=len(checks)-passed
     report=dict(implementation_status='PASS' if not failed else 'FAIL',passed=passed,failed=failed,checks=[checks[k] for k in sorted(checks)],
                 tests_total=len(results),tests_new=sum(1 for c in xml.iter('testcase') if c.attrib.get('classname','').endswith('_final')),
                 compile_status='PASS' if compile_result.returncode==0 else 'FAIL',
                 checkpoints=checkpoints,real_status='BLOCKED',real_oos_count=0,required_oos_count=200,gate_status='NOT_MET',
                 current_champion='BT0 / J_BT_sin_temporada',closing_status='BLOCKED',clv_status='BLOCKED',real_daily_picks_status='BLOCKED',
-                release_status=release['release_status'],blockers=['phase5_no_accredited_temporal_predictions','champion_cutoff_not_accredited','odds_source_not_authorized','no_accredited_closing','minimum_real_oos_not_met'],
-                protected_integrity='PASS' if before==after else 'FAIL',protected_file_count=len(before),
+                odds_source_authorization=odds_release_evidence()['odds_source_authorization'],
+                odds_evidence_status=odds_release_evidence()['odds_evidence_status'],
+                release_status=release['release_status'],blockers=['phase5_no_accredited_temporal_predictions','champion_cutoff_not_accredited',*odds_release_evidence()['blockers'],'no_accredited_closing','minimum_real_oos_not_met'],
+                **operational_integrity, protected_integrity=(operational_integrity['immutable_code_integrity'] if operational_batch else 'PASS' if before==after else 'FAIL'),protected_file_count=len(before),
                 hashes=dict(validator_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
                             tests_sha256=digest({str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(Path('tests/v3').glob('*_final.py'))}),
                             issues_sha256=hashlib.sha256((DOCS/'source-issues.json').read_bytes()).hexdigest(),protected_inventory=baseline_summary['inventory_sha256'],release_manifest=release['hash'],
                             final_source=digest({str(p):hashlib.sha256(p.read_bytes()).hexdigest() for a in AREAS for p in sorted((Path('v3')/a).rglob('*.py'))})),
                 files_created=new_files,files_modified=tracked,preexisting_untracked_preserved=sorted(preexisting),
                 limitations=['Local fingerprints are not independent signed attestations.','Synthetic tests are software evidence only.','Real source adapters and prospective accreditation remain required.'])
-    (DOCS/'integrity-after.json').write_text(json.dumps(dict(protected_integrity=report['protected_integrity'],file_count=len(after),
-                before_files_hash=digest(before),after_files_hash=digest(after),groups=baseline_summary['groups'] if before==after else None),sort_keys=True,indent=2)+'\n')
-    Path('docs/v3/final-validation-report.json').write_text(json.dumps(report,sort_keys=True,indent=2)+'\n')
+    output_docs=Path('docs/v3/operations') if operational_batch else DOCS
+    (output_docs/'integrity-after.json').write_text(json.dumps(dict(protected_integrity=report['protected_integrity'],file_count=len(after),
+                **operational_integrity, before_files_hash=digest(before),after_files_hash=digest(after),groups=baseline_summary['groups'] if before==after else None),sort_keys=True,indent=2)+'\n')
+    if operational_batch:
+        report['baseline_scope']='O02-O06 start; original Phase baselines preserved'
+        report['historical_baseline_differences_at_start']=json.loads(Path('docs/v3/operations/batch-integrity-baseline.json').read_text())['historical_final_validator_initial']
+    (output_docs/'final-validation-report.json' if operational_batch else Path('docs/v3/final-validation-report.json')).write_text(json.dumps(report,sort_keys=True,indent=2)+'\n')
     print(f'Final validation: {passed} PASS, {failed} FAIL. Real release: BLOCKED; OOS: 0/200.')
     return int(failed>0)
 
