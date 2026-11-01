@@ -1,0 +1,3313 @@
+{
+  "schema_version": "fs0-discovery-1",
+  "inspected_at": "2026-11-01T18:35:31+00:00",
+  "scope": "Documentation only; no runtime contract or acquisition permission",
+  "status_definitions": {
+    "OBSERVED": "Field label/structure confirmed in at least one inspected public representation; evidence_method qualifies indexed versus rendered evidence.",
+    "NOT_OBSERVED": "Explicitly inspected sample with no current-match field; never universal absence.",
+    "UNKNOWN": "Not evaluated or inconclusive, including loading/error/selected-period ambiguity.",
+    "POTENTIAL_MARKET": "Derivable settlement or candidate predictive support conditional on future coverage; separate from field status."
+  },
+  "fields": [
+    {
+      "canonical_name": "xg",
+      "observed_label": "Expected goals (xG)",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "ES-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "LaLiga",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "xgot",
+      "observed_label": "xG on target (xGOT)",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "ES-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "LaLiga",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "possession",
+      "observed_label": "Ball possession",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "ES-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "LaLiga",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "big_chances",
+      "observed_label": "Big chances",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "ES-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "LaLiga",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "box_touches",
+      "observed_label": "Touches in opposition box",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "ES-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "LaLiga",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "shots",
+      "observed_label": "Total shots",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "ES-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "LaLiga",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "TOTAL_CORNERS",
+        "CORNERS_1H",
+        "CORNERS_2H",
+        "TEAM_CORNERS",
+        "MOST_CORNERS",
+        "CORNER_HANDICAPS",
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "shots_on_target",
+      "observed_label": "Shots on target",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "ES-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "LaLiga",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "shots_off_target",
+      "observed_label": "Shots off target",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "ES-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "LaLiga",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "blocked_shots",
+      "observed_label": "Blocked shots",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "ES-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "LaLiga",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "TOTAL_CORNERS",
+        "CORNERS_1H",
+        "CORNERS_2H",
+        "TEAM_CORNERS",
+        "MOST_CORNERS",
+        "CORNER_HANDICAPS",
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "shots_inside_box",
+      "observed_label": "Shots inside the box",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "ES-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "LaLiga",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "shots_outside_box",
+      "observed_label": "Shots outside the box",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "ES-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "LaLiga",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "big_chances_scored",
+      "observed_label": "Big chances scored",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "ES-STATS",
+        "BR-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "LaLiga",
+        "Premier League"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "big_chances_missed",
+      "observed_label": "Big chances missed",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "ES-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "LaLiga",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "corners",
+      "observed_label": "Corner kicks",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "ES-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "LaLiga",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "TOTAL_CORNERS",
+        "CORNERS_1H",
+        "CORNERS_2H",
+        "TEAM_CORNERS",
+        "MOST_CORNERS",
+        "CORNER_HANDICAPS",
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "free_kicks",
+      "observed_label": "Free kicks",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "ES-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "LaLiga",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "offsides",
+      "observed_label": "Offsides",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "ES-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "LaLiga",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "passes",
+      "observed_label": "Passes",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "completed_passes",
+      "observed_label": "Accurate passes",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "pass_accuracy",
+      "observed_label": "Accurate passes",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand. Percentage is embedded alongside completed count; retain count/attempt denominator and rounding."
+    },
+    {
+      "canonical_name": "long_balls",
+      "observed_label": "Long passes",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "completed_long_balls",
+      "observed_label": "Accurate long passes",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "final_third_passes",
+      "observed_label": "Passes in final third",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "completed_final_third_passes",
+      "observed_label": "Accurate passes in final third",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "crosses",
+      "observed_label": "Crosses",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "TOTAL_CORNERS",
+        "CORNERS_1H",
+        "CORNERS_2H",
+        "TEAM_CORNERS",
+        "MOST_CORNERS",
+        "CORNER_HANDICAPS",
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "completed_crosses",
+      "observed_label": "Accurate crosses",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "xa",
+      "observed_label": "Expected assists (xA)",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "key_passes",
+      "observed_label": "Key passes",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "BR-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Premier League"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "throw_ins",
+      "observed_label": "Throw-ins",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "fouls",
+      "observed_label": "Fouls",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "TOTAL_CARDS",
+        "CARDS_1H",
+        "TEAM_CARDS",
+        "RED_CARD_YES_NO",
+        "MOST_CARDS",
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "duels_won",
+      "observed_label": "Duels won",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "TOTAL_CARDS",
+        "CARDS_1H",
+        "TEAM_CARDS",
+        "RED_CARD_YES_NO",
+        "MOST_CARDS",
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "tackles",
+      "observed_label": "Tackles",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "TOTAL_CARDS",
+        "CARDS_1H",
+        "TEAM_CARDS",
+        "RED_CARD_YES_NO",
+        "MOST_CARDS",
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "tackles_won",
+      "observed_label": "Tackles won",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "interceptions",
+      "observed_label": "Interceptions",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "clearances",
+      "observed_label": "Clearances",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "errors_leading_shot",
+      "observed_label": "Errors leading to shot",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "errors_leading_goal",
+      "observed_label": "Errors leading to goal",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "IT-STATS",
+        "DE-STATS",
+        "BR-STATS",
+        "EU-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Bundesliga",
+        "Europa League (fixture attribution; match text shows first leg)",
+        "Premier League",
+        "Serie A"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "goalkeeper_saves",
+      "observed_label": "Goalkeeper saves",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "BR-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Premier League"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "xgot_faced",
+      "observed_label": "xGOT faced",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "BR-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Premier League"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "goals_prevented",
+      "observed_label": "Goals prevented",
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-STATS",
+        "BR-STATS"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (competition attribution to verify in FS-3)",
+        "Premier League"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled team-pair rows in indexed public content; no current rendered or universal coverage claim. Predictive covariate unless directly counted market operand."
+    },
+    {
+      "canonical_name": "corners_1h",
+      "observed_label": null,
+      "surface": "statistics_first_half",
+      "level": "team",
+      "period": "1H",
+      "status": "UNKNOWN",
+      "evidence_ids": [
+        "HALF1"
+      ],
+      "example_competitions": [
+        "Italy — competition UNKNOWN (Draw navigation shown)"
+      ],
+      "potential_markets": [
+        "TOTAL_CORNERS",
+        "CORNERS_1H",
+        "CORNERS_2H",
+        "TEAM_CORNERS",
+        "MOST_CORNERS",
+        "CORNER_HANDICAPS"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Half navigation/URL inspected, active period and complete labeled rows not verified; no FT-to-half extrapolation."
+    },
+    {
+      "canonical_name": "yellow_cards_1h",
+      "observed_label": null,
+      "surface": "statistics_first_half",
+      "level": "team",
+      "period": "1H",
+      "status": "UNKNOWN",
+      "evidence_ids": [
+        "HALF1"
+      ],
+      "example_competitions": [
+        "Italy — competition UNKNOWN (Draw navigation shown)"
+      ],
+      "potential_markets": [
+        "TOTAL_CARDS",
+        "CARDS_1H",
+        "TEAM_CARDS",
+        "RED_CARD_YES_NO",
+        "MOST_CARDS"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Half navigation/URL inspected, active period and complete labeled rows not verified; no FT-to-half extrapolation."
+    },
+    {
+      "canonical_name": "red_cards_1h",
+      "observed_label": null,
+      "surface": "statistics_first_half",
+      "level": "team",
+      "period": "1H",
+      "status": "UNKNOWN",
+      "evidence_ids": [
+        "HALF1"
+      ],
+      "example_competitions": [
+        "Italy — competition UNKNOWN (Draw navigation shown)"
+      ],
+      "potential_markets": [
+        "TOTAL_CARDS",
+        "CARDS_1H",
+        "TEAM_CARDS",
+        "RED_CARD_YES_NO",
+        "MOST_CARDS"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Half navigation/URL inspected, active period and complete labeled rows not verified; no FT-to-half extrapolation."
+    },
+    {
+      "canonical_name": "shots_1h",
+      "observed_label": null,
+      "surface": "statistics_first_half",
+      "level": "team",
+      "period": "1H",
+      "status": "UNKNOWN",
+      "evidence_ids": [
+        "HALF1"
+      ],
+      "example_competitions": [
+        "Italy — competition UNKNOWN (Draw navigation shown)"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Half navigation/URL inspected, active period and complete labeled rows not verified; no FT-to-half extrapolation."
+    },
+    {
+      "canonical_name": "shots_on_target_1h",
+      "observed_label": null,
+      "surface": "statistics_first_half",
+      "level": "team",
+      "period": "1H",
+      "status": "UNKNOWN",
+      "evidence_ids": [
+        "HALF1"
+      ],
+      "example_competitions": [
+        "Italy — competition UNKNOWN (Draw navigation shown)"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Half navigation/URL inspected, active period and complete labeled rows not verified; no FT-to-half extrapolation."
+    },
+    {
+      "canonical_name": "xg_1h",
+      "observed_label": null,
+      "surface": "statistics_first_half",
+      "level": "team",
+      "period": "1H",
+      "status": "UNKNOWN",
+      "evidence_ids": [
+        "HALF1"
+      ],
+      "example_competitions": [
+        "Italy — competition UNKNOWN (Draw navigation shown)"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Half navigation/URL inspected, active period and complete labeled rows not verified; no FT-to-half extrapolation."
+    },
+    {
+      "canonical_name": "possession_1h",
+      "observed_label": null,
+      "surface": "statistics_first_half",
+      "level": "team",
+      "period": "1H",
+      "status": "UNKNOWN",
+      "evidence_ids": [
+        "HALF1"
+      ],
+      "example_competitions": [
+        "Italy — competition UNKNOWN (Draw navigation shown)"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Half navigation/URL inspected, active period and complete labeled rows not verified; no FT-to-half extrapolation."
+    },
+    {
+      "canonical_name": "fouls_1h",
+      "observed_label": null,
+      "surface": "statistics_first_half",
+      "level": "team",
+      "period": "1H",
+      "status": "UNKNOWN",
+      "evidence_ids": [
+        "HALF1"
+      ],
+      "example_competitions": [
+        "Italy — competition UNKNOWN (Draw navigation shown)"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Half navigation/URL inspected, active period and complete labeled rows not verified; no FT-to-half extrapolation."
+    },
+    {
+      "canonical_name": "corners_2h",
+      "observed_label": null,
+      "surface": "statistics_second_half",
+      "level": "team",
+      "period": "2H",
+      "status": "UNKNOWN",
+      "evidence_ids": [
+        "HALF2",
+        "HALF2-ERROR"
+      ],
+      "example_competitions": [
+        "Brazil — state competition attribution unverified",
+        "Copa Libertadores (fixture attribution unverified)"
+      ],
+      "potential_markets": [
+        "TOTAL_CORNERS",
+        "CORNERS_1H",
+        "CORNERS_2H",
+        "TEAM_CORNERS",
+        "MOST_CORNERS",
+        "CORNER_HANDICAPS"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Half navigation/URL inspected, active period and complete labeled rows not verified; no FT-to-half extrapolation."
+    },
+    {
+      "canonical_name": "yellow_cards_2h",
+      "observed_label": null,
+      "surface": "statistics_second_half",
+      "level": "team",
+      "period": "2H",
+      "status": "UNKNOWN",
+      "evidence_ids": [
+        "HALF2",
+        "HALF2-ERROR"
+      ],
+      "example_competitions": [
+        "Brazil — state competition attribution unverified",
+        "Copa Libertadores (fixture attribution unverified)"
+      ],
+      "potential_markets": [
+        "TOTAL_CARDS",
+        "CARDS_1H",
+        "TEAM_CARDS",
+        "RED_CARD_YES_NO",
+        "MOST_CARDS"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Half navigation/URL inspected, active period and complete labeled rows not verified; no FT-to-half extrapolation."
+    },
+    {
+      "canonical_name": "red_cards_2h",
+      "observed_label": null,
+      "surface": "statistics_second_half",
+      "level": "team",
+      "period": "2H",
+      "status": "UNKNOWN",
+      "evidence_ids": [
+        "HALF2",
+        "HALF2-ERROR"
+      ],
+      "example_competitions": [
+        "Brazil — state competition attribution unverified",
+        "Copa Libertadores (fixture attribution unverified)"
+      ],
+      "potential_markets": [
+        "TOTAL_CARDS",
+        "CARDS_1H",
+        "TEAM_CARDS",
+        "RED_CARD_YES_NO",
+        "MOST_CARDS"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Half navigation/URL inspected, active period and complete labeled rows not verified; no FT-to-half extrapolation."
+    },
+    {
+      "canonical_name": "shots_2h",
+      "observed_label": null,
+      "surface": "statistics_second_half",
+      "level": "team",
+      "period": "2H",
+      "status": "UNKNOWN",
+      "evidence_ids": [
+        "HALF2",
+        "HALF2-ERROR"
+      ],
+      "example_competitions": [
+        "Brazil — state competition attribution unverified",
+        "Copa Libertadores (fixture attribution unverified)"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Half navigation/URL inspected, active period and complete labeled rows not verified; no FT-to-half extrapolation."
+    },
+    {
+      "canonical_name": "shots_on_target_2h",
+      "observed_label": null,
+      "surface": "statistics_second_half",
+      "level": "team",
+      "period": "2H",
+      "status": "UNKNOWN",
+      "evidence_ids": [
+        "HALF2",
+        "HALF2-ERROR"
+      ],
+      "example_competitions": [
+        "Brazil — state competition attribution unverified",
+        "Copa Libertadores (fixture attribution unverified)"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Half navigation/URL inspected, active period and complete labeled rows not verified; no FT-to-half extrapolation."
+    },
+    {
+      "canonical_name": "xg_2h",
+      "observed_label": null,
+      "surface": "statistics_second_half",
+      "level": "team",
+      "period": "2H",
+      "status": "UNKNOWN",
+      "evidence_ids": [
+        "HALF2",
+        "HALF2-ERROR"
+      ],
+      "example_competitions": [
+        "Brazil — state competition attribution unverified",
+        "Copa Libertadores (fixture attribution unverified)"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Half navigation/URL inspected, active period and complete labeled rows not verified; no FT-to-half extrapolation."
+    },
+    {
+      "canonical_name": "possession_2h",
+      "observed_label": null,
+      "surface": "statistics_second_half",
+      "level": "team",
+      "period": "2H",
+      "status": "UNKNOWN",
+      "evidence_ids": [
+        "HALF2",
+        "HALF2-ERROR"
+      ],
+      "example_competitions": [
+        "Brazil — state competition attribution unverified",
+        "Copa Libertadores (fixture attribution unverified)"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Half navigation/URL inspected, active period and complete labeled rows not verified; no FT-to-half extrapolation."
+    },
+    {
+      "canonical_name": "fouls_2h",
+      "observed_label": null,
+      "surface": "statistics_second_half",
+      "level": "team",
+      "period": "2H",
+      "status": "UNKNOWN",
+      "evidence_ids": [
+        "HALF2",
+        "HALF2-ERROR"
+      ],
+      "example_competitions": [
+        "Brazil — state competition attribution unverified",
+        "Copa Libertadores (fixture attribution unverified)"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "TEAM_SHOTS",
+        "TEAM_SHOTS_ON_TARGET"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Half navigation/URL inspected, active period and complete labeled rows not verified; no FT-to-half extrapolation."
+    },
+    {
+      "canonical_name": "yellow_cards",
+      "observed_label": null,
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "UNKNOWN",
+      "evidence_ids": [],
+      "example_competitions": [],
+      "potential_markets": [
+        "TOTAL_CARDS",
+        "CARDS_1H",
+        "TEAM_CARDS",
+        "RED_CARD_YES_NO",
+        "MOST_CARDS"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Unlabeled numeric icon rows and foul annotations are insufficient to identify team card totals. Player column evidence is separate."
+    },
+    {
+      "canonical_name": "red_cards",
+      "observed_label": null,
+      "surface": "statistics_overall",
+      "level": "team",
+      "period": "FT",
+      "status": "UNKNOWN",
+      "evidence_ids": [],
+      "example_competitions": [],
+      "potential_markets": [
+        "TOTAL_CARDS",
+        "CARDS_1H",
+        "TEAM_CARDS",
+        "RED_CARD_YES_NO",
+        "MOST_CARDS"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Unlabeled numeric icon rows and foul annotations are insufficient to identify team card totals. Player column evidence is separate."
+    },
+    {
+      "canonical_name": "final_score",
+      "observed_label": "Finished",
+      "surface": "summary",
+      "level": "match",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "US-SUMMARY",
+        "EMX-SUMMARY",
+        "LOW-SUMMARY"
+      ],
+      "example_competitions": [
+        "Ghana — presumed Premier League; competition attribution unverified",
+        "Liga Expansión MX",
+        "MLS"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Public index structure observed; scores retained only as field presence. Verify regulation/extra-time/shootout scope before settlement. Ordered valid goals needed for first scorer."
+    },
+    {
+      "canonical_name": "halftime_score",
+      "observed_label": "1st Half",
+      "surface": "summary",
+      "level": "match",
+      "period": "1H",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "US-SUMMARY",
+        "EMX-SUMMARY",
+        "LOW-SUMMARY"
+      ],
+      "example_competitions": [
+        "Ghana — presumed Premier League; competition attribution unverified",
+        "Liga Expansión MX",
+        "MLS"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Public index structure observed; scores retained only as field presence. Verify regulation/extra-time/shootout scope before settlement. Ordered valid goals needed for first scorer."
+    },
+    {
+      "canonical_name": "goals_by_period",
+      "observed_label": "2nd Half",
+      "surface": "summary",
+      "level": "match",
+      "period": "2H",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "US-SUMMARY",
+        "EMX-SUMMARY",
+        "LOW-SUMMARY"
+      ],
+      "example_competitions": [
+        "Ghana — presumed Premier League; competition attribution unverified",
+        "Liga Expansión MX",
+        "MLS"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Public index structure observed; scores retained only as field presence. Verify regulation/extra-time/shootout scope before settlement. Ordered valid goals needed for first scorer."
+    },
+    {
+      "canonical_name": "goal_minute",
+      "observed_label": "minute / added-time notation",
+      "surface": "events",
+      "level": "match",
+      "period": "event",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "US-SUMMARY",
+        "EMX-SUMMARY",
+        "LOW-SUMMARY"
+      ],
+      "example_competitions": [
+        "Ghana — presumed Premier League; competition attribution unverified",
+        "Liga Expansión MX",
+        "MLS"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Public index structure observed; scores retained only as field presence. Verify regulation/extra-time/shootout scope before settlement. Ordered valid goals needed for first scorer."
+    },
+    {
+      "canonical_name": "penalty_goal",
+      "observed_label": "Penalty",
+      "surface": "events",
+      "level": "match",
+      "period": "event",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "US-SUMMARY"
+      ],
+      "example_competitions": [
+        "MLS"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Public index structure observed; scores retained only as field presence. Verify regulation/extra-time/shootout scope before settlement. Ordered valid goals needed for first scorer."
+    },
+    {
+      "canonical_name": "own_goal_event",
+      "observed_label": null,
+      "surface": "events",
+      "level": "match",
+      "period": "event",
+      "status": "UNKNOWN",
+      "evidence_ids": [],
+      "example_competitions": [],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "No explicit own-goal event annotation confirmed; player own-goals column does not prove an event."
+    },
+    {
+      "canonical_name": "formation",
+      "observed_label": "Formation",
+      "surface": "lineups",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "MX-LINEUPS"
+      ],
+      "example_competitions": [
+        "Liga MX"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "PLAYER_GOALS",
+        "PLAYER_SHOTS",
+        "PLAYER_SHOTS_ON_TARGET",
+        "PLAYER_ASSISTS",
+        "PLAYER_CARDS",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Post-match representation; no prematch official XI publication timestamp established."
+    },
+    {
+      "canonical_name": "starting_lineups",
+      "observed_label": "Starting Lineups",
+      "surface": "lineups",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "MX-LINEUPS"
+      ],
+      "example_competitions": [
+        "Liga MX"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "PLAYER_GOALS",
+        "PLAYER_SHOTS",
+        "PLAYER_SHOTS_ON_TARGET",
+        "PLAYER_ASSISTS",
+        "PLAYER_CARDS",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Post-match representation; no prematch official XI publication timestamp established."
+    },
+    {
+      "canonical_name": "substitutes",
+      "observed_label": "Substitutes",
+      "surface": "lineups",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "MX-LINEUPS"
+      ],
+      "example_competitions": [
+        "Liga MX"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE",
+        "PLAYER_GOALS",
+        "PLAYER_SHOTS",
+        "PLAYER_SHOTS_ON_TARGET",
+        "PLAYER_ASSISTS",
+        "PLAYER_CARDS",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Post-match representation; no prematch official XI publication timestamp established."
+    },
+    {
+      "canonical_name": "player_rating",
+      "observed_label": "Rating",
+      "surface": "player_statistics",
+      "level": "player",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "MX-LINEUPS",
+        "EMX-PLAYERS",
+        "AR-PLAYERS"
+      ],
+      "example_competitions": [
+        "Argentina — top division (stage attribution unverified)",
+        "Liga Expansión MX",
+        "Liga MX"
+      ],
+      "potential_markets": [
+        "PLAYER_SHOTS",
+        "PLAYER_SHOTS_ON_TARGET",
+        "PLAYER_GOALS",
+        "PLAYER_ASSISTS",
+        "PLAYER_CARDS",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled player table in public index. Dash semantics unresolved; column presence does not guarantee numeric observations. Stable IDs and provider minutes/rating conventions unverified."
+    },
+    {
+      "canonical_name": "player_minutes",
+      "observed_label": "Minutes played",
+      "surface": "player_statistics",
+      "level": "player",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "EMX-PLAYERS"
+      ],
+      "example_competitions": [
+        "Liga Expansión MX"
+      ],
+      "potential_markets": [
+        "PLAYER_SHOTS",
+        "PLAYER_SHOTS_ON_TARGET",
+        "PLAYER_GOALS",
+        "PLAYER_ASSISTS",
+        "PLAYER_CARDS",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled player table in public index. Dash semantics unresolved; column presence does not guarantee numeric observations. Stable IDs and provider minutes/rating conventions unverified."
+    },
+    {
+      "canonical_name": "player_goals",
+      "observed_label": "Goals",
+      "surface": "player_statistics",
+      "level": "player",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "EMX-PLAYERS"
+      ],
+      "example_competitions": [
+        "Liga Expansión MX"
+      ],
+      "potential_markets": [
+        "PLAYER_SHOTS",
+        "PLAYER_SHOTS_ON_TARGET",
+        "PLAYER_GOALS",
+        "PLAYER_ASSISTS",
+        "PLAYER_CARDS",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled player table in public index. Dash semantics unresolved; column presence does not guarantee numeric observations. Stable IDs and provider minutes/rating conventions unverified."
+    },
+    {
+      "canonical_name": "player_own_goals",
+      "observed_label": "Own goals",
+      "surface": "player_statistics",
+      "level": "player",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "EMX-PLAYERS"
+      ],
+      "example_competitions": [
+        "Liga Expansión MX"
+      ],
+      "potential_markets": [
+        "PLAYER_SHOTS",
+        "PLAYER_SHOTS_ON_TARGET",
+        "PLAYER_GOALS",
+        "PLAYER_ASSISTS",
+        "PLAYER_CARDS",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled player table in public index. Dash semantics unresolved; column presence does not guarantee numeric observations. Stable IDs and provider minutes/rating conventions unverified."
+    },
+    {
+      "canonical_name": "player_assists",
+      "observed_label": "Assists",
+      "surface": "player_statistics",
+      "level": "player",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "EMX-PLAYERS"
+      ],
+      "example_competitions": [
+        "Liga Expansión MX"
+      ],
+      "potential_markets": [
+        "PLAYER_SHOTS",
+        "PLAYER_SHOTS_ON_TARGET",
+        "PLAYER_GOALS",
+        "PLAYER_ASSISTS",
+        "PLAYER_CARDS",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled player table in public index. Dash semantics unresolved; column presence does not guarantee numeric observations. Stable IDs and provider minutes/rating conventions unverified."
+    },
+    {
+      "canonical_name": "player_yellow_cards",
+      "observed_label": "Yellow cards",
+      "surface": "player_statistics",
+      "level": "player",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "EMX-PLAYERS"
+      ],
+      "example_competitions": [
+        "Liga Expansión MX"
+      ],
+      "potential_markets": [
+        "PLAYER_SHOTS",
+        "PLAYER_SHOTS_ON_TARGET",
+        "PLAYER_GOALS",
+        "PLAYER_ASSISTS",
+        "PLAYER_CARDS",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled player table in public index. Dash semantics unresolved; column presence does not guarantee numeric observations. Stable IDs and provider minutes/rating conventions unverified."
+    },
+    {
+      "canonical_name": "player_red_cards",
+      "observed_label": "Red cards",
+      "surface": "player_statistics",
+      "level": "player",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "EMX-PLAYERS"
+      ],
+      "example_competitions": [
+        "Liga Expansión MX"
+      ],
+      "potential_markets": [
+        "PLAYER_SHOTS",
+        "PLAYER_SHOTS_ON_TARGET",
+        "PLAYER_GOALS",
+        "PLAYER_ASSISTS",
+        "PLAYER_CARDS",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled player table in public index. Dash semantics unresolved; column presence does not guarantee numeric observations. Stable IDs and provider minutes/rating conventions unverified."
+    },
+    {
+      "canonical_name": "player_shots",
+      "observed_label": "Total shots",
+      "surface": "player_statistics",
+      "level": "player",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "AR-PLAYERS"
+      ],
+      "example_competitions": [
+        "Argentina — top division (stage attribution unverified)"
+      ],
+      "potential_markets": [
+        "PLAYER_SHOTS",
+        "PLAYER_SHOTS_ON_TARGET",
+        "PLAYER_GOALS",
+        "PLAYER_ASSISTS",
+        "PLAYER_CARDS",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled player table in public index. Dash semantics unresolved; column presence does not guarantee numeric observations. Stable IDs and provider minutes/rating conventions unverified."
+    },
+    {
+      "canonical_name": "player_xg",
+      "observed_label": "Expected goals (xG)",
+      "surface": "player_statistics",
+      "level": "player",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "AR-PLAYERS"
+      ],
+      "example_competitions": [
+        "Argentina — top division (stage attribution unverified)"
+      ],
+      "potential_markets": [
+        "PLAYER_SHOTS",
+        "PLAYER_SHOTS_ON_TARGET",
+        "PLAYER_GOALS",
+        "PLAYER_ASSISTS",
+        "PLAYER_CARDS",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled player table in public index. Dash semantics unresolved; column presence does not guarantee numeric observations. Stable IDs and provider minutes/rating conventions unverified."
+    },
+    {
+      "canonical_name": "player_completed_passes",
+      "observed_label": "Accurate passes",
+      "surface": "player_statistics",
+      "level": "player",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "AR-PLAYERS"
+      ],
+      "example_competitions": [
+        "Argentina — top division (stage attribution unverified)"
+      ],
+      "potential_markets": [
+        "PLAYER_SHOTS",
+        "PLAYER_SHOTS_ON_TARGET",
+        "PLAYER_GOALS",
+        "PLAYER_ASSISTS",
+        "PLAYER_CARDS",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled player table in public index. Dash semantics unresolved; column presence does not guarantee numeric observations. Stable IDs and provider minutes/rating conventions unverified."
+    },
+    {
+      "canonical_name": "player_pass_accuracy",
+      "observed_label": "Accurate passes",
+      "surface": "player_statistics",
+      "level": "player",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "AR-PLAYERS"
+      ],
+      "example_competitions": [
+        "Argentina — top division (stage attribution unverified)"
+      ],
+      "potential_markets": [
+        "PLAYER_SHOTS",
+        "PLAYER_SHOTS_ON_TARGET",
+        "PLAYER_GOALS",
+        "PLAYER_ASSISTS",
+        "PLAYER_CARDS",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled player table in public index. Dash semantics unresolved; column presence does not guarantee numeric observations. Stable IDs and provider minutes/rating conventions unverified."
+    },
+    {
+      "canonical_name": "player_touches",
+      "observed_label": "Touches",
+      "surface": "player_statistics",
+      "level": "player",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "AR-PLAYERS"
+      ],
+      "example_competitions": [
+        "Argentina — top division (stage attribution unverified)"
+      ],
+      "potential_markets": [
+        "PLAYER_SHOTS",
+        "PLAYER_SHOTS_ON_TARGET",
+        "PLAYER_GOALS",
+        "PLAYER_ASSISTS",
+        "PLAYER_CARDS",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled player table in public index. Dash semantics unresolved; column presence does not guarantee numeric observations. Stable IDs and provider minutes/rating conventions unverified."
+    },
+    {
+      "canonical_name": "player_box_touches",
+      "observed_label": "Touches in opposition box",
+      "surface": "player_statistics",
+      "level": "player",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "AR-PLAYERS"
+      ],
+      "example_competitions": [
+        "Argentina — top division (stage attribution unverified)"
+      ],
+      "potential_markets": [
+        "PLAYER_SHOTS",
+        "PLAYER_SHOTS_ON_TARGET",
+        "PLAYER_GOALS",
+        "PLAYER_ASSISTS",
+        "PLAYER_CARDS",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled player table in public index. Dash semantics unresolved; column presence does not guarantee numeric observations. Stable IDs and provider minutes/rating conventions unverified."
+    },
+    {
+      "canonical_name": "player_dribbles",
+      "observed_label": "Successful dribbles",
+      "surface": "player_statistics",
+      "level": "player",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "AR-PLAYERS"
+      ],
+      "example_competitions": [
+        "Argentina — top division (stage attribution unverified)"
+      ],
+      "potential_markets": [
+        "PLAYER_SHOTS",
+        "PLAYER_SHOTS_ON_TARGET",
+        "PLAYER_GOALS",
+        "PLAYER_ASSISTS",
+        "PLAYER_CARDS",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled player table in public index. Dash semantics unresolved; column presence does not guarantee numeric observations. Stable IDs and provider minutes/rating conventions unverified."
+    },
+    {
+      "canonical_name": "player_duels",
+      "observed_label": "Duels",
+      "surface": "player_statistics",
+      "level": "player",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "AR-PLAYERS"
+      ],
+      "example_competitions": [
+        "Argentina — top division (stage attribution unverified)"
+      ],
+      "potential_markets": [
+        "PLAYER_SHOTS",
+        "PLAYER_SHOTS_ON_TARGET",
+        "PLAYER_GOALS",
+        "PLAYER_ASSISTS",
+        "PLAYER_CARDS",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Labeled player table in public index. Dash semantics unresolved; column presence does not guarantee numeric observations. Stable IDs and provider minutes/rating conventions unverified."
+    },
+    {
+      "canonical_name": "player_shots_on_target",
+      "observed_label": null,
+      "surface": "player_statistics",
+      "level": "player",
+      "period": "FT",
+      "status": "UNKNOWN",
+      "evidence_ids": [],
+      "example_competitions": [],
+      "potential_markets": [
+        "PLAYER_SHOTS_ON_TARGET",
+        "PLAYER_ASSISTS",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Product article/category navigation suggests exploration; no inspected player row for this metric."
+    },
+    {
+      "canonical_name": "player_xa",
+      "observed_label": null,
+      "surface": "player_statistics",
+      "level": "player",
+      "period": "FT",
+      "status": "UNKNOWN",
+      "evidence_ids": [],
+      "example_competitions": [],
+      "potential_markets": [
+        "PLAYER_SHOTS_ON_TARGET",
+        "PLAYER_ASSISTS",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Product article/category navigation suggests exploration; no inspected player row for this metric."
+    },
+    {
+      "canonical_name": "player_xgot",
+      "observed_label": null,
+      "surface": "player_statistics",
+      "level": "player",
+      "period": "FT",
+      "status": "UNKNOWN",
+      "evidence_ids": [],
+      "example_competitions": [],
+      "potential_markets": [
+        "PLAYER_SHOTS_ON_TARGET",
+        "PLAYER_ASSISTS",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Product article/category navigation suggests exploration; no inspected player row for this metric."
+    },
+    {
+      "canonical_name": "player_goalkeeper_saves",
+      "observed_label": null,
+      "surface": "player_statistics",
+      "level": "player",
+      "period": "FT",
+      "status": "UNKNOWN",
+      "evidence_ids": [],
+      "example_competitions": [],
+      "potential_markets": [
+        "PLAYER_SHOTS_ON_TARGET",
+        "PLAYER_ASSISTS",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Product article/category navigation suggests exploration; no inspected player row for this metric."
+    },
+    {
+      "canonical_name": "player_xgot_faced",
+      "observed_label": null,
+      "surface": "player_statistics",
+      "level": "player",
+      "period": "FT",
+      "status": "UNKNOWN",
+      "evidence_ids": [],
+      "example_competitions": [],
+      "potential_markets": [
+        "PLAYER_SHOTS_ON_TARGET",
+        "PLAYER_ASSISTS",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Product article/category navigation suggests exploration; no inspected player row for this metric."
+    },
+    {
+      "canonical_name": "player_goals_prevented",
+      "observed_label": null,
+      "surface": "player_statistics",
+      "level": "player",
+      "period": "FT",
+      "status": "UNKNOWN",
+      "evidence_ids": [],
+      "example_competitions": [],
+      "potential_markets": [
+        "PLAYER_SHOTS_ON_TARGET",
+        "PLAYER_ASSISTS",
+        "GOALKEEPER_SAVES"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Product article/category navigation suggests exploration; no inspected player row for this metric."
+    },
+    {
+      "canonical_name": "standing_position",
+      "observed_label": "#",
+      "surface": "standings",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-TABLE"
+      ],
+      "example_competitions": [
+        "Premier League"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "FT denotes accumulated completed-match context, not a single-fixture stat; season/stage/as-of snapshot required."
+    },
+    {
+      "canonical_name": "standing_played",
+      "observed_label": "MP",
+      "surface": "standings",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-TABLE"
+      ],
+      "example_competitions": [
+        "Premier League"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "FT denotes accumulated completed-match context, not a single-fixture stat; season/stage/as-of snapshot required."
+    },
+    {
+      "canonical_name": "standing_wins",
+      "observed_label": "W",
+      "surface": "standings",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-TABLE"
+      ],
+      "example_competitions": [
+        "Premier League"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "FT denotes accumulated completed-match context, not a single-fixture stat; season/stage/as-of snapshot required."
+    },
+    {
+      "canonical_name": "standing_draws",
+      "observed_label": "D",
+      "surface": "standings",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-TABLE"
+      ],
+      "example_competitions": [
+        "Premier League"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "FT denotes accumulated completed-match context, not a single-fixture stat; season/stage/as-of snapshot required."
+    },
+    {
+      "canonical_name": "standing_losses",
+      "observed_label": "L",
+      "surface": "standings",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-TABLE"
+      ],
+      "example_competitions": [
+        "Premier League"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "FT denotes accumulated completed-match context, not a single-fixture stat; season/stage/as-of snapshot required."
+    },
+    {
+      "canonical_name": "standing_goals",
+      "observed_label": "G",
+      "surface": "standings",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-TABLE"
+      ],
+      "example_competitions": [
+        "Premier League"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "FT denotes accumulated completed-match context, not a single-fixture stat; season/stage/as-of snapshot required."
+    },
+    {
+      "canonical_name": "standing_goal_difference",
+      "observed_label": "GD",
+      "surface": "standings",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-TABLE"
+      ],
+      "example_competitions": [
+        "Premier League"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "FT denotes accumulated completed-match context, not a single-fixture stat; season/stage/as-of snapshot required."
+    },
+    {
+      "canonical_name": "standing_points",
+      "observed_label": "Pts",
+      "surface": "standings",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-TABLE"
+      ],
+      "example_competitions": [
+        "Premier League"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "FT denotes accumulated completed-match context, not a single-fixture stat; season/stage/as-of snapshot required."
+    },
+    {
+      "canonical_name": "standing_form",
+      "observed_label": "Form",
+      "surface": "standings",
+      "level": "team",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "PL-TABLE"
+      ],
+      "example_competitions": [
+        "Premier League"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "FT denotes accumulated completed-match context, not a single-fixture stat; season/stage/as-of snapshot required."
+    },
+    {
+      "canonical_name": "h2h_results",
+      "observed_label": "Last matches / Head-to-head matches",
+      "surface": "h2h",
+      "level": "match",
+      "period": "FT",
+      "status": "OBSERVED",
+      "evidence_ids": [
+        "EMX-H2H"
+      ],
+      "example_competitions": [
+        "Liga Expansión MX"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": "public_search_index",
+      "notes": "Dated score rows and Overall/Home/Away navigation; exclude target, same-day unverified and future rows."
+    },
+    {
+      "canonical_name": "prematch_current_match_statistics",
+      "observed_label": null,
+      "surface": "statistics_overall",
+      "level": "match",
+      "period": "FT",
+      "status": "NOT_OBSERVED",
+      "evidence_ids": [
+        "PREMATCH"
+      ],
+      "example_competitions": [
+        "Brazil — Serie A (attribution unverified)"
+      ],
+      "potential_markets": [
+        "OU_FT",
+        "OU_1H",
+        "OU_2H",
+        "BTTS_FT",
+        "BTTS_1H",
+        "BTTS_2H",
+        "TEAM_GOALS",
+        "FIRST_TEAM_TO_SCORE",
+        "HT_1X2",
+        "HT_FT",
+        "FT_1X2",
+        "DOUBLE_CHANCE"
+      ],
+      "market_status": "POTENTIAL_MARKET",
+      "evidence_method": null,
+      "notes": "Explicit future-match placeholder inspected in index; absent for this lifecycle state, not evidence of competition non-coverage."
+    }
+  ]
+}
