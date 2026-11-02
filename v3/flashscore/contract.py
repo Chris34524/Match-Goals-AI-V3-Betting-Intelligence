@@ -25,7 +25,7 @@ METRICS = tuple('goals_ft goals_first_half goals_second_half corners cards fouls
     'shots_on_target shots_off_target blocked_shots shots_inside_box shots_outside_box '
     'xg xgot xa big_chances big_chances_scored big_chances_missed box_touches possession '
     'passes completed_passes pass_accuracy final_third_passes long_balls crosses key_passes '
-    'offsides free_kicks throw_ins duels tackles interceptions clearances errors_leading_shot '
+    'yellow_cards red_cards offsides free_kicks throw_ins duels tackles interceptions clearances errors_leading_shot '
     'errors_leading_goal goalkeeper_saves xgot_faced goals_prevented'.split())
 CAPABILITIES = SURFACES + METRICS
 DECIMALS = ('xg', 'xgot', 'xa', 'xgot_faced', 'goals_prevented')

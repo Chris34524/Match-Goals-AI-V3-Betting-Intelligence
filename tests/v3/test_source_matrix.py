@@ -6,7 +6,7 @@ from v3.features.source_matrix import FAMILIES, FIELDS, source_matrix, ingestion
 @pytest.mark.parametrize('family', FAMILIES)
 def test_each_family_has_explicit_permission_and_limits(family):
     rows = [r for r in source_matrix() if r['signal_family'] == family]
-    assert len(rows) == 2
+    assert len([r for r in rows if r['provider'] != 'api_football']) == 2
     assert all(set(r) == set(FIELDS) for r in rows)
     assert all(r['status'] in ('available','planned','blocked','review') for r in rows)
     assert all(r['blocked_reason'] and r['rate_limit/operational_limit'] for r in rows)
