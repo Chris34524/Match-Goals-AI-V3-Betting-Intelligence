@@ -1,6 +1,6 @@
 """2.7 permission matrix. Public surface visibility never authorizes acquisition.
 
-This registry authorizes no network or ingestion provider. Local archival
+Flashscore remains unauthorized. Official API acquisition is separately account-gated. Local archival
 inspection is distinct from permission to automate extraction/reuse for models.
 """
 import json
@@ -37,6 +37,15 @@ def source_matrix():
             'contract-specific storage/reuse/deletion terms required',
             'grant reference/scope, source ID/URL, stable IDs, publication/revision timestamp, evidence digest',
             'planned', 'Provider, license scope, operational limits, retention and as-of coverage must be selected and independently verified'))))
+    for family in ('advanced_team_stats', 'cards', 'corners', 'lineups', 'context'):
+        rows.append(dict(zip(FIELDS, (
+            'api_football', family, 'official_api_v3', 'explicit_live_env_key_enabled_adapter',
+            'authenticated_official_api_get', 'account_terms_required', 'provider_stable_ids',
+            'capture_only_not_historical_publication', False, 'subscription_dependent_not_yet_audited',
+            'explicit_request_budget_and_remaining_quota_guard',
+            'minimal_normalized_records_and_digests; reuse/account_terms_apply; redistribution_unverified',
+            'fixture/team/competition IDs, kickoff, capture timestamp, endpoint, digest, parser version',
+            'planned', 'API_FOOTBALL_KEY and enabled adapter required; historical as-of unverified'))))
     return rows
 
 

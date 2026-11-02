@@ -1,0 +1,66 @@
+{
+  "errors": [],
+  "get": "fixtures",
+  "paging": {
+    "current": 1,
+    "total": 1
+  },
+  "parameters": {
+    "fixture": "900001"
+  },
+  "response": [
+    {
+      "formation": "4-4-2",
+      "startXI": [
+        {
+          "player": {
+            "grid": "1:1",
+            "id": 102,
+            "name": "Test player",
+            "pos": "G"
+          }
+        }
+      ],
+      "substitutes": [
+        {
+          "player": {
+            "grid": null,
+            "id": 103,
+            "name": "Test bench",
+            "pos": "M"
+          }
+        }
+      ],
+      "team": {
+        "id": 101
+      }
+    },
+    {
+      "formation": "4-4-2",
+      "startXI": [
+        {
+          "player": {
+            "grid": "1:1",
+            "id": 203,
+            "name": "Test player",
+            "pos": "G"
+          }
+        }
+      ],
+      "substitutes": [
+        {
+          "player": {
+            "grid": null,
+            "id": 204,
+            "name": "Test bench",
+            "pos": "M"
+          }
+        }
+      ],
+      "team": {
+        "id": 202
+      }
+    }
+  ],
+  "results": 2
+}

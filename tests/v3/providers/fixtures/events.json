@@ -1,0 +1,74 @@
+{
+  "errors": [],
+  "get": "fixtures",
+  "paging": {
+    "current": 1,
+    "total": 1
+  },
+  "parameters": {
+    "fixture": "900001"
+  },
+  "response": [
+    {
+      "assist": {
+        "id": null,
+        "name": null
+      },
+      "comments": null,
+      "detail": "Yellow Card",
+      "player": {
+        "id": 10,
+        "name": "Test actor"
+      },
+      "team": {
+        "id": 101
+      },
+      "time": {
+        "elapsed": 44,
+        "extra": 2
+      },
+      "type": "Card"
+    },
+    {
+      "assist": {
+        "id": null,
+        "name": null
+      },
+      "comments": null,
+      "detail": "Second Yellow card",
+      "player": {
+        "id": 10,
+        "name": "Test actor"
+      },
+      "team": {
+        "id": 101
+      },
+      "time": {
+        "elapsed": 44,
+        "extra": 2
+      },
+      "type": "Card"
+    },
+    {
+      "assist": {
+        "id": null,
+        "name": null
+      },
+      "comments": null,
+      "detail": "Red Card",
+      "player": {
+        "id": 10,
+        "name": "Test actor"
+      },
+      "team": {
+        "id": 101
+      },
+      "time": {
+        "elapsed": 44,
+        "extra": 2
+      },
+      "type": "Card"
+    }
+  ],
+  "results": 3
+}

@@ -1,0 +1,58 @@
+{
+  "errors": [],
+  "get": "fixtures",
+  "paging": {
+    "current": 1,
+    "total": 1
+  },
+  "parameters": {},
+  "response": [
+    {
+      "fixture": {
+        "date": "2025-09-01T18:00:00+00:00",
+        "id": 900001,
+        "status": {
+          "short": "NS"
+        }
+      },
+      "goals": {
+        "away": 1,
+        "home": 2
+      },
+      "league": {
+        "id": 900,
+        "round": "Test round",
+        "season": 2025
+      },
+      "score": {
+        "extratime": {
+          "away": null,
+          "home": null
+        },
+        "fulltime": {
+          "away": null,
+          "home": null
+        },
+        "halftime": {
+          "away": null,
+          "home": null
+        },
+        "penalty": {
+          "away": null,
+          "home": null
+        }
+      },
+      "teams": {
+        "away": {
+          "id": 202,
+          "name": "Test Away"
+        },
+        "home": {
+          "id": 101,
+          "name": "Test Home"
+        }
+      }
+    }
+  ],
+  "results": 1
+}
