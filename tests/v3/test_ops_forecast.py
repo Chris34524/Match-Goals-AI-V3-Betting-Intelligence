@@ -218,4 +218,13 @@ def test_ops_data_drift_informational(tmp_path,monkeypatch):
 
 def test_ops_champion_direct():
     from v3.ops.integrity import champion_integrity
-    assert champion_integrity()
+    from v3.selected_analysis.compatibility import legacy_compatibility
+    import subprocess
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[2]
+    assert legacy_compatibility(root, ref='origin/main')
+    lineage = subprocess.check_output(['git','diff','origin/main','--name-only','--',
+                                      'docs/v3/models','analysis','v3/models'], cwd=root, text=True)
+    # The operational gate intentionally remains closed while the authorized
+    # presentation correction differs from origin/main. Never bypass it.
+    assert champion_integrity() is (not bool(lineage.strip()))

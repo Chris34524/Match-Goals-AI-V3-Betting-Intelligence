@@ -1,0 +1,739 @@
+{
+  "version": "selected-pilot-validation-1",
+  "review_date": "2026-11-07",
+  "baseline": {
+    "passed": 1832,
+    "seconds": 153.75,
+    "warnings_reported": 0
+  },
+  "final_tests": {
+    "passed": 1853,
+    "new_cases": 21,
+    "seconds": 132.19,
+    "warnings_reported": 0,
+    "deprecations_reported": 0,
+    "notices_reported": 0,
+    "command": "PYTHONPATH=$PWD/.venv/lib/python3.12/site-packages OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 /home/leos/projects/qualityMind-ML/.venv/bin/python -m pytest -q tests/v3 -W error"
+  },
+  "checks": {
+    ".venv/bin/python -m compileall -q v3 tests/v3": {
+      "exit_code": 0,
+      "warnings": 0
+    },
+    "git diff --check": {
+      "exit_code": 0,
+      "warnings": 0
+    }
+  },
+  "pilot_directory": "/home/leos/projects/match-goals-ai/v3_data/selected_analysis/pilots/b7ca9c414cb3c1ec945797653f9cc4e6a6bd414aa973b37b675a632a74430eee",
+  "pilot_id": "b7ca9c414cb3c1ec945797653f9cc4e6a6bd414aa973b37b675a632a74430eee",
+  "cutoff": "2026-11-07T21:05:31.532894+00:00",
+  "started_at": "2026-11-07T21:05:31.127792+00:00",
+  "sealed_at": "2026-11-07T21:05:31.532894+00:00",
+  "finished_at": "2026-11-07T21:05:31.704694+00:00",
+  "input_files": 47,
+  "input_manifest_sha256": "62fd6451dbc27ee1392e508c2761b51123841cc1eb3e1367c4e8c8615e2023d7",
+  "reports": [
+    {
+      "match_id": "Agsy2CLs",
+      "kickoff": "2026-11-07T19:00:00-06:00",
+      "generated_before_kickoff": true,
+      "target_same_day_future_excluded": true,
+      "source": "flashscore",
+      "matrix": [
+        {
+          "calibration": "NOT_ACCREDITED",
+          "coverage": 1.0,
+          "decision": "NO_BET",
+          "frozen_inputs": true,
+          "input_availability": "LOCAL_BYTES_SEALED_BEFORE_KICKOFF",
+          "input_sample_sizes": [
+            20,
+            20
+          ],
+          "market": "GOLES",
+          "method": "BT0 / J_BT_sin_temporada",
+          "oos_eligible": false,
+          "prematch_cutoff": "2026-11-07T21:05:31.532894+00:00",
+          "probabilities": {
+            "BTTS_NO": 0.3981699679064624,
+            "BTTS_YES": 0.6018300320935376,
+            "OVER_1.5": 0.8018865589017278,
+            "OVER_2.5": 0.5783639626298596,
+            "OVER_3.5": 0.3543239529406954,
+            "OVER_4.5": 0.18590498732366734,
+            "UNDER_1.5": 0.19811344109827222,
+            "UNDER_2.5": 0.42163603737014044,
+            "UNDER_3.5": 0.6456760470593046,
+            "UNDER_4.5": 0.8140950126763327
+          },
+          "reason": null,
+          "sample_size": [
+            20,
+            20
+          ],
+          "source": [
+            "/home/leos/projects/match-goals-ai/v3_data/selected_analysis/pilots/b7ca9c414cb3c1ec945797653f9cc4e6a6bd414aa973b37b675a632a74430eee/inputs/matches/Agsy2CLs/history.json"
+          ],
+          "status": "IMPLEMENTED",
+          "temporal_accreditation": "HISTORICAL_SCORE_DATE_POLICY",
+          "temporal_window": {
+            "end": "2026-11-01",
+            "start": "2026-04-25"
+          },
+          "validated_oos": false,
+          "value_kind": "MODEL_ESTIMATE"
+        },
+        {
+          "calibration": "NOT_ACCREDITED",
+          "coverage": 1.0,
+          "decision": "NO_BET",
+          "frozen_inputs": true,
+          "input_availability": "LOCAL_BYTES_SEALED_BEFORE_KICKOFF",
+          "input_sample_sizes": [
+            20,
+            20
+          ],
+          "market": "1X2",
+          "method": "BT0 / J_BT_sin_temporada",
+          "oos_eligible": false,
+          "prematch_cutoff": "2026-11-07T21:05:31.532894+00:00",
+          "probabilities": {
+            "1": 0.3294698510541254,
+            "2": 0.4295494046969462,
+            "X": 0.2409807442489281
+          },
+          "reason": null,
+          "sample_size": [
+            20,
+            20
+          ],
+          "source": [
+            "/home/leos/projects/match-goals-ai/v3_data/selected_analysis/pilots/b7ca9c414cb3c1ec945797653f9cc4e6a6bd414aa973b37b675a632a74430eee/inputs/matches/Agsy2CLs/history.json"
+          ],
+          "status": "IMPLEMENTED",
+          "temporal_accreditation": "HISTORICAL_SCORE_DATE_POLICY",
+          "temporal_window": {
+            "end": "2026-11-01",
+            "start": "2026-04-25"
+          },
+          "validated_oos": false,
+          "value_kind": "MODEL_ESTIMATE"
+        },
+        {
+          "calibration": "NOT_ACCREDITED",
+          "coverage": 1.0,
+          "decision": "NO_BET",
+          "frozen_inputs": true,
+          "input_availability": "LOCAL_BYTES_SEALED_BEFORE_KICKOFF",
+          "input_sample_sizes": [
+            20,
+            20
+          ],
+          "market": "DOBLE OPORTUNIDAD",
+          "method": "BT0 / J_BT_sin_temporada",
+          "oos_eligible": false,
+          "prematch_cutoff": "2026-11-07T21:05:31.532894+00:00",
+          "probabilities": {
+            "12": 0.7590192557510715,
+            "1X": 0.5704505953030535,
+            "X2": 0.6705301489458743
+          },
+          "reason": null,
+          "sample_size": [
+            20,
+            20
+          ],
+          "source": [
+            "/home/leos/projects/match-goals-ai/v3_data/selected_analysis/pilots/b7ca9c414cb3c1ec945797653f9cc4e6a6bd414aa973b37b675a632a74430eee/inputs/matches/Agsy2CLs/history.json"
+          ],
+          "status": "IMPLEMENTED",
+          "temporal_accreditation": "HISTORICAL_SCORE_DATE_POLICY",
+          "temporal_window": {
+            "end": "2026-11-01",
+            "start": "2026-04-25"
+          },
+          "validated_oos": false,
+          "value_kind": "MODEL_ESTIMATE"
+        },
+        {
+          "calibration": "NOT_ACCREDITED",
+          "coverage": null,
+          "decision": "NO_BET",
+          "frozen_inputs": true,
+          "input_availability": "LOCAL_BYTES_SEALED_BEFORE_KICKOFF",
+          "market": "xG",
+          "method": "Paired historical observed xG/xGA means; not model lambda",
+          "observed_coverage": [
+            1.0,
+            0.9
+          ],
+          "observed_sample_size": [
+            10,
+            9
+          ],
+          "oos_eligible": false,
+          "prematch_cutoff": "2026-11-07T21:05:31.532894+00:00",
+          "probabilities": {},
+          "reason": "unverified_xg_period_capture_publication_or_identity",
+          "sample_size": [
+            0,
+            0
+          ],
+          "source": [
+            "/home/leos/projects/match-goals-ai/v3_data/selected_analysis/pilots/b7ca9c414cb3c1ec945797653f9cc4e6a6bd414aa973b37b675a632a74430eee/inputs/matches/Agsy2CLs/xg_history.json"
+          ],
+          "status": "BLOCKED",
+          "temporal_accreditation": "VERIFIED_CAPABILITY_LINEAGE_REQUIRED",
+          "validated_oos": false,
+          "value_kind": "OBSERVED_INPUT_NOT_PREDICTION"
+        },
+        {
+          "calibration": "NOT_ACCREDITED",
+          "coverage": null,
+          "decision": "NO_BET",
+          "frozen_inputs": true,
+          "input_availability": "LOCAL_BYTES_SEALED_BEFORE_KICKOFF",
+          "input_sample_sizes": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "market": "PRIMERA MITAD",
+          "method": "independent_poisson",
+          "oos_eligible": false,
+          "prematch_cutoff": "2026-11-07T21:05:31.532894+00:00",
+          "probabilities": {
+            "AWAY_SCORES": null,
+            "BTTS_YES": null,
+            "HOME_SCORES": null,
+            "OVER_0.5": null,
+            "OVER_1.5": null,
+            "UNDER_0.5": null,
+            "UNDER_1.5": null
+          },
+          "reason": "stable_team_competition_season_ids_required",
+          "sample_size": [
+            0,
+            0
+          ],
+          "source": [],
+          "status": "BLOCKED",
+          "temporal_accreditation": "VERIFIED_CAPABILITY_LINEAGE_REQUIRED",
+          "temporal_window": {
+            "end": null,
+            "start": null
+          },
+          "validated_oos": false,
+          "value_kind": "MODEL_ESTIMATE"
+        },
+        {
+          "calibration": "NOT_ACCREDITED",
+          "coverage": null,
+          "decision": "NO_BET",
+          "frozen_inputs": true,
+          "input_availability": "LOCAL_BYTES_SEALED_BEFORE_KICKOFF",
+          "input_sample_sizes": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "market": "SEGUNDA MITAD",
+          "method": "independent_poisson",
+          "oos_eligible": false,
+          "prematch_cutoff": "2026-11-07T21:05:31.532894+00:00",
+          "probabilities": {
+            "AWAY_SCORES": null,
+            "BTTS_YES": null,
+            "HOME_SCORES": null,
+            "OVER_0.5": null,
+            "OVER_1.5": null,
+            "UNDER_0.5": null,
+            "UNDER_1.5": null
+          },
+          "reason": "stable_team_competition_season_ids_required",
+          "sample_size": [
+            0,
+            0
+          ],
+          "source": [],
+          "status": "BLOCKED",
+          "temporal_accreditation": "VERIFIED_CAPABILITY_LINEAGE_REQUIRED",
+          "temporal_window": {
+            "end": null,
+            "start": null
+          },
+          "validated_oos": false,
+          "value_kind": "MODEL_ESTIMATE"
+        },
+        {
+          "calibration": "NOT_ACCREDITED",
+          "coverage": null,
+          "decision": "NO_BET",
+          "frozen_inputs": true,
+          "input_availability": "LOCAL_BYTES_SEALED_BEFORE_KICKOFF",
+          "input_sample_sizes": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "market": "CÓRNERS",
+          "method": "independent_count_moments_v1",
+          "oos_eligible": false,
+          "prematch_cutoff": "2026-11-07T21:05:31.532894+00:00",
+          "probabilities": {
+            "OVER_10.5": null,
+            "OVER_11.5": null,
+            "OVER_7.5": null,
+            "OVER_8.5": null,
+            "OVER_9.5": null
+          },
+          "reason": "stable_team_competition_season_ids_required",
+          "sample_size": [
+            0,
+            0
+          ],
+          "source": [],
+          "status": "BLOCKED",
+          "temporal_accreditation": "VERIFIED_CAPABILITY_LINEAGE_REQUIRED",
+          "temporal_window": {
+            "end": null,
+            "start": null
+          },
+          "validated_oos": false,
+          "value_kind": "MODEL_ESTIMATE"
+        },
+        {
+          "calibration": "NOT_ACCREDITED",
+          "coverage": null,
+          "decision": "NO_BET",
+          "frozen_inputs": true,
+          "input_availability": "LOCAL_BYTES_SEALED_BEFORE_KICKOFF",
+          "input_sample_sizes": [
+            0,
+            0
+          ],
+          "market": "TARJETAS",
+          "method": "independent_count_moments_v1",
+          "oos_eligible": false,
+          "prematch_cutoff": "2026-11-07T21:05:31.532894+00:00",
+          "probabilities": {
+            "ANY_DISMISSAL": null,
+            "OVER_2.5": null,
+            "OVER_3.5": null,
+            "OVER_4.5": null,
+            "OVER_5.5": null
+          },
+          "reason": "explicit_verified_card_counting_policy_required",
+          "sample_size": [
+            0,
+            0
+          ],
+          "source": [],
+          "status": "BLOCKED",
+          "temporal_accreditation": "VERIFIED_CAPABILITY_LINEAGE_REQUIRED",
+          "temporal_window": {
+            "end": null,
+            "start": null
+          },
+          "validated_oos": false,
+          "value_kind": "MODEL_ESTIMATE"
+        }
+      ],
+      "json": "/home/leos/projects/match-goals-ai/v3_data/selected_analysis/pilots/b7ca9c414cb3c1ec945797653f9cc4e6a6bd414aa973b37b675a632a74430eee/reports/2026-11-07/flashscore_Agsy2CLs/59bf4bec8a63a7cedbf8e1e837419c909c119c2d2e3547e296f06a87dfc454af/report.json",
+      "html": "/home/leos/projects/match-goals-ai/v3_data/selected_analysis/pilots/b7ca9c414cb3c1ec945797653f9cc4e6a6bd414aa973b37b675a632a74430eee/reports/2026-11-07/flashscore_Agsy2CLs/59bf4bec8a63a7cedbf8e1e837419c909c119c2d2e3547e296f06a87dfc454af/report.html",
+      "json_sha256": "d499636b25e53ce10f5da78de431303f487b6b2debe697094aa0f4cda8138b3a",
+      "html_sha256": "2d921e48f7da0989e9fe3d2904024f91a62e6fdf8d970b7ef74258833a62b0ed"
+    },
+    {
+      "match_id": "AR2jbUK6",
+      "kickoff": "2026-11-07T21:10:00-06:00",
+      "generated_before_kickoff": true,
+      "target_same_day_future_excluded": true,
+      "source": "flashscore",
+      "matrix": [
+        {
+          "calibration": "NOT_ACCREDITED",
+          "coverage": 1.0,
+          "decision": "NO_BET",
+          "frozen_inputs": true,
+          "input_availability": "LOCAL_BYTES_SEALED_BEFORE_KICKOFF",
+          "input_sample_sizes": [
+            20,
+            20
+          ],
+          "market": "GOLES",
+          "method": "BT0 / J_BT_sin_temporada",
+          "oos_eligible": false,
+          "prematch_cutoff": "2026-11-07T21:05:31.532894+00:00",
+          "probabilities": {
+            "BTTS_NO": 0.31186395430960223,
+            "BTTS_YES": 0.6881360456903977,
+            "OVER_1.5": 0.874477752724693,
+            "OVER_2.5": 0.6975536028568388,
+            "OVER_3.5": 0.4851445116137395,
+            "OVER_4.5": 0.2938861867478947,
+            "UNDER_1.5": 0.12552224727530703,
+            "UNDER_2.5": 0.30244639714316124,
+            "UNDER_3.5": 0.5148554883862605,
+            "UNDER_4.5": 0.7061138132521053
+          },
+          "reason": null,
+          "sample_size": [
+            20,
+            20
+          ],
+          "source": [
+            "/home/leos/projects/match-goals-ai/v3_data/selected_analysis/pilots/b7ca9c414cb3c1ec945797653f9cc4e6a6bd414aa973b37b675a632a74430eee/inputs/matches/AR2jbUK6/history.json"
+          ],
+          "status": "IMPLEMENTED",
+          "temporal_accreditation": "HISTORICAL_SCORE_DATE_POLICY",
+          "temporal_window": {
+            "end": "2026-10-31",
+            "start": "2026-05-24"
+          },
+          "validated_oos": false,
+          "value_kind": "MODEL_ESTIMATE"
+        },
+        {
+          "calibration": "NOT_ACCREDITED",
+          "coverage": 1.0,
+          "decision": "NO_BET",
+          "frozen_inputs": true,
+          "input_availability": "LOCAL_BYTES_SEALED_BEFORE_KICKOFF",
+          "input_sample_sizes": [
+            20,
+            20
+          ],
+          "market": "1X2",
+          "method": "BT0 / J_BT_sin_temporada",
+          "oos_eligible": false,
+          "prematch_cutoff": "2026-11-07T21:05:31.532894+00:00",
+          "probabilities": {
+            "1": 0.3003785777516733,
+            "2": 0.485763209752172,
+            "X": 0.21385821249615436
+          },
+          "reason": null,
+          "sample_size": [
+            20,
+            20
+          ],
+          "source": [
+            "/home/leos/projects/match-goals-ai/v3_data/selected_analysis/pilots/b7ca9c414cb3c1ec945797653f9cc4e6a6bd414aa973b37b675a632a74430eee/inputs/matches/AR2jbUK6/history.json"
+          ],
+          "status": "IMPLEMENTED",
+          "temporal_accreditation": "HISTORICAL_SCORE_DATE_POLICY",
+          "temporal_window": {
+            "end": "2026-10-31",
+            "start": "2026-05-24"
+          },
+          "validated_oos": false,
+          "value_kind": "MODEL_ESTIMATE"
+        },
+        {
+          "calibration": "NOT_ACCREDITED",
+          "coverage": 1.0,
+          "decision": "NO_BET",
+          "frozen_inputs": true,
+          "input_availability": "LOCAL_BYTES_SEALED_BEFORE_KICKOFF",
+          "input_sample_sizes": [
+            20,
+            20
+          ],
+          "market": "DOBLE OPORTUNIDAD",
+          "method": "BT0 / J_BT_sin_temporada",
+          "oos_eligible": false,
+          "prematch_cutoff": "2026-11-07T21:05:31.532894+00:00",
+          "probabilities": {
+            "12": 0.7861417875038453,
+            "1X": 0.5142367902478276,
+            "X2": 0.6996214222483264
+          },
+          "reason": null,
+          "sample_size": [
+            20,
+            20
+          ],
+          "source": [
+            "/home/leos/projects/match-goals-ai/v3_data/selected_analysis/pilots/b7ca9c414cb3c1ec945797653f9cc4e6a6bd414aa973b37b675a632a74430eee/inputs/matches/AR2jbUK6/history.json"
+          ],
+          "status": "IMPLEMENTED",
+          "temporal_accreditation": "HISTORICAL_SCORE_DATE_POLICY",
+          "temporal_window": {
+            "end": "2026-10-31",
+            "start": "2026-05-24"
+          },
+          "validated_oos": false,
+          "value_kind": "MODEL_ESTIMATE"
+        },
+        {
+          "calibration": "NOT_ACCREDITED",
+          "coverage": null,
+          "decision": "NO_BET",
+          "frozen_inputs": true,
+          "input_availability": "LOCAL_BYTES_SEALED_BEFORE_KICKOFF",
+          "market": "xG",
+          "method": "Paired historical observed xG/xGA means; not model lambda",
+          "observed_coverage": [
+            1.0,
+            0.8
+          ],
+          "observed_sample_size": [
+            10,
+            8
+          ],
+          "oos_eligible": false,
+          "prematch_cutoff": "2026-11-07T21:05:31.532894+00:00",
+          "probabilities": {},
+          "reason": "unverified_xg_period_capture_publication_or_identity",
+          "sample_size": [
+            0,
+            0
+          ],
+          "source": [
+            "/home/leos/projects/match-goals-ai/v3_data/selected_analysis/pilots/b7ca9c414cb3c1ec945797653f9cc4e6a6bd414aa973b37b675a632a74430eee/inputs/matches/AR2jbUK6/xg_history.json"
+          ],
+          "status": "BLOCKED",
+          "temporal_accreditation": "VERIFIED_CAPABILITY_LINEAGE_REQUIRED",
+          "validated_oos": false,
+          "value_kind": "OBSERVED_INPUT_NOT_PREDICTION"
+        },
+        {
+          "calibration": "NOT_ACCREDITED",
+          "coverage": null,
+          "decision": "NO_BET",
+          "frozen_inputs": true,
+          "input_availability": "LOCAL_BYTES_SEALED_BEFORE_KICKOFF",
+          "input_sample_sizes": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "market": "PRIMERA MITAD",
+          "method": "independent_poisson",
+          "oos_eligible": false,
+          "prematch_cutoff": "2026-11-07T21:05:31.532894+00:00",
+          "probabilities": {
+            "AWAY_SCORES": null,
+            "BTTS_YES": null,
+            "HOME_SCORES": null,
+            "OVER_0.5": null,
+            "OVER_1.5": null,
+            "UNDER_0.5": null,
+            "UNDER_1.5": null
+          },
+          "reason": "stable_team_competition_season_ids_required",
+          "sample_size": [
+            0,
+            0
+          ],
+          "source": [],
+          "status": "BLOCKED",
+          "temporal_accreditation": "VERIFIED_CAPABILITY_LINEAGE_REQUIRED",
+          "temporal_window": {
+            "end": null,
+            "start": null
+          },
+          "validated_oos": false,
+          "value_kind": "MODEL_ESTIMATE"
+        },
+        {
+          "calibration": "NOT_ACCREDITED",
+          "coverage": null,
+          "decision": "NO_BET",
+          "frozen_inputs": true,
+          "input_availability": "LOCAL_BYTES_SEALED_BEFORE_KICKOFF",
+          "input_sample_sizes": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "market": "SEGUNDA MITAD",
+          "method": "independent_poisson",
+          "oos_eligible": false,
+          "prematch_cutoff": "2026-11-07T21:05:31.532894+00:00",
+          "probabilities": {
+            "AWAY_SCORES": null,
+            "BTTS_YES": null,
+            "HOME_SCORES": null,
+            "OVER_0.5": null,
+            "OVER_1.5": null,
+            "UNDER_0.5": null,
+            "UNDER_1.5": null
+          },
+          "reason": "stable_team_competition_season_ids_required",
+          "sample_size": [
+            0,
+            0
+          ],
+          "source": [],
+          "status": "BLOCKED",
+          "temporal_accreditation": "VERIFIED_CAPABILITY_LINEAGE_REQUIRED",
+          "temporal_window": {
+            "end": null,
+            "start": null
+          },
+          "validated_oos": false,
+          "value_kind": "MODEL_ESTIMATE"
+        },
+        {
+          "calibration": "NOT_ACCREDITED",
+          "coverage": null,
+          "decision": "NO_BET",
+          "frozen_inputs": true,
+          "input_availability": "LOCAL_BYTES_SEALED_BEFORE_KICKOFF",
+          "input_sample_sizes": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "market": "CÓRNERS",
+          "method": "independent_count_moments_v1",
+          "oos_eligible": false,
+          "prematch_cutoff": "2026-11-07T21:05:31.532894+00:00",
+          "probabilities": {
+            "OVER_10.5": null,
+            "OVER_11.5": null,
+            "OVER_7.5": null,
+            "OVER_8.5": null,
+            "OVER_9.5": null
+          },
+          "reason": "stable_team_competition_season_ids_required",
+          "sample_size": [
+            0,
+            0
+          ],
+          "source": [],
+          "status": "BLOCKED",
+          "temporal_accreditation": "VERIFIED_CAPABILITY_LINEAGE_REQUIRED",
+          "temporal_window": {
+            "end": null,
+            "start": null
+          },
+          "validated_oos": false,
+          "value_kind": "MODEL_ESTIMATE"
+        },
+        {
+          "calibration": "NOT_ACCREDITED",
+          "coverage": null,
+          "decision": "NO_BET",
+          "frozen_inputs": true,
+          "input_availability": "LOCAL_BYTES_SEALED_BEFORE_KICKOFF",
+          "input_sample_sizes": [
+            0,
+            0
+          ],
+          "market": "TARJETAS",
+          "method": "independent_count_moments_v1",
+          "oos_eligible": false,
+          "prematch_cutoff": "2026-11-07T21:05:31.532894+00:00",
+          "probabilities": {
+            "ANY_DISMISSAL": null,
+            "OVER_2.5": null,
+            "OVER_3.5": null,
+            "OVER_4.5": null,
+            "OVER_5.5": null
+          },
+          "reason": "explicit_verified_card_counting_policy_required",
+          "sample_size": [
+            0,
+            0
+          ],
+          "source": [],
+          "status": "BLOCKED",
+          "temporal_accreditation": "VERIFIED_CAPABILITY_LINEAGE_REQUIRED",
+          "temporal_window": {
+            "end": null,
+            "start": null
+          },
+          "validated_oos": false,
+          "value_kind": "MODEL_ESTIMATE"
+        }
+      ],
+      "json": "/home/leos/projects/match-goals-ai/v3_data/selected_analysis/pilots/b7ca9c414cb3c1ec945797653f9cc4e6a6bd414aa973b37b675a632a74430eee/reports/2026-11-07/flashscore_AR2jbUK6/5d2730eb1d93c164741081888b37176859a867b95d448a23c23d602742d8555d/report.json",
+      "html": "/home/leos/projects/match-goals-ai/v3_data/selected_analysis/pilots/b7ca9c414cb3c1ec945797653f9cc4e6a6bd414aa973b37b675a632a74430eee/reports/2026-11-07/flashscore_AR2jbUK6/5d2730eb1d93c164741081888b37176859a867b95d448a23c23d602742d8555d/report.html",
+      "json_sha256": "90728f213f87cb7796e40e53c137b056b3c1126402ffc11f516ee5f5c1c384f8",
+      "html_sha256": "de2928b785ff041445521230c8b48f1c8325e5accb18ad52d24a67ca5c13f56e"
+    }
+  ],
+  "replay": {
+    "status": "REPLAY_PASS",
+    "pilot_id": "b7ca9c414cb3c1ec945797653f9cc4e6a6bd414aa973b37b675a632a74430eee",
+    "matches": 2,
+    "original_cutoff": "2026-11-07T21:05:31.532894+00:00",
+    "network_requests": 0,
+    "oos_eligible": false
+  },
+  "visual": {
+    "status": "PASS",
+    "pilot_id": "b7ca9c414cb3c1ec945797653f9cc4e6a6bd414aa973b37b675a632a74430eee",
+    "reports": [
+      {
+        "match_id": "Agsy2CLs",
+        "desktop": 1440,
+        "mobile": 390,
+        "filter": "PASS",
+        "horizontal_overflow": false
+      },
+      {
+        "match_id": "AR2jbUK6",
+        "desktop": 1440,
+        "mobile": 390,
+        "filter": "PASS",
+        "horizontal_overflow": false
+      }
+    ],
+    "page_errors": [],
+    "http_requests": [],
+    "screenshots": "/home/leos/projects/match-goals-ai/v3_data/selected_analysis/pilots/b7ca9c414cb3c1ec945797653f9cc4e6a6bd414aa973b37b675a632a74430eee/qa"
+  },
+  "integrity": {
+    "scrapers_and_gates_unchanged": true,
+    "champion_formula_unchanged": true,
+    "source_drift_since_pilot": [],
+    "original_user_scripts_preserved": [
+      "generate_daily_forecast_report.py",
+      "generate_rich_forecast_report.py",
+      "generate_rich_forecast_report_v2.py"
+    ],
+    "operational_champion_gate": false,
+    "release_reason": "Existing display-only compare_lambda.py diff keeps the unchanged operational release gate closed."
+  },
+  "acquisition": {
+    "sports_capture_http_requests": 0,
+    "api_football_requests": 0,
+    "automatic_fallback": false,
+    "new_extractors": 0
+  },
+  "limitations": [
+    "Schedule corroboration is public metadata review, not OOS accreditation.",
+    "Historical score-date policy is retained; archive source capture time is not manufactured.",
+    "xG remains observed-only; period/publication/revision lineage is not accredited.",
+    "Halves/corners lack stable context and historical capabilities; cards also lack verified counting policy.",
+    "The corpus audit is sequential on a mutable tree, not an atomic global snapshot."
+  ],
+  "files": {
+    "created": [
+      "v3/selected_analysis/pilot.py",
+      "v3/selected_analysis/market_matrix.py",
+      "tests/v3/test_selected_pilot.py",
+      "docs/v3/selected-pilot-e2e.md",
+      "docs/v3/selected-pilot-validation.json",
+      "docs/v3/selected-pilot-corpus-audit.json"
+    ],
+    "modified": [
+      "v3/selected_analysis/engine.py",
+      "v3/selected_analysis/report.py",
+      "docs/v3/selected-analysis.md",
+      "docs/v3/flashscore/mx-coverage-audit.md"
+    ]
+  },
+  "log_sha256": "7abefc903bdf4ad332836c9f15515ba696410c1ac853afbc72024c6068e1521b"
+}

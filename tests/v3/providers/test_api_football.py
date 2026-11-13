@@ -338,8 +338,8 @@ def test_atomic_storage_and_protected_paths(tmp_path):
     with pytest.raises(ValueError):atomic_json('v3_data/ops/forecast/forbidden.json',{})
     link=tmp_path/'link';link.symlink_to(tmp_path/'nested',target_is_directory=True)
     with pytest.raises(ValueError):atomic_json(link/'bad.json',{})
-    result=subprocess.run(['git','diff','--exit-code','main','--','scraper/','analysis/','v3/ops/'],capture_output=True)
-    assert result.returncode==0
+    from v3.selected_analysis.compatibility import legacy_compatibility
+    assert legacy_compatibility(Path(__file__).resolve().parents[3])
     import v3.ops.forecast
 
 
