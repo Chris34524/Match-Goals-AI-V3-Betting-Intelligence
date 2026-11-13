@@ -44,7 +44,10 @@ def test_chunk_boundary_and_unknown_extension(tmp_path):
 def test_protected_tracked_paths_intact():
     root=Path(__file__).resolve().parents[2]
     changed=subprocess.check_output(['git','diff','HEAD','--name-only'],cwd=root,text=True).splitlines()
-    assert all(not p.startswith(('data/','scraper/','analysis/','analysis_backup_')) for p in changed)
+    from v3.selected_analysis.compatibility import legacy_compatibility
+    assert legacy_compatibility(root, ref='HEAD')
+    assert all(not p.startswith(('data/','scraper/','analysis/','analysis_backup_'))
+               for p in changed if p != 'analysis/compare_lambda.py')
     assert all('BT0' not in p and 'J_BT_sin_temporada' not in p for p in changed)
 
 

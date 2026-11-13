@@ -111,6 +111,11 @@ def agregar_total(metodo):
     return metodo
 
 
+def formato_lambda(valor, ancho):
+    """Keep missing signals missing in JSON and printable in the diagnostic table."""
+    return f"{'N/D':>{ancho}}" if valor is None else f"{valor:>{ancho}.3f}"
+
+
 def main():
     parser = argparse.ArgumentParser()
 
@@ -1034,9 +1039,9 @@ def main():
     ):
         print(
             f"{nombre:<30}"
-            f"{valores['local']:>17.3f}"
-            f"{valores['visitante']:>17.3f}"
-            f"{valores['total']:>12.3f}"
+            f"{formato_lambda(valores['local'], 17)}"
+            f"{formato_lambda(valores['visitante'], 17)}"
+            f"{formato_lambda(valores['total'], 12)}"
         )
 
     print()

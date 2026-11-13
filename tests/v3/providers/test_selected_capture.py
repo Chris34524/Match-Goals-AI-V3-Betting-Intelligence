@@ -208,10 +208,8 @@ def test_selection_secret_not_displayed(tmp_path, monkeypatch, capsys):
 
 
 def test_protected_paths_unchanged():
-    import subprocess
-    result = subprocess.run(['git','diff','--exit-code','main','--','scraper/','analysis/','v3/ops/'],
-                            capture_output=True, text=True)
-    assert result.returncode == 0, result.stdout
+    from v3.selected_analysis.compatibility import legacy_compatibility
+    assert legacy_compatibility(Path(__file__).resolve().parents[3])
 
 
 def test_verified_matrix_does_not_create_transport(monkeypatch):

@@ -1,0 +1,100 @@
+{
+  "version": "flashscore-mx-priority-validation-1",
+  "review_date": "2026-11-07",
+  "tests": {
+    "baseline": 1814,
+    "final_passed": 1832,
+    "new_cases": 18,
+    "seconds": 87.82,
+    "warnings_reported": 0,
+    "deprecations_reported": 0,
+    "notices_reported": 0,
+    "command": "PYTHONPATH=$PWD/.venv/lib/python3.12/site-packages OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 /home/leos/projects/qualityMind-ML/.venv/bin/python -m pytest -q tests/v3 -W error"
+  },
+  "checks": {
+    ".venv/bin/python -m compileall -q v3 tests/v3": {
+      "exit_code": 0,
+      "warnings": 0
+    },
+    "git diff --check": {
+      "exit_code": 0,
+      "warnings": 0
+    }
+  },
+  "field_matrix_count": 116,
+  "source_directories": 6633,
+  "source_sha256": "89c492ebe8333035fc49e08f970678ee332209bf0e42dc923c08271cdcd85d06",
+  "html": {
+    "reports": [
+      {
+        "decision": "NO_BET",
+        "html": "/home/leos/projects/match-goals-ai/v3_data/selected_analysis/2026-11-06/flashscore_QilxV7k3/b5aa745e60a965b2c0384e4a45bb15c7379baa4be3d3aedeece689b76f9e66b9/report.html",
+        "json": "/home/leos/projects/match-goals-ai/v3_data/selected_analysis/2026-11-06/flashscore_QilxV7k3/b5aa745e60a965b2c0384e4a45bb15c7379baa4be3d3aedeece689b76f9e66b9/report.json",
+        "match_id": "QilxV7k3",
+        "oos_eligible": false,
+        "provider": "flashscore",
+        "status": "REPORT_CREATED"
+      },
+      {
+        "decision": "NO_BET",
+        "html": "/home/leos/projects/match-goals-ai/v3_data/selected_analysis/2026-11-06/flashscore_pMxurfFb/b6b31687b8c91dfd056b0ae96f56fd43b901377c9d87c389b4128b563f8743b5/report.html",
+        "json": "/home/leos/projects/match-goals-ai/v3_data/selected_analysis/2026-11-06/flashscore_pMxurfFb/b6b31687b8c91dfd056b0ae96f56fd43b901377c9d87c389b4128b563f8743b5/report.json",
+        "match_id": "pMxurfFb",
+        "oos_eligible": false,
+        "provider": "flashscore",
+        "status": "REPORT_CREATED"
+      }
+    ],
+    "desktop_width": 1440,
+    "mobile_width": 390,
+    "horizontal_overflow": false,
+    "http_requests": [],
+    "page_errors": [],
+    "filter": "PASS",
+    "raw_xg_value_visible": 1.472
+  },
+  "files": {
+    "created": [
+      "v3/selected_analysis/flashscore_reference.py",
+      "tests/v3/test_flashscore_mx_reference.py",
+      "docs/v3/flashscore/mx-coverage-audit.md",
+      "docs/v3/flashscore/mx-coverage-audit.json",
+      "docs/v3/flashscore/mx-priority-validation.md",
+      "docs/v3/flashscore/mx-priority-validation.json"
+    ],
+    "modified": [
+      "v3/selected_analysis/cli.py",
+      "v3/selected_analysis/engine.py",
+      "v3/selected_analysis/report.py",
+      "docs/v3/selected-analysis.md",
+      "docs/v3/selected-analysis-validation.md"
+    ]
+  },
+  "integrity": {
+    "scrapers_unchanged": true,
+    "models_unchanged": true,
+    "provider_and_flashscore_gates_unchanged": true,
+    "champion_formula_unchanged": true,
+    "operational_champion_integrity": false,
+    "reason": "Existing presentation-only diff against origin/main keeps the unchanged release gate closed."
+  },
+  "acquisition": {
+    "sports_http_requests": 0,
+    "real_api_requests": 0,
+    "new_extractors": 0,
+    "automatic_fallback": false,
+    "documentation_research": [
+      "https://www.flashscore.com.mx/",
+      "https://www.flashscore.com.mx/terms-of-use/",
+      "https://www.flashscore.com.mx/faq/data/"
+    ],
+    "robots_result": "web_tool_inaccessible_not_an_authorization"
+  },
+  "limitations": [
+    "Corpus is mutable; audit is not an atomic global snapshot.",
+    "Legacy capture/period/publication lineage remains null/unverified.",
+    "No automatic field-level cross-provider mixing; independently verified crosswalk required.",
+    "No calibrated or OOS status was granted by this work."
+  ],
+  "test_log_sha256": "b5492cf29c28db1d93e379e189f08e421d127b7054a39d5463f106e3aa22d33a"
+}
